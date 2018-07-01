@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Oh Sugar!</string>
+
+    <!-- Font String -->
+    <string name="font">font/main.ttf</string>
+
+    <!-- Navigation Bar Titles -->
+    <string name="welcome_to">welcome to...</string>
+    <string name="home">home</string>
+
+</resources>
