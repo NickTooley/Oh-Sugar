@@ -1,6 +1,6 @@
-Oh Sugar!
+# Oh Sugar!
 
-This repository holds all the required files for the Oh Sugar! application for Cromwell grils.
+This repository holds all the required files for the Oh Sugar! application for the girls from Cromwell.
 
 The following repository contains:
 
