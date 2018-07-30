@@ -1,8 +1,10 @@
 package com.example.graysonorr.ohsugar;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.*;
 import android.os.*;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.*;
 import android.view.View;
 import android.view.Window;
@@ -18,6 +20,13 @@ public class WelcomeActivity extends AppCompatActivity {
         TextView toolBarTitle = findViewById(R.id.toolbar_title);
         Typeface customFont = Typeface.createFromAsset(getAssets(), getString(R.string.font));
         toolBarTitle.setTypeface(customFont);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            ActivityCompat.requestPermissions(WelcomeActivity.this,
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.INTERNET},
+                    1);
+        }
+
 
         //Shader txtShader = new LinearGradient(0,0,100,0, new int[]{R.color.colorTomato, R.color.colorDeepPink}, new float[]{0,1}, Shader.TileMode.CLAMP);
         //toolBarTitle.getPaint().setShader(txtShader);
@@ -38,6 +47,30 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+
+        Button shoppingListBtn = (Button) findViewById(R.id.listBtn);
+
+        shoppingListBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ShoppingListActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+
+        Button helpBtn = (Button) findViewById(R.id.helpBtn);
+
+        helpBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), HelpActivity.class);
                 startActivity(intent);
             }
         });
