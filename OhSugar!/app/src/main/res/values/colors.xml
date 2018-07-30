@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimaryDark">#F9398E</color>
     <color name="colorAccent">#FF4081</color>
 
     <!-- Custom Colors -->
@@ -9,4 +9,5 @@
     <color name="colorTomato">#fc552e</color>
     <color name="colorDeepPink">#F9398E</color>
     <color name="colorLightSlateGray">#8E8F93</color>
+
 </resources>
