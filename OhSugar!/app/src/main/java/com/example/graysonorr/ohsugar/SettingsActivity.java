@@ -32,18 +32,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         Button conversionsBtn = (Button) findViewById(R.id.button);
 
-        Toolbar mActionBar = (Toolbar) findViewById(R.id.toolbar_top);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mActionBar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_arrow_back_black_24dp));
-            mActionBar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //What to do on back clicked
-                }
-            });
-
-        }
+        
 
 
     }
