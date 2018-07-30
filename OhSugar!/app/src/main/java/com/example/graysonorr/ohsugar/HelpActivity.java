@@ -21,7 +21,7 @@ public class HelpActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
-        
+
 
         TextView toolBarTitle = findViewById(R.id.toolbar_title);
         Typeface customFont = Typeface.createFromAsset(getAssets(), getString(R.string.font));
