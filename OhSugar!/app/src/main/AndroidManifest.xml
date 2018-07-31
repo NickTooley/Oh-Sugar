@@ -23,7 +23,19 @@
         <activity android:name=".HomeActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".HelpActivity" />
-        <activity android:name=".ShoppingListActivity"></activity>
+        <activity android:name=".ShoppingListActivity" />
+        <activity android:name=".CompareActivity" />
+        <activity
+            android:name=".BarcodeScanner"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_barcode_scanner"
+            android:theme="@style/FullscreenTheme" />
+        <activity
+            android:name=".FullscreenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_fullscreen"
+            android:theme="@style/FullscreenTheme" />
+        <activity android:name=".BarcodeRetrieval"></activity>
     </application>
 
 </manifest>

@@ -10,4 +10,6 @@
     <color name="colorDeepPink">#F9398E</color>
     <color name="colorLightSlateGray">#8E8F93</color>
 
+    <color name="black_overlay">#66000000</color>
+
 </resources>

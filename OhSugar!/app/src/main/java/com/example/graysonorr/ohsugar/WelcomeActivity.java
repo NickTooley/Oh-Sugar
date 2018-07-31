@@ -75,6 +75,16 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         });
 
+        Button scanBtn = (Button) findViewById(R.id.cameraBtn);
+
+        scanBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), BarcodeRetrieval.class);
+                startActivity(intent);
+            }
+        });
+
 
 
     }
