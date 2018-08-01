@@ -2,14 +2,18 @@ package com.example.graysonorr.ohsugar;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.*;
 import android.os.*;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.*;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.*;
+
+import java.io.Console;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -23,7 +27,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             ActivityCompat.requestPermissions(WelcomeActivity.this,
-                    new String[]{Manifest.permission.CAMERA, Manifest.permission.INTERNET},
+                    new String[]{Manifest.permission.CAMERA },
                     1);
         }
 
@@ -39,6 +43,7 @@ public class WelcomeActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.setStatusBarColor(this.getResources().getColor(R.color.colorLightSlateGray));
         }
+
         //Snippet end
 
         Button settingsBtn = (Button) findViewById(R.id.settingsBtn);
@@ -85,7 +90,27 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         });
 
+        Button compareBtn = (Button) findViewById(R.id.compareBtn);
+
+        compareBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), CompareActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
 
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if (grantResults.length <= 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(WelcomeActivity.this,
+                    "Permission Denied - External Storage",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }
