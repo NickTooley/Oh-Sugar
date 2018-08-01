@@ -45,6 +45,9 @@ public class BarcodeRetrieval extends AppCompatActivity {
             }
         });
 
+        Intent intent = new Intent(BarcodeRetrieval.this, BarcodeScanner.class);
+        startActivityForResult(intent, 1);
+
 
     }
 

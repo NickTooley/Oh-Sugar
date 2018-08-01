@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -135,9 +136,18 @@ public class BarcodeScanner extends AppCompatActivity {
         mBarcodeDetector = bCodeDectBuilder.build();
         mBarcodeDetector.setProcessor(new BarcodeProcessor());
 
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+
         mCameraSource = new CameraSource
                 .Builder(this, mBarcodeDetector)
+                .setRequestedPreviewSize(height, width)
+                .setAutoFocusEnabled(true)
                 .build();
+
 
 
         // Set up the user interaction to manually show or hide the system UI.
@@ -155,6 +165,9 @@ public class BarcodeScanner extends AppCompatActivity {
         // while interacting with the UI.
         //findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
     }
+
+
+
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
