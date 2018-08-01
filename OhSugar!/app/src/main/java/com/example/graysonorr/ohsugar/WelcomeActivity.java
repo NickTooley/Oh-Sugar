@@ -1,6 +1,7 @@
 package com.example.graysonorr.ohsugar;
 
 import android.Manifest;
+import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.*;
@@ -30,6 +31,9 @@ public class WelcomeActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.CAMERA },
                     1);
         }
+
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "food-db").build();
 
 
         //Shader txtShader = new LinearGradient(0,0,100,0, new int[]{R.color.colorTomato, R.color.colorDeepPink}, new float[]{0,1}, Shader.TileMode.CLAMP);
