@@ -2,20 +2,27 @@ package com.example.graysonorr.ohsugar;
 
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.Collections;
+import com.example.graysonorr.ohsugar.db.AppDatabase;
+import com.example.graysonorr.ohsugar.db.Food;
+import com.example.graysonorr.ohsugar.db.utils.dbinit;
+
+import java.util.List;
 
 public class BarcodeRetrieval extends AppCompatActivity {
-    private TextView mBarcode;
+    private TextView barcodeText;
+    private TextView productNameText;
+    private TextView sugarContentText;
+    private AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +36,12 @@ public class BarcodeRetrieval extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode_retrieval);
 
-        mBarcode = findViewById(R.id.barcodeText);
+        db = AppDatabase.getInMemoryDatabase(getApplicationContext());
+        populateDb();
+
+        barcodeText = findViewById(R.id.barcodeText);
+        productNameText = findViewById(R.id.productNameText);
+        sugarContentText = findViewById(R.id.sugarText);
 
         TextView toolBarTitle = findViewById(R.id.toolbar_title);
         Typeface customFont = Typeface.createFromAsset(getAssets(), getString(R.string.font));
@@ -49,6 +61,14 @@ public class BarcodeRetrieval extends AppCompatActivity {
         startActivityForResult(intent, 1);
 
 
+
+
+
+
+    }
+
+    private void populateDb() {
+        dbinit.populateAsync(db);
     }
 
     @Override
@@ -57,9 +77,27 @@ public class BarcodeRetrieval extends AppCompatActivity {
         if (requestCode == 1) {
             currentQRCode = data.getStringExtra("nada");
             if(currentQRCode!=null) {
-                mBarcode.setText(currentQRCode);
+                barcodeText.setText(currentQRCode);
+                fetchData(currentQRCode);
             }
 
         }
+    }
+
+    private void showOutput(Food food){
+        productNameText.setText(food.name);
+        sugarContentText.setText(food.sugar + "g");
+    }
+
+    private void fetchData(String barcode) {
+        // This activity is executing a query on the main thread, making the UI perform badly.
+        Log.d("Barcode", barcode);
+        Food food = db.foodDao().findByBarcode(barcode);
+        //Food food = db.foodDao().findByID(1);
+
+        if(food != null){
+            showOutput(food);
+        }
+
     }
 }

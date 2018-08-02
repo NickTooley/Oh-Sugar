@@ -8,13 +8,12 @@ import android.graphics.*;
 import android.os.*;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.*;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.*;
 
-import java.io.Console;
+import com.example.graysonorr.ohsugar.db.AppDatabase;
 
 public class WelcomeActivity extends AppCompatActivity {
 
