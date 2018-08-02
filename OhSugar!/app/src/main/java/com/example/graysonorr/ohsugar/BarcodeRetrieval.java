@@ -37,7 +37,7 @@ public class BarcodeRetrieval extends AppCompatActivity {
         setContentView(R.layout.activity_barcode_retrieval);
 
         db = AppDatabase.getInMemoryDatabase(getApplicationContext());
-        populateDb();
+        //populateDb();
 
         barcodeText = findViewById(R.id.barcodeText);
         productNameText = findViewById(R.id.productNameText);

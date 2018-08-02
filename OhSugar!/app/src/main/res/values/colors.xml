@@ -7,7 +7,7 @@
     <!-- Custom Colors -->
     <color name="colorMainSecondary">#E6E6E6</color>
     <color name="colorTomato">#fc552e</color>
-    <color name="colorDeepPink">#F9398E</color>
+    <color name="colorDeepPink">#f9398e</color>
     <color name="colorLightSlateGray">#8E8F93</color>
 
     <color name="black_overlay">#66000000</color>
