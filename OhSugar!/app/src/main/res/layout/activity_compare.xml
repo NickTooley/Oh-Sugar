@@ -133,7 +133,7 @@
                             android:textSize="30sp" />
 
                         <TextView
-                            android:id="@+id/textView16"
+                            android:id="@+id/product1Measure"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=" grams"
@@ -178,7 +178,7 @@
                             android:textSize="30sp" />
 
                         <TextView
-                            android:id="@+id/textView14"
+                            android:id="@+id/product2Measure"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=" grams"

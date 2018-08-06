@@ -26,6 +26,16 @@ public class SplashScreenActivity extends AppCompatActivity {
         Animation downAnimation = AnimationUtils.loadAnimation(this, R.anim.down);
         splashIconImgView.startAnimation(downAnimation);
 
+        SharedPreferences sharedPref = SplashScreenActivity.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
+
+        if(sharedPref.getString("abbreviation", "no") == "no"){
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putFloat("floatMeasure", 1.0f);
+            editor.putString("abbreviation", "g");
+            editor.putString("stringMeasure", "Grams");
+            editor.apply();
+        }
+
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

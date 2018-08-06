@@ -18,6 +18,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.google.android.gms.vision.*;
 import com.google.android.gms.vision.barcode.*;
@@ -132,7 +133,7 @@ public class BarcodeScanner extends AppCompatActivity {
         SurfaceHolder surfHolder = mSurfaceView.getHolder();
         surfHolder.addCallback(new SurfaceHolderSetUp());
         BarcodeDetector.Builder bCodeDectBuilder = new BarcodeDetector.Builder(this);
-        bCodeDectBuilder.setBarcodeFormats(Barcode.EAN_13);
+        bCodeDectBuilder.setBarcodeFormats(Barcode.EAN_13 | Barcode.EAN_8);
         mBarcodeDetector = bCodeDectBuilder.build();
         mBarcodeDetector.setProcessor(new BarcodeProcessor());
 
@@ -256,7 +257,8 @@ public class BarcodeScanner extends AppCompatActivity {
         public void surfaceCreated(SurfaceHolder surfHolder) {
             try {
                 mCameraSource.start(surfHolder);
-            } catch (IOException e) {
+            } catch (IOException | SecurityException e) {
+                Toast.makeText(BarcodeScanner.this, "You do not have Camera permissions enabled", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
         }

@@ -35,7 +35,8 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_fullscreen"
             android:theme="@style/FullscreenTheme" />
-        <activity android:name=".BarcodeRetrieval"></activity>
+        <activity android:name=".BarcodeRetrieval" />
+        <activity android:name=".ConversionsActivity"></activity>
     </application>
 
 </manifest>
