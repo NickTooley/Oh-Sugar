@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
-    tools:context=".WelcomeActivity">
+    tools:context="com.example.graysonorr.ohsugar.BarcodeRetrieval">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="settings"
+                android:text="barcode"
                 android:textColor="#ffffff"
                 android:textSize="25sp" />
 
@@ -49,38 +48,41 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center_horizontal"
-            android:paddingTop="100dp">
+            android:paddingTop="50dp">
 
+            <TextView
+                android:id="@+id/barcodeText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No Barcode"
+                android:textAlignment="center"
+                android:textSize="24sp" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/scanBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="COVERSASIONS"
-                android:paddingLeft="50dp"
-                android:paddingRight="50dp"
-                android:layout_marginBottom="30dp"
-                android:textSize="24sp"
-                android:background="@drawable/long_btn"/>
+                android:text="SCAN"
+                android:layout_marginBottom="30dp"/>
 
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/productNameText"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="shopping list"
-                android:paddingLeft="50dp"
-                android:paddingRight="50dp"
-                android:textSize="24sp"
-                android:background="@drawable/long_btn"/>
+                android:text="Unknown Product Name"
+                android:textAlignment="center"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/sugarText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Unknown Sugar Content"
+                android:textAlignment="center"
+                android:textSize="24sp" />
         </LinearLayout>
 
 
-
-
-
     </LinearLayout>
-
-
-
 
 </android.support.constraint.ConstraintLayout>

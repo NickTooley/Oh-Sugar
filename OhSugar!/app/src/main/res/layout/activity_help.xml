@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="settings"
+                android:text="help"
                 android:textColor="#ffffff"
                 android:textSize="25sp" />
 
@@ -43,38 +43,6 @@
 
 
         </FrameLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center_horizontal"
-            android:paddingTop="100dp">
-
-
-            <Button
-                android:id="@+id/button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="COVERSASIONS"
-                android:paddingLeft="50dp"
-                android:paddingRight="50dp"
-                android:layout_marginBottom="30dp"
-                android:textSize="24sp"
-                android:background="@drawable/long_btn"/>
-
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="shopping list"
-                android:paddingLeft="50dp"
-                android:paddingRight="50dp"
-                android:textSize="24sp"
-                android:background="@drawable/long_btn"/>
-        </LinearLayout>
-
-
 
 
 

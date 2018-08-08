@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="grad_colors">
+        <item>@color/colorDeepPink</item>
+        <item>@color/colorTomato</item>
+    </array>
+</resources>
