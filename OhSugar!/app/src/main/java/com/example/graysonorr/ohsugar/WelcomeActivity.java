@@ -103,6 +103,28 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         });
 
+        Button searchBtn = (Button) findViewById(R.id.searchBtn);
+
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button healthBtn = (Button) findViewById(R.id.healthBtn);
+
+        healthBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), HealthActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+
 
 
     }
