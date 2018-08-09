@@ -34,7 +34,7 @@
                 android:id="@+id/barcodeOverlay"
                 android:layout_width="230dp"
                 android:layout_height="150dp"
-                android:background="@drawable/long_btn">
+                android:background="@drawable/tall_btn">
 
             </FrameLayout>
         </LinearLayout>
