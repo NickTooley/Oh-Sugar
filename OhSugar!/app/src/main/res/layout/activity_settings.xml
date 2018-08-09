@@ -52,26 +52,34 @@
             android:paddingTop="100dp">
 
 
-            <Button
+            <TextView
                 android:id="@+id/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="CONVERSIONS"
-                android:paddingLeft="50dp"
-                android:paddingRight="50dp"
                 android:layout_marginBottom="30dp"
-                android:textSize="24sp"
-                android:background="@drawable/long_btn"/>
+                android:background="@drawable/long_btn"
+                android:paddingBottom="8dp"
+                android:paddingLeft="60dp"
+                android:paddingRight="60dp"
+                android:paddingTop="5dp"
+                android:text="conversions"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                android:textSize="28sp"
+                android:textStyle="bold" />
 
-            <Button
+            <TextView
                 android:id="@+id/button2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/long_btn"
+                android:paddingBottom="8dp"
+                android:paddingLeft="60dp"
+                android:paddingRight="60dp"
+                android:paddingTop="5dp"
                 android:text="shopping list"
-                android:paddingLeft="50dp"
-                android:paddingRight="50dp"
-                android:textSize="24sp"
-                android:background="@drawable/long_btn"/>
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                android:textSize="28sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
 

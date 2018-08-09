@@ -3,6 +3,7 @@ package com.example.graysonorr.ohsugar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.graphics.Typeface;
@@ -38,7 +39,7 @@ public class SettingsActivity extends AppCompatActivity {
         Typeface customFont = Typeface.createFromAsset(getAssets(), getString(R.string.font));
         toolBarTitle.setTypeface(customFont);
 
-        Button conversionsBtn = (Button) findViewById(R.id.button);
+        TextView conversionsBtn = (TextView) findViewById(R.id.button);
 
         conversionsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +48,25 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        conversionsBtn.measure(0,0);
+
+        Log.d("conversionswidth", Integer.toString(conversionsBtn.getMeasuredWidth()));
+
+        Shader textShader=new LinearGradient(0, 0, conversionsBtn.getMeasuredWidth() / 2, 0,
+                new int[]{Color.parseColor("#fc552e"),Color.parseColor("#f9398e")},
+                new float[]{0, 1}, Shader.TileMode.CLAMP);
+        conversionsBtn.getPaint().setShader(textShader);
+
+        TextView shoppingListBtn = (TextView) findViewById(R.id.button2);
+
+        shoppingListBtn.measure(0,0);
+
+        Shader textShader2=new LinearGradient(0, 0, shoppingListBtn.getMeasuredWidth() / 2, 0,
+                new int[]{Color.parseColor("#fc552e"),Color.parseColor("#f9398e")},
+                new float[]{0, 1}, Shader.TileMode.CLAMP);
+        shoppingListBtn.getPaint().setShader(textShader2);
+
 
 
 

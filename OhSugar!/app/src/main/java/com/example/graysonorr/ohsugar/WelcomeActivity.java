@@ -27,7 +27,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             ActivityCompat.requestPermissions(WelcomeActivity.this,
-                    new String[]{Manifest.permission.CAMERA },
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.INTERNET },
                     1);
         }
 
