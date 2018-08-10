@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,7 +39,6 @@ import java.util.List;
 public class SearchActivity extends AppCompatActivity {
 
     private AppDatabase db;
-    private ListView lv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,7 @@ public class SearchActivity extends AppCompatActivity {
         Typeface customFont = Typeface.createFromAsset(getAssets(), getString(R.string.font));
         toolBarTitle.setTypeface(customFont);
 
-        lv = (ListView) findViewById(R.id.searchResults);
+        final ListView lv = (ListView) findViewById(R.id.searchResults);
 
         db = AppDatabase.getInMemoryDatabase(getApplicationContext());
 
@@ -114,27 +114,43 @@ public class SearchActivity extends AppCompatActivity {
             HashMap<String, String> searchResults = (HashMap<String,String>) data.getSerializableExtra("countdownMap");
             Log.d("Checkeromni", "heiojdf");
 
-            populateListView(lv, searchResults);
+            populateListView(searchResults);
 
 
         }
     }
 
-    private void populateListView(ListView lv, List<Food> foods){
+    private void populateListView(List<Food> foods){
+        final ListView lv = (ListView) findViewById(R.id.searchResults);
         FoodAdapter adapter = new FoodAdapter(this, foods);
         lv.setAdapter(adapter);
 
     }
 
-    private void populateListView(ListView lv, HashMap<String, String> foods){
+    private void populateListView(final HashMap<String, String> foods){
 
         List<String> results = new ArrayList<String>(foods.keySet());
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1 , results);
+        final ListView lv = (ListView) findViewById(R.id.searchResults);
         lv.setAdapter(adapter);
 
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String name = lv.getItemAtPosition(position).toString();
+                String URL = foods.get(name);
+                Intent intent = new Intent(getApplicationContext(), BasicSugarContent.class);
+                intent.putExtra("Name", name);
+                intent.putExtra("URL", URL);
+                Log.d("URL", URL);
+                Log.d("Name", name);
+                startActivity(intent);
+            }
+        });
     }
 
-    private void populateListView(ListView lv, Food food){
+    private void populateListView(Food food){
+        final ListView lv = (ListView) findViewById(R.id.searchResults);
         List<Food> foods = new ArrayList<Food>();
 
         foods.add(food);
@@ -152,7 +168,7 @@ public class SearchActivity extends AppCompatActivity {
         Food foods = db.foodDao().findByBarcode(barcode);
 
         if(foods != null){
-            populateListView(lv, foods);
+            populateListView(foods);
         }
 
     }
@@ -165,7 +181,7 @@ public class SearchActivity extends AppCompatActivity {
 
         if(foods.size() > 0){
             //showOutput(food);
-            populateListView(lv, foods);
+            populateListView(foods);
 
         }else{
             AsyncScraper scraper = new AsyncScraper(SearchActivity.this, search);
@@ -238,7 +254,7 @@ public class SearchActivity extends AppCompatActivity {
             //CountdownScraper.returnValues();
             toReturn = fetchedMap;
             if(fetchedMap != null) {
-                populateListView(lv, fetchedMap);
+                populateListView(fetchedMap);
                 //returnValues(fetchedMap);
             }else{
                 //returnValues();

@@ -39,7 +39,8 @@
         <activity android:name=".ConversionsActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".HealthActivity" />
-        <activity android:name=".CountdownScraper"></activity>
+        <activity android:name=".CountdownScraper" />
+        <activity android:name=".BasicSugarContent"></activity>
     </application>
 
 </manifest>
