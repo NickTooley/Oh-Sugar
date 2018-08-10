@@ -12,7 +12,7 @@ import com.example.graysonorr.ohsugar.db.FoodDao;
  * Created by toolnj1 on 1/08/2018.
  */
 
-@Database(entities = {Food.class}, version = 1)
+@Database(entities = {Food.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;
