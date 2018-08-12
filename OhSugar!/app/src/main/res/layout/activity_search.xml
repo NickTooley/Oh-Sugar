@@ -44,20 +44,43 @@
 
         </FrameLayout>
 
-        <AutoCompleteTextView
-            android:id="@+id/searchBox"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
-            android:layout_gravity="center"
-            android:background="@drawable/long_btn"
-            android:clickable="true"
-            android:paddingBottom="10dp"
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp"
-            android:paddingTop="10dp"
-            android:hint="Search"
-            android:textSize="24sp" />
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <AutoCompleteTextView
+                android:id="@+id/searchBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/long_btn"
+                android:clickable="true"
+                android:hint="Search"
+                android:paddingBottom="10dp"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:paddingTop="10dp"
+                android:textSize="24sp" />
+
+            <Button
+                android:id="@+id/searchBtn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/search_btn_dark"
+                android:text="" />
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/SearchResultsLstVw"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 

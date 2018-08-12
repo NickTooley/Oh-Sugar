@@ -31,4 +31,7 @@ public interface FoodDao {
 
     @Query("SELECT name FROM Food")
     List<String> getAllNames();
+
+    @Query("SELECT name FROM Food WHERE name LIKE :name")
+    List<String> searchByName(String name);
 }
