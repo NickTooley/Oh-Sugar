@@ -61,7 +61,9 @@ public class dbinit {
         addFood(db, 1, "9415767422209", "Fresh Up Big Fizz Juicy Orange", 55.9);
         addFood(db, 2, "9300675036337", "Pumped Lime", 17.0);
         addFood(db, 3, "9414912300140", "Choysa Classic Tea Bags", 0.0);
-        addFood(db, 3, "9414789100508", "Pepsi 355ml", 38.5);
+        addFood(db, 4, "9414789100508", "Pepsi 355ml", 38.5);
+        addFood(db, 5, "9414789100506", "Pepsi Max 355ml", 38.5);
+        addFood(db, 6, "9414789100507", "Diet Pepsi 355ml", 38.5);
     }
 
 }

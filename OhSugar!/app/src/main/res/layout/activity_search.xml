@@ -5,27 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
-    tools:context=".ShoppingListActivity">
+    tools:context=".SearchActivity">
 
     <LinearLayout
-        android:id="@+id/FragContainer"
-        android:layout_width="216dp"
-        android:layout_height="182dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar_top"
@@ -39,11 +24,11 @@
 
             <TextView
                 android:id="@+id/toolbar_title"
+                android:paddingTop="40dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingTop="40dp"
-                android:text="Shopping list"
+                android:text="Search"
                 android:textColor="#ffffff"
                 android:textSize="25sp" />
 
@@ -53,28 +38,30 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@drawable/mask_gradient">
+            android:background="@drawable/mask_gradient"
+            android:layout_gravity="bottom">
 
 
         </FrameLayout>
 
-        <TextView
-            android:id="@+id/AddToListTxtVw"
+        <AutoCompleteTextView
+            android:id="@+id/searchBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginBottom="30dp"
+            android:layout_gravity="center"
             android:background="@drawable/long_btn"
             android:clickable="true"
             android:paddingBottom="10dp"
             android:paddingLeft="50dp"
             android:paddingRight="50dp"
             android:paddingTop="10dp"
-            android:text="Add Item"
+            android:hint="Search"
             android:textSize="24sp" />
 
     </LinearLayout>
+
+
 
 
 </android.support.constraint.ConstraintLayout>

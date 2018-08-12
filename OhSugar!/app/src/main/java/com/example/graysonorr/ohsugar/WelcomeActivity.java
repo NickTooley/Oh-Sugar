@@ -59,8 +59,6 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         });
 
-
-
         Button shoppingListBtn = (Button) findViewById(R.id.listBtn);
 
         shoppingListBtn.setOnClickListener(new View.OnClickListener() {
@@ -70,8 +68,6 @@ public class WelcomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
 
         Button helpBtn = (Button) findViewById(R.id.helpBtn);
 
@@ -99,6 +95,16 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), CompareActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button searchBtn = (Button) findViewById(R.id.searchBtn);
+
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
                 startActivity(intent);
             }
         });
