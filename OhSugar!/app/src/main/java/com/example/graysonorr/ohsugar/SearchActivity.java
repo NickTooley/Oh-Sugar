@@ -12,12 +12,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -60,7 +63,12 @@ public class SearchActivity extends AppCompatActivity {
 
         db = AppDatabase.getInMemoryDatabase(getApplicationContext());
 
-        final EditText searchText = (EditText) findViewById(R.id.searchText);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, db.foodDao().getAllNames());
+        final AutoCompleteTextView searchText = (AutoCompleteTextView)
+                findViewById(R.id.searchText);
+
+        searchText.setAdapter(adapter);
 
         searchText.measure(0,0);
 
@@ -72,9 +80,18 @@ public class SearchActivity extends AppCompatActivity {
         searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
                 lv.setAdapter(null);
 
-                fetchTextData(searchText.getText().toString());
+                SearchResultArrayAdapter adapter1 = new SearchResultArrayAdapter
+                        (SearchActivity.this, R.layout.custom_search_results_listview, db.foodDao().searchByName("%"+searchText.getText().toString()+"%"));
+                ListView lv = (ListView) findViewById(R.id.searchResults);
+                lv.setAdapter(adapter1);
+
+                Log.d("get count", Integer.toString(adapter1.getCount()));
+                if(adapter1.getCount() == 0) {
+                    fetchTextData(searchText.getText().toString());
+                }
 
                 findViewById(R.id.searchResults).requestFocus();
                 View view = SearchActivity.this.getCurrentFocus();
@@ -177,7 +194,7 @@ public class SearchActivity extends AppCompatActivity {
         // This activity is executing a query on the main thread, making the UI perform badly.
         Log.d("Barcode", search);
         //Food food = db.foodDao().findByBarcode(barcode);
-        List<Food> foods = db.foodDao().findByText(search);
+        List<Food> foods = db.foodDao().searchByName(search);
 
         if(foods.size() > 0){
             //showOutput(food);
@@ -264,7 +281,35 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
+    public class SearchResultArrayAdapter extends ArrayAdapter<Food> {
+        public SearchResultArrayAdapter(Context context, int resource, List<Food> objects) {
+            super(context, resource, objects);
+        }
 
-}
+        public View getView(int position, View convertView, ViewGroup container) {
+            LayoutInflater inflater = LayoutInflater.from(SearchActivity.this);
+            View customView = inflater.inflate(R.layout.food_item, container, false);
+
+            TextView resultTxtVw = (TextView) customView.findViewById(R.id.foodName);
+            Button addBtn = (Button) customView.findViewById(R.id.AddBtn);
+
+            final Food currentItem = getItem(position);
+
+            resultTxtVw.setText(currentItem.name);
+            addBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(SearchActivity.this, ShoppingListActivity.class);
+                    startActivity(intent);
+                }
+            });
+
+            return customView;
+        }
+    }
+
+
+
+    }
 
 
