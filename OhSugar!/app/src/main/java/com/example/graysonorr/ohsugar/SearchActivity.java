@@ -84,7 +84,7 @@ public class SearchActivity extends AppCompatActivity {
                 lv.setAdapter(null);
 
                 SearchResultArrayAdapter adapter1 = new SearchResultArrayAdapter
-                        (SearchActivity.this, R.layout.custom_search_results_listview, db.foodDao().searchByName("%"+searchText.getText().toString()+"%"));
+                        (SearchActivity.this, R.layout.food_item, db.foodDao().searchByName("%"+searchText.getText().toString()+"%"));
                 ListView lv = (ListView) findViewById(R.id.searchResults);
                 lv.setAdapter(adapter1);
 
@@ -109,7 +109,6 @@ public class SearchActivity extends AppCompatActivity {
         scanBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(SearchActivity.this, BarcodeScanner.class);
                 Intent intent = new Intent(SearchActivity.this, BarcodeScanner.class);
                 startActivityForResult(intent, 1);
             }
@@ -132,8 +131,6 @@ public class SearchActivity extends AppCompatActivity {
             Log.d("Checkeromni", "heiojdf");
 
             populateListView(searchResults);
-
-
         }
     }
 
@@ -206,10 +203,6 @@ public class SearchActivity extends AppCompatActivity {
         }
 
     }
-
-
-
-
 
     class AsyncScraper extends AsyncTask<String, Void, HashMap<String,String>>{
         HashMap<String, String> toReturn;
@@ -299,7 +292,16 @@ public class SearchActivity extends AppCompatActivity {
             addBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    currentItem.onShopList = true;
                     Intent intent = new Intent(SearchActivity.this, ShoppingListActivity.class);
+                    startActivity(intent);
+                }
+            });
+            resultTxtVw.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(SearchActivity.this, MoreInfoActivity.class);
+                    intent.putExtra("ID", currentItem.foodID);
                     startActivity(intent);
                 }
             });

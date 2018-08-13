@@ -20,5 +20,6 @@ public class Food {
     public String barcode;
     public String name;
     public double sugar;
+    public boolean onShopList;
 
 }
