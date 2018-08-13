@@ -1,6 +1,8 @@
 package com.example.graysonorr.ohsugar;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -46,6 +48,8 @@ public class CompareActivity extends AppCompatActivity {
         Typeface customFont = Typeface.createFromAsset(getAssets(), getString(R.string.font));
         toolBarTitle.setTypeface(customFont);
 
+        SharedPreferences sharedPref = CompareActivity.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
+
         compare1 = (TextView) findViewById(R.id.compare1);
         compare2 = (TextView) findViewById(R.id.compare2);
         product1Title = (TextView) findViewById(R.id.product1Title);
@@ -54,6 +58,12 @@ public class CompareActivity extends AppCompatActivity {
         product2Sugar = (TextView) findViewById(R.id.product2Sugar);
 
         db = AppDatabase.getInMemoryDatabase(getApplicationContext());
+
+        TextView comp1Measure = (TextView) findViewById(R.id.product1Measure);
+        TextView comp2Measure = (TextView) findViewById(R.id.product2Measure);
+
+        comp1Measure.setText(sharedPref.getString("abbreviation", "grams"));
+        comp2Measure.setText(sharedPref.getString("abbreviation", "grams"));
 
         compare1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,7 +117,8 @@ public class CompareActivity extends AppCompatActivity {
 
     private void showOutput(Food food, TextView name, TextView sugar){
         name.setText(food.name);
-        sugar.setText(Integer.toString((int)(food.sugar + 0.5d)));
+        SharedPreferences sharedPref = CompareActivity.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
+        sugar.setText(Integer.toString((int)(food.sugar / sharedPref.getFloat("floatMeasure", 1.0f) + 0.5d)));
     }
 
 

@@ -27,7 +27,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             ActivityCompat.requestPermissions(WelcomeActivity.this,
-                    new String[]{Manifest.permission.CAMERA },
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.INTERNET },
                     1);
         }
 
@@ -102,6 +102,28 @@ public class WelcomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        Button searchBtn = (Button) findViewById(R.id.searchBtn);
+
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button healthBtn = (Button) findViewById(R.id.healthBtn);
+
+        healthBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), HealthActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
 
 
 
