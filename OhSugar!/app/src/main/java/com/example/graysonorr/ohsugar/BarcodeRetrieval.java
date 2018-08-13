@@ -1,6 +1,8 @@
 package com.example.graysonorr.ohsugar;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -86,7 +88,10 @@ public class BarcodeRetrieval extends AppCompatActivity {
 
     private void showOutput(Food food){
         productNameText.setText(food.name);
-        sugarContentText.setText(food.sugar + "g");
+        SharedPreferences sharedPref = BarcodeRetrieval.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
+        String abbrev = sharedPref.getString("abbreviation", "g");
+        Float measure = sharedPref.getFloat("floatMeasure", 1.0f);
+        sugarContentText.setText((food.sugar / measure) + abbrev);
     }
 
     private void fetchData(String barcode) {

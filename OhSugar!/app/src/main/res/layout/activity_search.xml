@@ -45,46 +45,68 @@
         </FrameLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="30dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
 
-            <AutoCompleteTextView
-                android:id="@+id/searchBox"
-                android:layout_width="290dp"
-                android:maxWidth="290dp"
-                android:maxLines="1"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:background="@drawable/long_btn"
-                android:clickable="true"
-                android:hint="Search"
-                android:paddingBottom="10dp"
-                android:paddingLeft="50dp"
-                android:paddingRight="50dp"
-                android:paddingTop="10dp"
-                android:textSize="24sp" />
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/searchBtn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/search_btn_dark"
-                android:text="" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/searchText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="-3dp"
+                        android:background="@drawable/long_btn"
+                        android:hint="Search here"
+                        android:imeOptions="actionSearch"
+                        android:inputType="text"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:maxLines="1"
+                        android:paddingBottom="20dp"
+                        android:paddingTop="20dp"
+                        android:textAlignment="center"
+                        android:textSize="18sp" />
+
+                    <FrameLayout
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/mask_gradient"></FrameLayout>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/scanBtn"
+                    android:layout_width="120dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/camera_pink_btn" />
+
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/searchResults"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
         </LinearLayout>
 
-        <ListView
-            android:id="@+id/SearchResultsLstVw"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="5dp"/>
 
     </LinearLayout>
 

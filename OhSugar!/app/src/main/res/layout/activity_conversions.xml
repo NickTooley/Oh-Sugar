@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="settings"
+                android:text="conversions"
                 android:textColor="#ffffff"
                 android:textSize="25sp" />
 
@@ -52,34 +52,50 @@
             android:paddingTop="100dp">
 
 
-            <TextView
-                android:id="@+id/button"
+            <RadioGroup
+                android:id="@+id/conversionSelect"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                android:background="@drawable/long_btn"
-                android:paddingBottom="8dp"
-                android:paddingLeft="60dp"
-                android:paddingRight="60dp"
-                android:paddingTop="5dp"
-                android:text="conversions"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                android:textSize="28sp"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/button2"
+                <RadioButton
+                    android:id="@+id/radioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:text="Grams" />
+
+                <RadioButton
+                    android:id="@+id/radioButton2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:text="Teaspoons" />
+
+                <RadioButton
+                    android:id="@+id/radioButton3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:text="Tablespoons" />
+
+                <RadioButton
+                    android:id="@+id/radioButton4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:layout_weight="1"
+                    android:text="Sugar Cubes" />
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/saveBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/long_btn"
-                android:paddingBottom="8dp"
-                android:paddingLeft="60dp"
-                android:paddingRight="60dp"
-                android:paddingTop="5dp"
-                android:text="shopping list"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                android:textSize="28sp"
-                android:textStyle="bold" />
+                android:text="Save" />
+
         </LinearLayout>
 
 

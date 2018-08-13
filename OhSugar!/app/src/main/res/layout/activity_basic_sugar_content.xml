@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="settings"
+                android:text="sugar content"
                 android:textColor="#ffffff"
                 android:textSize="25sp" />
 
@@ -49,46 +49,29 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center_horizontal"
-            android:paddingTop="100dp">
-
-
-            <TextView
-                android:id="@+id/button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                android:background="@drawable/long_btn"
-                android:paddingBottom="8dp"
-                android:paddingLeft="60dp"
-                android:paddingRight="60dp"
-                android:paddingTop="5dp"
-                android:text="conversions"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                android:textSize="28sp"
-                android:textStyle="bold" />
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="50dp">
 
             <TextView
-                android:id="@+id/button2"
+                android:id="@+id/foodTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/long_btn"
-                android:paddingBottom="8dp"
-                android:paddingLeft="60dp"
-                android:paddingRight="60dp"
-                android:paddingTop="5dp"
-                android:text="shopping list"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                android:textSize="28sp"
-                android:textStyle="bold" />
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textSize="30sp"/>
+
+            <TextView
+                android:id="@+id/foodSugar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:text="TextView" />
         </LinearLayout>
 
 
-
-
-
     </LinearLayout>
-
-
 
 
 </android.support.constraint.ConstraintLayout>
