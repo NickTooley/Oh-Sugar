@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    tools:context=".WelcomeActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_top"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@drawable/gradient_background"
+            android:minHeight="?attr/actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:paddingTop="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Info"
+                android:textColor="#ffffff"
+                android:textSize="25sp" />
+
+
+        </android.support.v7.widget.Toolbar>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/mask_gradient"
+            android:layout_gravity="bottom">
+
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="30dp"
+            android:paddingTop="5dp">
+
+            <TextView
+                android:id="@+id/FoodProductTxtVw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:background="@drawable/long_btn"
+                android:clickable="true"
+                android:paddingBottom="10dp"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:paddingTop="10dp"
+                android:text="Food Product"
+                android:textColor="@color/colorAccent"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sugar Levels:  "
+                    android:textColor="@android:color/background_dark"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/MsrmntTxtVw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2"
+                    android:textColor="@color/colorDeepPink"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/UnitTxtVw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" cubes"
+                    android:textColor="@color/colorDeepPink"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="15dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/HealthyAltTxtVwLbl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Healthier Alternative:"
+                android:textColor="@android:color/background_dark"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/HealthyAltTxtVw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/long_btn"
+                android:clickable="true"
+                android:paddingBottom="10dp"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:paddingTop="10dp"
+                android:textAlignment="center"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="15dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/TotalUnderTxtVw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Total Under:"
+                android:textColor="@android:color/background_dark"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="15dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/HealthyTxtVw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Healthy?"
+                android:textColor="@android:color/background_dark"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/AddToListTxtVw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/long_btn"
+                android:clickable="true"
+                android:paddingBottom="10dp"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:paddingTop="10dp"
+                android:text="Add to shopping list"
+                android:textColor="@android:color/background_dark"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

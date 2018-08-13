@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent"
+    tools:layout_editor_absoluteY="25dp">
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout3"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout3">
+
+        <Button
+            android:id="@+id/searchBtn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/search_btn"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/searchTxtVw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SEARCH"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/scanBtn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/camera_btn"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/scanTxtVw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SCAN"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

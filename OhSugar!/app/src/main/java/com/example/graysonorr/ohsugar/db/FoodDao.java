@@ -29,7 +29,9 @@ public interface FoodDao {
     @Query("DELETE FROM Food")
     void deleteAll();
 
-    @Query("SELECT * FROM Food WHERE name LIKE :search")
-    List<Food> findByText(String search);
+    @Query("SELECT name FROM Food")
+    List<String> getAllNames();
 
+    @Query("SELECT * FROM Food WHERE name LIKE :name")
+    List<Food> searchByName(String name);
 }
