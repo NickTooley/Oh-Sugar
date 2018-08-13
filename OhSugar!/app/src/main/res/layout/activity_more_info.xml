@@ -128,7 +128,6 @@
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"
                 android:paddingTop="10dp"
-                android:text="Your mum"
                 android:textAlignment="center"
                 android:textSize="14sp" />
 
@@ -175,7 +174,7 @@
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"
                 android:paddingTop="10dp"
-                android:text="Add to list"
+                android:text="Add to shopping list"
                 android:textColor="@android:color/background_dark"
                 android:textSize="14sp"
                 android:textStyle="bold" />
