@@ -2,6 +2,7 @@ package com.example.graysonorr.ohsugar;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
@@ -28,6 +29,8 @@ import android.widget.TextView;
 
 import com.example.graysonorr.ohsugar.db.AppDatabase;
 import com.example.graysonorr.ohsugar.db.Food;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -35,6 +38,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -292,7 +296,7 @@ public class SearchActivity extends AppCompatActivity {
             addBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    currentItem.onShopList = true;
+                    addToShoppingList(currentItem);
                     Intent intent = new Intent(SearchActivity.this, ShoppingListActivity.class);
                     startActivity(intent);
                 }
@@ -310,8 +314,29 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
+    public void addToShoppingList(Food item){
+        SharedPreferences sharedPreferences = getSharedPreferences("Shopping List", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("shopping list", null);
+        Type type = new TypeToken<ArrayList<Food>>() {}.getType();
 
+        ArrayList<Food> shoppinglist = gson.fromJson(json, type);
+
+        if(shoppinglist == null){
+            shoppinglist = new ArrayList<>();
+        }
+
+        shoppinglist.add(item);
+
+        gson = new Gson();
+        json = gson.toJson(shoppinglist);
+        editor.putString("shopping list", json);
+        editor.commit();
     }
+
+
+}
 
 

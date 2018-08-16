@@ -1,10 +1,8 @@
 package com.example.graysonorr.ohsugar;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -21,12 +19,18 @@ import android.widget.TextView;
 
 import com.example.graysonorr.ohsugar.db.AppDatabase;
 import com.example.graysonorr.ohsugar.db.Food;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShoppingListActivity extends AppCompatActivity {
 
     private AppDatabase db;
+    private ArrayList<Food> shoppingList;
+    SharedPreferences conversions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +49,13 @@ public class ShoppingListActivity extends AppCompatActivity {
 
         db = AppDatabase.getInMemoryDatabase(getApplicationContext());
 
+        conversions = getSharedPreferences("conversions", Context.MODE_PRIVATE);
+
         TextView addItem = (TextView) findViewById(R.id.AddToListTxtVw);
 
         ShoppingListArrayAdapter adapter1 = new ShoppingListArrayAdapter
-                (ShoppingListActivity.this, R.layout.food_item, db.foodDao().getShopList());
-        ListView lv = (ListView) findViewById(R.id.listView);
+                (ShoppingListActivity.this, R.layout.food_item, getShoppingList());
+        ListView lv = (ListView) findViewById(R.id.ListView);
         lv.setAdapter(adapter1);
 
         addItem.setOnClickListener(new View.OnClickListener() {
@@ -59,6 +65,12 @@ public class ShoppingListActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        TextView sugarTotal = (TextView) findViewById(R.id.sugarTotal);
+        TextView units = (TextView) findViewById(R.id.unitsTxtVw);
+
+        sugarTotal.setText(Double.toString(getTotalSugar()) + " ");
+        units.setText(conversions.getString("stringMeasure", null));
     }
 
     public class ShoppingListArrayAdapter extends ArrayAdapter<Food> {
@@ -70,13 +82,17 @@ public class ShoppingListActivity extends AppCompatActivity {
             LayoutInflater inflater = LayoutInflater.from(ShoppingListActivity.this);
             View customView = inflater.inflate(R.layout.food_item, container, false);
 
-            TextView textView = (TextView) customView.findViewById(R.id.foodName);
+            TextView name = (TextView) customView.findViewById(R.id.foodName);
+            TextView sugar = (TextView) customView.findViewById(R.id.foodSugar);
+            Button remove = (Button) customView.findViewById(R.id.AddBtn);
 
             final Food currentItem = getItem(position);
 
-            textView.setText(currentItem.name);
+            name.setText(currentItem.name);
+            sugar.setText(Double.toString(currentItem.sugar) + " " + conversions.getString("abbreviation", null));
 
-            textView.setOnClickListener(new View.OnClickListener() {
+
+            name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(ShoppingListActivity.this, MoreInfoActivity.class);
@@ -85,7 +101,70 @@ public class ShoppingListActivity extends AppCompatActivity {
                 }
             });
 
+            remove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    removeFromShoppingList(currentItem);
+                    restartActivity();
+                }
+            });
+
             return customView;
         }
+    }
+
+    public ArrayList<Food> getShoppingList(){
+        SharedPreferences sharedPreferences = getSharedPreferences("Shopping List", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("shopping list", null);
+        Type type = new TypeToken<ArrayList<Food>>() {}.getType();
+
+        ArrayList<Food> shoppinglist = gson.fromJson(json, type);
+
+        if(shoppinglist == null){
+            shoppinglist = new ArrayList<>();
+        }
+
+        return shoppinglist;
+    }
+
+    public void removeFromShoppingList(Food item){
+        SharedPreferences sharedPreferences = getSharedPreferences("Shopping List", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("shopping list", null);
+        Type type = new TypeToken<ArrayList<Food>>() {}.getType();
+
+        ArrayList<Food> shoppinglist = gson.fromJson(json, type);
+
+        if(shoppinglist == null){
+            shoppinglist = new ArrayList<>();
+        }
+
+        for(int i=0; i < shoppinglist.size(); i++){
+            if (shoppinglist.get(i).foodID == item.foodID){
+                shoppinglist.remove(i);
+            }
+        }
+
+        gson = new Gson();
+        json = gson.toJson(shoppinglist);
+        editor.putString("shopping list", json);
+        editor.commit();
+    }
+
+    public void restartActivity(){
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+    }
+
+    public Double getTotalSugar(){
+        Double total = 0.00;
+        for(Food item : getShoppingList()){
+            total += item.sugar;
+        }
+        return total;
     }
 }
