@@ -25,11 +25,11 @@ public class WelcomeActivity extends AppCompatActivity {
         Typeface customFont = Typeface.createFromAsset(getAssets(), getString(R.string.font));
         toolBarTitle.setTypeface(customFont);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            ActivityCompat.requestPermissions(WelcomeActivity.this,
-                    new String[]{Manifest.permission.CAMERA, Manifest.permission.INTERNET },
-                    1);
-        }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                ActivityCompat.requestPermissions(WelcomeActivity.this,
+                        new String[]{Manifest.permission.CAMERA, Manifest.permission.INTERNET },
+                        1);
+            }
 
         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "food-db").build();

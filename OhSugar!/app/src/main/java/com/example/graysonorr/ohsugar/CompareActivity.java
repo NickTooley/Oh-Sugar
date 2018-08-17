@@ -68,7 +68,7 @@ public class CompareActivity extends AppCompatActivity {
         compare1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CompareActivity.this, BarcodeScanner.class);
+                Intent intent = new Intent(CompareActivity.this, SearchReturn.class);
                 startActivityForResult(intent, 1);
             }
         });
@@ -76,7 +76,7 @@ public class CompareActivity extends AppCompatActivity {
         compare2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CompareActivity.this, BarcodeScanner.class);
+                Intent intent = new Intent(CompareActivity.this, SearchReturn.class);
                 startActivityForResult(intent, 2);
             }
         });
@@ -86,20 +86,24 @@ public class CompareActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         String currentQRCode;
+        String name;
+        Double sugar;
         if (requestCode == 1) {
-            currentQRCode = data.getStringExtra("nada");
-            if(currentQRCode!=null) {
-                compare1.setText(currentQRCode);
-                fetchData(currentQRCode, product1Title, product1Sugar);
+            name = data.getStringExtra("Name");
+            sugar = data.getDoubleExtra("Sugar", 1.0);
+            if(name!=null) {
+                compare1.setText(name);
+                showOutput(name, sugar, product1Title, product1Sugar);
             }
 
         }
 
         if (requestCode == 2) {
-            currentQRCode = data.getStringExtra("nada");
-            if(currentQRCode!=null) {
-                compare2.setText(currentQRCode);
-                fetchData(currentQRCode, product2Title, product2Sugar);
+            name = data.getStringExtra("Name");
+            sugar = data.getDoubleExtra("Sugar", 1.0);
+            if(name!=null) {
+                compare2.setText(name);
+                showOutput(name, sugar, product2Title, product2Sugar);
             }
         }
     }
@@ -121,5 +125,10 @@ public class CompareActivity extends AppCompatActivity {
         sugar.setText(Integer.toString((int)(food.sugar / sharedPref.getFloat("floatMeasure", 1.0f) + 0.5d)));
     }
 
+    private void showOutput(String name, Double sugar, TextView nameTv, TextView sugarTv){
+        nameTv.setText(name);
+        SharedPreferences sharedPref = CompareActivity.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
+        sugarTv.setText(Integer.toString((int)(sugar / sharedPref.getFloat("floatMeasure", 1.0f) + 0.5d)));
+    }
 
 }

@@ -21,14 +21,14 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.HashMap;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class BasicSugarContent extends AppCompatActivity {
+public class BasicSugarContentReturn extends AppCompatActivity {
     private String productName;
+    Button addBtn;
+    Button returnBtn;
 
 
     @Override
@@ -60,35 +60,17 @@ public class BasicSugarContent extends AppCompatActivity {
 
         tvName.setText(productName);
 
-        AsyncScraper scraper = new AsyncScraper(BasicSugarContent.this, URL);
+        AsyncScraper scraper = new AsyncScraper(this, URL);
         scraper.execute();
 
-        Button addBtn = (Button) findViewById(R.id.addBtn);
-        Button returnBtn = (Button) findViewById(R.id.returnBtn);
-
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        returnBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                
-            }
-        });
-
-
-
-
+        addBtn = (Button) findViewById(R.id.addBtn);
+        returnBtn = (Button) findViewById(R.id.returnBtn);
 
 
     }
 
     private void fillText(double sugar){
-        SharedPreferences sharedPref = BasicSugarContent.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = BasicSugarContentReturn.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
         TextView tvSugar = (TextView) findViewById(R.id.foodSugar);
         tvSugar.setText(Double.toString(sugar/sharedPref.getFloat("floatMeasure", 1.0f)) + " " + sharedPref.getString("abbreviation", "g"));
     }
@@ -124,9 +106,9 @@ public class BasicSugarContent extends AppCompatActivity {
                 Elements nutritional = doc.select("td");
 
                 /**while(nutritional.next().html() != "Sugars"){
-                    String sugarString = nutritional.next().html();
-                    Log.d("test", sugarString);
-                }**/
+                 String sugarString = nutritional.next().html();
+                 Log.d("test", sugarString);
+                 }**/
 
                 for(Element nutritionals: nutritional){
                     if(nutritionals.html().equals("Sugars")){
@@ -169,7 +151,7 @@ public class BasicSugarContent extends AppCompatActivity {
             return sugarContent;
         }
 
-        protected void onPostExecute(Double fetchedSugar){
+        protected void onPostExecute(final Double fetchedSugar){
 
             if(fetchedSugar == 0){
 
@@ -177,9 +159,29 @@ public class BasicSugarContent extends AppCompatActivity {
                 fillText(fetchedSugar);
             }
 
+            addBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.putExtra("Name", productName);
+                    intent.putExtra("Sugar", fetchedSugar);
+                    //intent.putExtra("Barcode", foods.barcode);
+                    //intent.putExtra("ID", foods.foodID);
+                    Log.d("test", "Does this work?");
+                    setResult(1, intent);
+                    finish();
+                }
+            });
+
+            returnBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("test", "wb dis");
+                    finish();
+                }
+            });
+
         }
 
     }
-
-
 }
