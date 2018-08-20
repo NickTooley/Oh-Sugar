@@ -13,7 +13,7 @@ import android.support.annotation.NonNull;
 @Entity
 public class Food {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @NonNull
     public int foodID;
 

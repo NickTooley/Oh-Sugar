@@ -67,7 +67,21 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textSize="20sp"
-                android:text="TextView" />
+                android:text="Loading Sugar Content..." />
+
+            <Button
+                android:layout_marginTop="20dp"
+                android:id="@+id/addBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add to list" />
+
+            <Button
+                android:layout_marginTop="20dp"
+                android:id="@+id/returnBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="back" />
         </LinearLayout>
 
 
