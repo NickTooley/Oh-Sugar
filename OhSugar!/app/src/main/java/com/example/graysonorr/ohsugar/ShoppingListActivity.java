@@ -57,11 +57,6 @@ public class ShoppingListActivity extends AppCompatActivity {
 
         TextView addItem = (TextView) findViewById(R.id.AddToListTxtVw);
 
-        ShoppingListArrayAdapter adapter1 = new ShoppingListArrayAdapter
-                (ShoppingListActivity.this, R.layout.food_item, getShoppingList());
-        ListView lv = (ListView) findViewById(R.id.ListView);
-        lv.setAdapter(adapter1);
-
         addItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,11 +65,7 @@ public class ShoppingListActivity extends AppCompatActivity {
             }
         });
 
-        TextView sugarTotal = (TextView) findViewById(R.id.sugarTotal);
-        TextView units = (TextView) findViewById(R.id.unitsTxtVw);
-
-        sugarTotal.setText(Double.toString(getTotalSugar()) + " ");
-        units.setText(conversions.getString("stringMeasure", null));
+        updateActivity();
     }
 
     @Override
@@ -112,11 +103,7 @@ public class ShoppingListActivity extends AppCompatActivity {
                 editor.putString("shopping list", json);
                 editor.commit();
 
-                ShoppingListArrayAdapter adapter1 = new ShoppingListArrayAdapter
-                        (ShoppingListActivity.this, R.layout.food_item, getShoppingList());
-                ListView lv = (ListView) findViewById(R.id.ListView);
-                lv.setAdapter(adapter1);
-
+                updateActivity();
             }
 
 
@@ -155,7 +142,7 @@ public class ShoppingListActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     removeFromShoppingList(currentItem);
-                    restartActivity();
+                    updateActivity();
                 }
             });
 
@@ -204,17 +191,19 @@ public class ShoppingListActivity extends AppCompatActivity {
         editor.commit();
     }
 
-    public void restartActivity(){
-        Intent intent = getIntent();
-        finish();
-        startActivity(intent);
-    }
+    public void updateActivity(){
+        ShoppingListArrayAdapter adapter1 = new ShoppingListArrayAdapter
+                (ShoppingListActivity.this, R.layout.food_item, getShoppingList());
+        ListView lv = (ListView) findViewById(R.id.ListView);
+        lv.setAdapter(adapter1);
 
-    public Double getTotalSugar(){
-        Double total = 0.00;
-        for(Food item : getShoppingList()){
-            total += item.sugar;
+        double totalSugar = 0.00;
+
+        for(Food f : getShoppingList()){
+            totalSugar += f.sugar;
         }
-        return total;
+
+        TextView units = (TextView) findViewById(R.id.unitsTxtVw);
+        units.setText(Double.toString(totalSugar) + " " + conversions.getString("stringMeasure", null));
     }
 }
