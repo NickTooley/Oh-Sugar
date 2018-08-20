@@ -15,7 +15,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar_top"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="100dp"
             android:background="@drawable/gradient_toolbar_background"
             android:minHeight="?attr/actionBarSize"
             app:layout_constraintEnd_toEndOf="parent"
@@ -24,7 +24,7 @@
 
             <TextView
                 android:id="@+id/toolbar_title"
-                android:paddingTop="20dp"
+                android:paddingTop="40dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

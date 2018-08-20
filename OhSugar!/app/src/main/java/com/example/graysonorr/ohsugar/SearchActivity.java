@@ -125,7 +125,7 @@ public class SearchActivity extends AppCompatActivity {
         List<Food> searchResult = db.foodDao().searchByName("%"+searchText.getText().toString()+"%");
 
         SearchResultArrayAdapter adapter1 = new SearchResultArrayAdapter
-                (SearchActivity.this, R.layout.custom_search_results_listview, db.foodDao().searchByName("%"+searchText.getText().toString()+"%"));
+                (SearchActivity.this, R.layout.food_item, db.foodDao().searchByName("%"+searchText.getText().toString()+"%"));
         ListView lv = (ListView) findViewById(R.id.searchResults);
         lv.setAdapter(adapter1);
 
@@ -347,7 +347,7 @@ public class SearchActivity extends AppCompatActivity {
             addBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    addToShoppingList(currentItem);
+                    //addToShoppingList(currentItem);
                     Intent intent = new Intent(SearchActivity.this, ShoppingListActivity.class);
                     startActivity(intent);
                 }
@@ -356,7 +356,7 @@ public class SearchActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(SearchActivity.this, MoreInfoActivity.class);
-                    intent.putExtra("ID", currentItem.foodID);
+                    //intent.putExtra("ID", currentItem.foodID);
                     startActivity(intent);
                 }
             });

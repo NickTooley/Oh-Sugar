@@ -41,7 +41,11 @@ public class ShoppingListActivity extends AppCompatActivity {
         }
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shopping_list);
+
+        int mScreenWidth = getWindowManager().getDefaultDisplay().getWidth();
+        int mScreenHeight = getWindowManager().getDefaultDisplay().getHeight();
+        View view = getLayoutInflater().inflate(R.layout.shopping_list_v2, null);
+        setContentView(view, new ViewGroup.LayoutParams(mScreenWidth, mScreenHeight));
 
         TextView toolBarTitle = findViewById(R.id.toolbar_title);
         Typeface customFont = Typeface.createFromAsset(getAssets(), getString(R.string.font));
@@ -61,8 +65,8 @@ public class ShoppingListActivity extends AppCompatActivity {
         addItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ShoppingListActivity.this, SearchActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(ShoppingListActivity.this, SearchReturn.class);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -71,6 +75,52 @@ public class ShoppingListActivity extends AppCompatActivity {
 
         sugarTotal.setText(Double.toString(getTotalSugar()) + " ");
         units.setText(conversions.getString("stringMeasure", null));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String currentQRCode;
+        String name;
+        Double sugar;
+        if (requestCode == 1) {
+            name = data.getStringExtra("Name");
+            sugar = data.getDoubleExtra("Sugar", 1.0);
+
+            if(name!=null) {
+                SharedPreferences sharedPreferences = getSharedPreferences("Shopping List", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                Gson gson = new Gson();
+                String json = sharedPreferences.getString("shopping list", null);
+                Type type = new TypeToken<ArrayList<Food>>() {}.getType();
+
+                ArrayList<Food> shoppinglist = gson.fromJson(json, type);
+
+                if(shoppinglist == null){
+                    shoppinglist = new ArrayList<>();
+                }
+
+                Food item = new Food();
+
+                item.name = name;
+                item.sugar = sugar;
+
+                shoppinglist.add(item);
+
+                gson = new Gson();
+                json = gson.toJson(shoppinglist);
+                editor.putString("shopping list", json);
+                editor.commit();
+
+                ShoppingListArrayAdapter adapter1 = new ShoppingListArrayAdapter
+                        (ShoppingListActivity.this, R.layout.food_item, getShoppingList());
+                ListView lv = (ListView) findViewById(R.id.ListView);
+                lv.setAdapter(adapter1);
+
+            }
+
+
+        }
     }
 
     public class ShoppingListArrayAdapter extends ArrayAdapter<Food> {
