@@ -1,5 +1,6 @@
 package com.example.graysonorr.ohsugar;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -22,7 +23,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchReturn extends AppCompatActivity {
 
     private AppDatabase db;
     private ListView lv;
@@ -93,7 +93,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Intent intent = new Intent(SearchActivity.this, BarcodeScanner.class);
-                Intent intent = new Intent(SearchActivity.this, BarcodeScanner.class);
+                Intent intent = new Intent(SearchReturn.this, BarcodeScanner.class);
                 startActivityForResult(intent, 1);
             }
         });
@@ -108,6 +108,19 @@ public class SearchActivity extends AppCompatActivity {
             if(currentQRCode!=null) {
                 fetchBarcodeData(currentQRCode);
             }
+        }else if (requestCode == 2){
+            if(data.getStringExtra("Name") == null){
+
+            }else{
+                String name = data.getStringExtra("Name");
+                Double sugar = data.getDoubleExtra("Sugar", 1.0);
+
+                Intent intent = new Intent();
+                intent.putExtra("Name", name);
+                intent.putExtra("Sugar", sugar);
+                setResult(1, intent);
+                finish();
+            }
         }
     }
 
@@ -121,8 +134,8 @@ public class SearchActivity extends AppCompatActivity {
 
         List<Food> searchResult = db.foodDao().searchByName("%"+searchText.getText().toString()+"%");
 
-        SearchResultArrayAdapter adapter1 = new SearchResultArrayAdapter
-                (SearchActivity.this, R.layout.custom_search_results_listview, db.foodDao().searchByName("%"+searchText.getText().toString()+"%"));
+        FoodAdapterWClickListen adapter1 = new FoodAdapterWClickListen
+                (this, searchResult);
         ListView lv = (ListView) findViewById(R.id.searchResults);
         lv.setAdapter(adapter1);
 
@@ -142,7 +155,7 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         findViewById(R.id.searchResults).requestFocus();
-        View view = SearchActivity.this.getCurrentFocus();
+        View view = SearchReturn.this.getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -174,12 +187,13 @@ public class SearchActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String name = lv.getItemAtPosition(position).toString();
                 String URL = foods.get(name);
-                Intent intent = new Intent(getApplicationContext(), BasicSugarContent.class);
+                //Intent intent = new Intent(getApplicationContext(), BasicSugarContent.class);
+                Intent intent = new Intent(SearchReturn.this, BasicSugarContentReturn.class);
                 intent.putExtra("Name", name);
                 intent.putExtra("URL", URL);
                 Log.d("URL", URL);
                 Log.d("Name", name);
-                startActivity(intent);
+                startActivityForResult(intent, 2);
             }
         });
     }
@@ -190,7 +204,7 @@ public class SearchActivity extends AppCompatActivity {
 
         foods.add(food);
 
-        FoodAdapter adapter = new FoodAdapter(this, foods);
+        FoodAdapterWClickListen adapter = new FoodAdapterWClickListen(this, foods);
         lv.setAdapter(adapter);
 
     }
@@ -203,7 +217,17 @@ public class SearchActivity extends AppCompatActivity {
         Food foods = db.foodDao().findByBarcode(barcode);
 
         if(foods != null){
-            populateListView(foods);
+            Intent intent = new Intent();
+            intent.putExtra("Name", foods.name);
+            intent.putExtra("Sugar", foods.sugar);
+            intent.putExtra("Barcode", foods.barcode);
+            intent.putExtra("ID", foods.foodID);
+            setResult(1, intent);
+            finish();
+            //populateListView(foods);
+        }else{
+            BarcodeAsyncScraper scraper = new BarcodeAsyncScraper(this, barcode);
+            scraper.execute();
         }
 
     }
@@ -219,7 +243,7 @@ public class SearchActivity extends AppCompatActivity {
             populateListView(foods);
 
         }else{
-            AsyncScraper scraper = new AsyncScraper(SearchActivity.this, search);
+            AsyncScraper scraper = new AsyncScraper(this, search);
             scraper.execute();
         }
 
@@ -229,7 +253,7 @@ public class SearchActivity extends AppCompatActivity {
 
 
 
-    class AsyncScraper extends AsyncTask<String, Void, HashMap<String,String>>{
+    class AsyncScraper extends AsyncTask<String, Void, HashMap<String,String>> {
         HashMap<String, String> toReturn;
         private Context context;
         private String searchRequest;
@@ -305,7 +329,7 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         public View getView(int position, View convertView, ViewGroup container) {
-            LayoutInflater inflater = LayoutInflater.from(SearchActivity.this);
+            LayoutInflater inflater = LayoutInflater.from(SearchReturn.this);
             View customView = inflater.inflate(R.layout.food_item, container, false);
 
             TextView resultTxtVw = (TextView) customView.findViewById(R.id.foodName);
@@ -319,7 +343,7 @@ public class SearchActivity extends AppCompatActivity {
             addBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(SearchActivity.this, ShoppingListActivity.class);
+                    Intent intent = new Intent(SearchReturn.this, ShoppingListActivity.class);
                     startActivity(intent);
                 }
             });
@@ -335,7 +359,7 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         public View getView(int position, View convertView, ViewGroup container) {
-            LayoutInflater inflater = LayoutInflater.from(SearchActivity.this);
+            LayoutInflater inflater = LayoutInflater.from(SearchReturn.this);
             View customView = inflater.inflate(R.layout.food_item, container, false);
 
             TextView resultTxtVw = (TextView) customView.findViewById(R.id.foodName);
@@ -348,7 +372,7 @@ public class SearchActivity extends AppCompatActivity {
             addBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(SearchActivity.this, ShoppingListActivity.class);
+                    Intent intent = new Intent(SearchReturn.this, ShoppingListActivity.class);
                     startActivity(intent);
                 }
             });
@@ -360,6 +384,94 @@ public class SearchActivity extends AppCompatActivity {
 
 
 
+    class BarcodeAsyncScraper extends AsyncTask<String, Void, ArrayList<String>> {
+        HashMap<String, String> toReturn;
+        private Context context;
+        private String searchRequest;
+
+        public BarcodeAsyncScraper(Context context, String search){
+            this.context = context;
+            this.searchRequest = search;
+            searchRequest = search.replace(' ', '+');
+        }
+
+        protected ArrayList<String> doInBackground(String... search){
+
+            ArrayList<String> searchResultMap = new ArrayList<String>();
+            double sugarContent = 0;
+
+            try{
+                Document doc = Jsoup.connect("https://shop.countdown.co.nz/shop/searchproducts?search="+searchRequest).get();
+                Log.d("test", doc.title());
+
+                Elements newsHeadlines = doc.select(".gridProductStamp-name");
+                List<String> searchResults = doc.select(".gridProductStamp-name").eachText();
+                Elements searchResultsURL = doc.select(".gridProductStamp-imageLink");
+                //List<String> searchResultsURL = doc.select("._jumpTop").eachText();
+
+
+                for(Element URLs: searchResultsURL){
+                    //   Log.d("URLs", URLs.attr("href"));
+                }
+
+                String productName = searchResults.get(0);
+                String productURL = searchResultsURL.get(0).attr("href");
+                searchResultMap.add(productName);
+                searchResultMap.add(productURL);
+
+                Document doc2 = Jsoup.connect("https://shop.countdown.co.nz"+productURL).get();
+
+                Elements nutritional = doc2.select("td");
+
+                for(Element nutritionals: nutritional){
+                    if(nutritionals.html().equals("Sugars")){
+                        String sugarOGString = nutritionals.nextElementSibling().html();
+                        String sugarString = sugarOGString.substring(0, sugarOGString.length() - 1);
+                        sugarContent = Double.parseDouble(sugarString);
+                    }
+                }
+                searchResultMap.add(Double.toString(sugarContent));
+
+
+
+            }catch(IOException e){
+
+            }
+
+            return searchResultMap;
+        }
+
+        protected void onPostExecute(ArrayList<String> fetchedMap){
+            //CountdownScraper.returnValues();
+            //toReturn = fetchedMap;
+            if(fetchedMap != null) {
+                //productNameText.setText(fetchedMap.get(0));
+                //sugarContentText.setText(fetchedMap.get(2) + "g");
+
+                Food food = new Food();
+                food.sugar = Double.parseDouble(fetchedMap.get(2));
+                food.name = fetchedMap.get(0);
+                food.barcode = searchRequest;
+
+                Intent intent = new Intent();
+                intent.putExtra("Name", food.name);
+                intent.putExtra("Sugar", food.sugar);
+                intent.putExtra("Barcode", food.barcode);
+                intent.putExtra("ID", food.foodID);
+                setResult(1, intent);
+                finish();
+
+                //showOutput(food);
+
+                //populateListView(fetchedMap);
+                //returnValues(fetchedMap);
+            }else{
+                //returnValues();
+            }
+
+        }
+
     }
 
 
+}

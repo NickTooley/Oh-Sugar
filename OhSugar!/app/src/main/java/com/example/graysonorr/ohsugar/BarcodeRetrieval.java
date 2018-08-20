@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +19,14 @@ import com.example.graysonorr.ohsugar.db.AppDatabase;
 import com.example.graysonorr.ohsugar.db.Food;
 import com.example.graysonorr.ohsugar.db.utils.dbinit;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class BarcodeRetrieval extends AppCompatActivity {
@@ -102,6 +111,90 @@ public class BarcodeRetrieval extends AppCompatActivity {
 
         if(food != null){
             showOutput(food);
+        }else{
+            AsyncScraper scraper = new AsyncScraper(this, barcode);
+            scraper.execute();
+        }
+
+    }
+
+    class AsyncScraper extends AsyncTask<String, Void, ArrayList<String>> {
+        HashMap<String, String> toReturn;
+        private Context context;
+        private String searchRequest;
+
+        public AsyncScraper(Context context, String search){
+            this.context = context;
+            this.searchRequest = search;
+            searchRequest = search.replace(' ', '+');
+        }
+
+        protected ArrayList<String> doInBackground(String... search){
+
+            ArrayList<String> searchResultMap = new ArrayList<String>();
+            double sugarContent = 0;
+
+            try{
+                Document doc = Jsoup.connect("https://shop.countdown.co.nz/shop/searchproducts?search="+searchRequest).get();
+                Log.d("test", doc.title());
+
+                Elements newsHeadlines = doc.select(".gridProductStamp-name");
+                List<String> searchResults = doc.select(".gridProductStamp-name").eachText();
+                Elements searchResultsURL = doc.select(".gridProductStamp-imageLink");
+                //List<String> searchResultsURL = doc.select("._jumpTop").eachText();
+
+
+                for(Element URLs: searchResultsURL){
+                    //   Log.d("URLs", URLs.attr("href"));
+                }
+
+                String productName = searchResults.get(0);
+                String productURL = searchResultsURL.get(0).attr("href");
+                searchResultMap.add(productName);
+                searchResultMap.add(productURL);
+
+                Document doc2 = Jsoup.connect("https://shop.countdown.co.nz"+productURL).get();
+
+                Elements nutritional = doc2.select("td");
+
+                for(Element nutritionals: nutritional){
+                    if(nutritionals.html().equals("Sugars")){
+                        String sugarOGString = nutritionals.nextElementSibling().html();
+                        String sugarString = sugarOGString.substring(0, sugarOGString.length() - 1);
+                        sugarContent = Double.parseDouble(sugarString);
+                    }
+                }
+                searchResultMap.add(Double.toString(sugarContent));
+
+
+
+            }catch(IOException e){
+
+            }
+
+            return searchResultMap;
+        }
+
+        protected void onPostExecute(ArrayList<String> fetchedMap){
+            //CountdownScraper.returnValues();
+            //toReturn = fetchedMap;
+            if(fetchedMap != null) {
+                //productNameText.setText(fetchedMap.get(0));
+                //sugarContentText.setText(fetchedMap.get(2) + "g");
+
+                Food food = new Food();
+                food.sugar = Double.parseDouble(fetchedMap.get(2));
+                food.name = fetchedMap.get(0);
+                food.barcode = searchRequest;
+
+                showOutput(food);
+
+                //populateListView(fetchedMap);
+                //returnValues(fetchedMap);
+            }else{
+                //returnValues();
+            }
+
         }
 
     }
