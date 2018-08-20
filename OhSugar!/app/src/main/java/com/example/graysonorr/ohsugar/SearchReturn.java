@@ -102,24 +102,27 @@ public class SearchReturn extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String currentQRCode;
-        if (requestCode == 1) {
-            currentQRCode = data.getStringExtra("nada");
-            if(currentQRCode!=null) {
-                fetchBarcodeData(currentQRCode);
-            }
-        }else if (requestCode == 2){
-            if(data.getStringExtra("Name") == null){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK) {
+            String currentQRCode;
+            if (requestCode == 1) {
+                currentQRCode = data.getStringExtra("nada");
+                if (currentQRCode != null) {
+                    fetchBarcodeData(currentQRCode);
+                }
+            } else if (requestCode == 2) {
+                if (data.getStringExtra("Name") == null) {
 
-            }else{
-                String name = data.getStringExtra("Name");
-                Double sugar = data.getDoubleExtra("Sugar", 1.0);
+                } else {
+                    String name = data.getStringExtra("Name");
+                    Double sugar = data.getDoubleExtra("Sugar", 1.0);
 
-                Intent intent = new Intent();
-                intent.putExtra("Name", name);
-                intent.putExtra("Sugar", sugar);
-                setResult(1, intent);
-                finish();
+                    Intent intent = new Intent();
+                    intent.putExtra("Name", name);
+                    intent.putExtra("Sugar", sugar);
+                    setResult(1, intent);
+                    finish();
+                }
             }
         }
     }

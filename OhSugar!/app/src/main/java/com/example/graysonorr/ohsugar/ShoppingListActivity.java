@@ -79,47 +79,51 @@ public class ShoppingListActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String currentQRCode;
-        String name;
-        Double sugar;
-        if (requestCode == 1) {
-            name = data.getStringExtra("Name");
-            sugar = data.getDoubleExtra("Sugar", 1.0);
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            String currentQRCode;
+            String name;
+            Double sugar;
+            if (requestCode == 1) {
+                name = data.getStringExtra("Name");
+                sugar = data.getDoubleExtra("Sugar", 1.0);
 
-            if(name!=null) {
-                SharedPreferences sharedPreferences = getSharedPreferences("Shopping List", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
+                if (name != null) {
+                    SharedPreferences sharedPreferences = getSharedPreferences("Shopping List", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                Gson gson = new Gson();
-                String json = sharedPreferences.getString("shopping list", null);
-                Type type = new TypeToken<ArrayList<Food>>() {}.getType();
+                    Gson gson = new Gson();
+                    String json = sharedPreferences.getString("shopping list", null);
+                    Type type = new TypeToken<ArrayList<Food>>() {
+                    }.getType();
 
-                ArrayList<Food> shoppinglist = gson.fromJson(json, type);
+                    ArrayList<Food> shoppinglist = gson.fromJson(json, type);
 
-                if(shoppinglist == null){
-                    shoppinglist = new ArrayList<>();
+                    if (shoppinglist == null) {
+                        shoppinglist = new ArrayList<>();
+                    }
+
+                    Food item = new Food();
+
+                    item.name = name;
+                    item.sugar = sugar;
+
+                    shoppinglist.add(item);
+
+                    gson = new Gson();
+                    json = gson.toJson(shoppinglist);
+                    editor.putString("shopping list", json);
+                    editor.commit();
+
+                    ShoppingListArrayAdapter adapter1 = new ShoppingListArrayAdapter
+                            (ShoppingListActivity.this, R.layout.food_item, getShoppingList());
+                    ListView lv = (ListView) findViewById(R.id.ListView);
+                    lv.setAdapter(adapter1);
+
                 }
 
-                Food item = new Food();
-
-                item.name = name;
-                item.sugar = sugar;
-
-                shoppinglist.add(item);
-
-                gson = new Gson();
-                json = gson.toJson(shoppinglist);
-                editor.putString("shopping list", json);
-                editor.commit();
-
-                ShoppingListArrayAdapter adapter1 = new ShoppingListArrayAdapter
-                        (ShoppingListActivity.this, R.layout.food_item, getShoppingList());
-                ListView lv = (ListView) findViewById(R.id.ListView);
-                lv.setAdapter(adapter1);
 
             }
-
-
         }
     }
 

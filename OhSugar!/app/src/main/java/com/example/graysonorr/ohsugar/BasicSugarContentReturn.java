@@ -69,6 +69,14 @@ public class BasicSugarContentReturn extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Intent intent = new Intent();
+        setResult(0, intent);
+        finish();
+    }
+
     private void fillText(double sugar){
         SharedPreferences sharedPref = BasicSugarContentReturn.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
         TextView tvSugar = (TextView) findViewById(R.id.foodSugar);
@@ -177,6 +185,8 @@ public class BasicSugarContentReturn extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Log.d("test", "wb dis");
+                    Intent intent = new Intent();
+                    setResult(0, intent);
                     finish();
                 }
             });

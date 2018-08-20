@@ -84,14 +84,19 @@ public class BarcodeRetrieval extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String currentQRCode;
-        if (requestCode == 1) {
-            currentQRCode = data.getStringExtra("nada");
-            if(currentQRCode!=null) {
-                barcodeText.setText(currentQRCode);
-                fetchData(currentQRCode);
-            }
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK) {
+            String currentQRCode;
+            if (requestCode == 1) {
+                currentQRCode = data.getStringExtra("nada");
+                if (currentQRCode != null) {
+                    barcodeText.setText(currentQRCode);
+                    fetchData(currentQRCode);
+                }
 
+            }
+        }else{
+            finish();
         }
     }
 

@@ -85,25 +85,28 @@ public class CompareActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String currentQRCode;
-        String name;
-        Double sugar;
-        if (requestCode == 1) {
-            name = data.getStringExtra("Name");
-            sugar = data.getDoubleExtra("Sugar", 1.0);
-            if(name!=null) {
-                compare1.setText(name);
-                showOutput(name, sugar, product1Title, product1Sugar);
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK) {
+            String currentQRCode;
+            String name;
+            Double sugar;
+            if (requestCode == 1) {
+                name = data.getStringExtra("Name");
+                sugar = data.getDoubleExtra("Sugar", 1.0);
+                if (name != null) {
+                    compare1.setText(name);
+                    showOutput(name, sugar, product1Title, product1Sugar);
+                }
+
             }
 
-        }
-
-        if (requestCode == 2) {
-            name = data.getStringExtra("Name");
-            sugar = data.getDoubleExtra("Sugar", 1.0);
-            if(name!=null) {
-                compare2.setText(name);
-                showOutput(name, sugar, product2Title, product2Sugar);
+            if (requestCode == 2) {
+                name = data.getStringExtra("Name");
+                sugar = data.getDoubleExtra("Sugar", 1.0);
+                if (name != null) {
+                    compare2.setText(name);
+                    showOutput(name, sugar, product2Title, product2Sugar);
+                }
             }
         }
     }
