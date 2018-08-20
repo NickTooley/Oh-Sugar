@@ -9,11 +9,12 @@
     tools:layout_editor_absoluteY="25dp">
 
     <ListView
-        android:id="@+id/listView"
+        android:id="@+id/ListView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="16dp"
         android:layout_marginTop="140dp"
+        android:divider="@null"
         app:layout_constraintBottom_toTopOf="@+id/AddToListTxtVw"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,8 +25,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="16dp"
         android:background="@drawable/long_btn"
         android:clickable="true"
         android:paddingBottom="10dp"
@@ -40,19 +41,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/linearLayout5"
-        app:layout_constraintTop_toBottomOf="@+id/listView" />
-
-    <LinearLayout
-        android:id="@+id/FragContainer"
-        android:layout_width="216dp"
-        android:layout_height="184dp"
-        android:layout_marginBottom="125dp"
-        android:layout_marginTop="193dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/ListView" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -102,14 +91,15 @@
         android:id="@+id/linearLayout5"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="9dp"
         android:layout_marginEnd="76dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/AddToListTxtVw"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/FragContainer">
+        app:layout_constraintTop_toBottomOf="@+id/ListView">
 
         <TextView
             android:id="@+id/textView10"
@@ -126,22 +116,25 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView11"
-                android:layout_width="17dp"
-                android:layout_height="wrap_content"
+                android:id="@+id/sugarTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
                 android:layout_weight="1"
-                android:text="50 "
+                android:text="00 "
                 android:textAlignment="textEnd"
                 android:textColor="@color/colorAccent"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/unitsTxtVw"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
                 android:layout_weight="1"
+                android:gravity="center_vertical"
                 android:text="Cubes"
-                android:textAlignment="textStart"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
         </LinearLayout>
