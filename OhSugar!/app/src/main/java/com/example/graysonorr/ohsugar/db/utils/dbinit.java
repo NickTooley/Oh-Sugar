@@ -60,17 +60,9 @@ public class dbinit {
 
         addFood(db, 1, "9415767422209", "Fresh Up Big Fizz Juicy Orange", 55.9);
         addFood(db, 2, "9300675036337", "Pumped Lime", 17.0);
-        addFood(db, 3, "9300675036337", "Pumped Lime", 12.0);
-        addFood(db, 4, "9300675036337", "Pumped Lime", 13.0);
-        addFood(db, 5, "9300675036337", "Pumped Lime", 19.0);
-        addFood(db, 6, "9300675036337", "Pumped Lime", 27.0);
-        addFood(db, 7, "9300675036337", "Pumped Lime", 77.0);
-        addFood(db, 8, "9300675036337", "Pumped Lime", 87.0);
-        addFood(db, 9, "9300675036337", "Pumped Lime", 127.0);
-        addFood(db, 10, "9300675036337", "Pumped Lime", 7.0);
-        addFood(db, 11, "9300675036337", "Pumped Lime", 167.0);
         addFood(db, 12, "9414912300140", "Choysa Classic Tea Bags", 0.0);
         addFood(db, 13, "9414789100508", "Pepsi 355ml", 38.5);
+        addFood(db, 14, "8886467103407", "Pringles Originals 134g", 0.1);
     }
 
 }

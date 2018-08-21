@@ -1,5 +1,6 @@
 package com.example.graysonorr.ohsugar;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -69,6 +70,14 @@ public class BasicSugarContentReturn extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Intent intent = new Intent();
+        setResult(0, intent);
+        finish();
+    }
+
     private void fillText(double sugar){
         SharedPreferences sharedPref = BasicSugarContentReturn.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
         TextView tvSugar = (TextView) findViewById(R.id.foodSugar);
@@ -87,11 +96,19 @@ public class BasicSugarContentReturn extends AppCompatActivity {
         HashMap<String, String> toReturn;
         private Context context;
         private String searchRequest;
+        private ProgressDialog dialog;
 
         public AsyncScraper(Context context, String search){
             this.context = context;
             this.searchRequest = search;
             searchRequest = search.replace(' ', '+');
+            dialog = new ProgressDialog(context);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog.setMessage("Retrieving sugar content");
+            dialog.show();
         }
 
         protected Double doInBackground(String... search){
@@ -153,6 +170,10 @@ public class BasicSugarContentReturn extends AppCompatActivity {
 
         protected void onPostExecute(final Double fetchedSugar){
 
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+
             if(fetchedSugar == 0){
 
             }else{
@@ -168,7 +189,7 @@ public class BasicSugarContentReturn extends AppCompatActivity {
                     //intent.putExtra("Barcode", foods.barcode);
                     //intent.putExtra("ID", foods.foodID);
                     Log.d("test", "Does this work?");
-                    setResult(1, intent);
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
             });
@@ -177,6 +198,8 @@ public class BasicSugarContentReturn extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Log.d("test", "wb dis");
+                    Intent intent = new Intent();
+                    setResult(0, intent);
                     finish();
                 }
             });

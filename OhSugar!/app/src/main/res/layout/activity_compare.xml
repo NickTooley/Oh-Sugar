@@ -68,7 +68,7 @@
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"
                 android:paddingTop="10dp"
-                android:text="Scan Barcode 1"
+                android:text="Enter a Product"
                 android:textSize="24sp" />
 
             <TextView
@@ -89,7 +89,7 @@
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"
                 android:paddingTop="10dp"
-                android:text="Scan Barcode 2"
+                android:text="Enter a Product"
                 android:textSize="24sp" />
 
             <LinearLayout

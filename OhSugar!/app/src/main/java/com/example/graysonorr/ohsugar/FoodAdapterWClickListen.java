@@ -14,6 +14,8 @@ import com.example.graysonorr.ohsugar.db.Food;
 
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by toolnj1 on 17/08/2018.
  */
@@ -55,7 +57,7 @@ public class FoodAdapterWClickListen extends ArrayAdapter<Food> {
                 intent.putExtra("Sugar", food.sugar);
                 intent.putExtra("Barcode", food.barcode);
                 intent.putExtra("ID", food.foodID);
-                ((Activity)mContext).setResult(1, intent);
+                ((Activity)mContext).setResult(RESULT_OK, intent);
                 ((Activity)mContext).finish();
             }
         });
