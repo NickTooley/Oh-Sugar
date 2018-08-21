@@ -1,5 +1,6 @@
 package com.example.graysonorr.ohsugar;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -95,11 +96,19 @@ public class BasicSugarContentReturn extends AppCompatActivity {
         HashMap<String, String> toReturn;
         private Context context;
         private String searchRequest;
+        private ProgressDialog dialog;
 
         public AsyncScraper(Context context, String search){
             this.context = context;
             this.searchRequest = search;
             searchRequest = search.replace(' ', '+');
+            dialog = new ProgressDialog(context);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog.setMessage("Retrieving sugar content");
+            dialog.show();
         }
 
         protected Double doInBackground(String... search){
@@ -160,6 +169,10 @@ public class BasicSugarContentReturn extends AppCompatActivity {
         }
 
         protected void onPostExecute(final Double fetchedSugar){
+
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
 
             if(fetchedSugar == 0){
 
