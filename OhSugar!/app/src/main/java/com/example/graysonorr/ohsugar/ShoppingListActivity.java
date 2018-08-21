@@ -1,6 +1,8 @@
 package com.example.graysonorr.ohsugar;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -141,8 +143,25 @@ public class ShoppingListActivity extends AppCompatActivity {
             remove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    removeFromShoppingList(currentItem);
-                    updateActivity();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ShoppingListActivity.this);
+                    builder.setTitle("Remove " + currentItem.name + " from your shopping list?");
+                    builder.setMessage("Are you sure?");
+                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            removeFromShoppingList(currentItem);
+                            updateActivity();
+                        }
+                    });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+
                 }
             });
 
