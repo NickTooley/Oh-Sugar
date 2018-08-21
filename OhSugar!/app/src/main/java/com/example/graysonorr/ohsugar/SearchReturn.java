@@ -120,7 +120,7 @@ public class SearchReturn extends AppCompatActivity {
                     Intent intent = new Intent();
                     intent.putExtra("Name", name);
                     intent.putExtra("Sugar", sugar);
-                    setResult(1, intent);
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
             }
@@ -225,7 +225,7 @@ public class SearchReturn extends AppCompatActivity {
             intent.putExtra("Sugar", foods.sugar);
             intent.putExtra("Barcode", foods.barcode);
             intent.putExtra("ID", foods.foodID);
-            setResult(1, intent);
+            setResult(RESULT_OK, intent);
             finish();
             //populateListView(foods);
         }else{
@@ -461,7 +461,7 @@ public class SearchReturn extends AppCompatActivity {
                 intent.putExtra("Sugar", food.sugar);
                 intent.putExtra("Barcode", food.barcode);
                 intent.putExtra("ID", food.foodID);
-                setResult(1, intent);
+                setResult(RESULT_OK, intent);
                 finish();
 
                 //showOutput(food);

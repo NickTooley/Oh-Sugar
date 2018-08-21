@@ -19,6 +19,7 @@ import com.example.graysonorr.ohsugar.db.AppDatabase;
 import com.example.graysonorr.ohsugar.db.Food;
 import com.example.graysonorr.ohsugar.db.utils.dbinit;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -86,6 +87,7 @@ public class BarcodeRetrieval extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK) {
+        Log.d("ResultCode", Integer.toString(resultCode));
             String currentQRCode;
             if (requestCode == 1) {
                 currentQRCode = data.getStringExtra("nada");
@@ -134,50 +136,59 @@ public class BarcodeRetrieval extends AppCompatActivity {
             searchRequest = search.replace(' ', '+');
         }
 
-        protected ArrayList<String> doInBackground(String... search){
+        protected ArrayList<String> doInBackground(String... search) {
 
             ArrayList<String> searchResultMap = new ArrayList<String>();
             double sugarContent = 0;
 
-            try{
-                Document doc = Jsoup.connect("https://shop.countdown.co.nz/shop/searchproducts?search="+searchRequest).get();
-                Log.d("test", doc.title());
+            try {
+                Connection.Response response = Jsoup.connect("https://shop.countdown.co.nz/shop/searchproducts?search=" + searchRequest).timeout(2000).execute();
 
-                Elements newsHeadlines = doc.select(".gridProductStamp-name");
-                List<String> searchResults = doc.select(".gridProductStamp-name").eachText();
-                Elements searchResultsURL = doc.select(".gridProductStamp-imageLink");
-                //List<String> searchResultsURL = doc.select("._jumpTop").eachText();
+                int statusCode = response.statusCode();
+
+                if (statusCode != 200) {
+                    return null;
+                } else {
+                    Document doc = Jsoup.connect("https://shop.countdown.co.nz/shop/searchproducts?search=" + searchRequest).get();
+                    Log.d("test", doc.title());
+
+                    Elements newsHeadlines = doc.select(".gridProductStamp-name");
+                    List<String> searchResults = doc.select(".gridProductStamp-name").eachText();
+                    Elements searchResultsURL = doc.select(".gridProductStamp-imageLink");
+                    //List<String> searchResultsURL = doc.select("._jumpTop").eachText();
 
 
-                for(Element URLs: searchResultsURL){
-                    //   Log.d("URLs", URLs.attr("href"));
-                }
-
-                String productName = searchResults.get(0);
-                String productURL = searchResultsURL.get(0).attr("href");
-                searchResultMap.add(productName);
-                searchResultMap.add(productURL);
-
-                Document doc2 = Jsoup.connect("https://shop.countdown.co.nz"+productURL).get();
-
-                Elements nutritional = doc2.select("td");
-
-                for(Element nutritionals: nutritional){
-                    if(nutritionals.html().equals("Sugars")){
-                        String sugarOGString = nutritionals.nextElementSibling().html();
-                        String sugarString = sugarOGString.substring(0, sugarOGString.length() - 1);
-                        sugarContent = Double.parseDouble(sugarString);
+                    for (Element URLs : searchResultsURL) {
+                        //   Log.d("URLs", URLs.attr("href"));
                     }
+
+                    String productName = searchResults.get(0);
+                    String productURL = searchResultsURL.get(0).attr("href");
+                    searchResultMap.add(productName);
+                    searchResultMap.add(productURL);
+
+                    Document doc2 = Jsoup.connect("https://shop.countdown.co.nz" + productURL).get();
+                    Log.d("Connect?", doc2.outerHtml());
+                    Elements nutritional = doc2.select("td");
+
+                    for (Element nutritionals : nutritional) {
+                        if (nutritionals.html().equals("Sugars")) {
+                            String sugarOGString = nutritionals.nextElementSibling().html();
+                            String sugarString = sugarOGString.substring(0, sugarOGString.length() - 1);
+                            sugarContent = Double.parseDouble(sugarString);
+                        }
+                    }
+                    searchResultMap.add(Double.toString(sugarContent));
                 }
-                searchResultMap.add(Double.toString(sugarContent));
 
 
+                }catch(IOException e){
+                    return null;
+                }
 
-            }catch(IOException e){
+                return searchResultMap;
 
-            }
 
-            return searchResultMap;
         }
 
         protected void onPostExecute(ArrayList<String> fetchedMap){

@@ -176,7 +176,7 @@ public class BasicSugarContentReturn extends AppCompatActivity {
                     //intent.putExtra("Barcode", foods.barcode);
                     //intent.putExtra("ID", foods.foodID);
                     Log.d("test", "Does this work?");
-                    setResult(1, intent);
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
             });
