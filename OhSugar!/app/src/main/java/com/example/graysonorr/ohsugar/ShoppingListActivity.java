@@ -1,6 +1,8 @@
 package com.example.graysonorr.ohsugar;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -57,11 +59,6 @@ public class ShoppingListActivity extends AppCompatActivity {
 
         TextView addItem = (TextView) findViewById(R.id.AddToListTxtVw);
 
-        ShoppingListArrayAdapter adapter1 = new ShoppingListArrayAdapter
-                (ShoppingListActivity.this, R.layout.food_item, getShoppingList());
-        ListView lv = (ListView) findViewById(R.id.ListView);
-        lv.setAdapter(adapter1);
-
         addItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,11 +67,7 @@ public class ShoppingListActivity extends AppCompatActivity {
             }
         });
 
-        TextView sugarTotal = (TextView) findViewById(R.id.sugarTotal);
-        TextView units = (TextView) findViewById(R.id.unitsTxtVw);
-
-        sugarTotal.setText(Double.toString(getTotalSugar()) + " ");
-        units.setText(conversions.getString("stringMeasure", null));
+        updateActivity();
     }
 
     @Override
@@ -115,12 +108,8 @@ public class ShoppingListActivity extends AppCompatActivity {
                     editor.putString("shopping list", json);
                     editor.commit();
 
-                    ShoppingListArrayAdapter adapter1 = new ShoppingListArrayAdapter
-                            (ShoppingListActivity.this, R.layout.food_item, getShoppingList());
-                    ListView lv = (ListView) findViewById(R.id.ListView);
-                    lv.setAdapter(adapter1);
-
-                }
+                updateActivity();
+            }
 
 
             }
@@ -158,8 +147,25 @@ public class ShoppingListActivity extends AppCompatActivity {
             remove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    removeFromShoppingList(currentItem);
-                    restartActivity();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ShoppingListActivity.this);
+                    builder.setTitle("Remove " + currentItem.name + " from your shopping list?");
+                    builder.setMessage("Are you sure?");
+                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            removeFromShoppingList(currentItem);
+                            updateActivity();
+                        }
+                    });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+
                 }
             });
 
@@ -208,17 +214,19 @@ public class ShoppingListActivity extends AppCompatActivity {
         editor.commit();
     }
 
-    public void restartActivity(){
-        Intent intent = getIntent();
-        finish();
-        startActivity(intent);
-    }
+    public void updateActivity(){
+        ShoppingListArrayAdapter adapter1 = new ShoppingListArrayAdapter
+                (ShoppingListActivity.this, R.layout.food_item, getShoppingList());
+        ListView lv = (ListView) findViewById(R.id.ListView);
+        lv.setAdapter(adapter1);
 
-    public Double getTotalSugar(){
-        Double total = 0.00;
-        for(Food item : getShoppingList()){
-            total += item.sugar;
+        double totalSugar = 0.00;
+
+        for(Food f : getShoppingList()){
+            totalSugar += f.sugar;
         }
-        return total;
+
+        TextView units = (TextView) findViewById(R.id.unitsTxtVw);
+        units.setText(Double.toString(totalSugar) + " " + conversions.getString("stringMeasure", null));
     }
 }
