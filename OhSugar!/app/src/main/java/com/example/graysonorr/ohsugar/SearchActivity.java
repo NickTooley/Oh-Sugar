@@ -1,6 +1,5 @@
 package com.example.graysonorr.ohsugar;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -233,19 +232,11 @@ public class SearchActivity extends AppCompatActivity {
         HashMap<String, String> toReturn;
         private Context context;
         private String searchRequest;
-        private ProgressDialog dialog;
 
         public AsyncScraper(Context context, String search){
             this.context = context;
             this.searchRequest = search;
             searchRequest = search.replace(' ', '+');
-            dialog = new ProgressDialog(context);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            dialog.setMessage("Searching products");
-            dialog.show();
         }
 
         protected HashMap<String, String> doInBackground(String... search){
@@ -294,10 +285,6 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(HashMap<String, String> fetchedMap){
-
-            if (dialog.isShowing()) {
-                dialog.dismiss();
-            }
             //CountdownScraper.returnValues();
             toReturn = fetchedMap;
             if(fetchedMap != null) {
