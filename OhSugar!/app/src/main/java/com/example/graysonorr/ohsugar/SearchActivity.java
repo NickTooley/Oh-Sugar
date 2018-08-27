@@ -133,7 +133,7 @@ public class SearchActivity extends AppCompatActivity {
         HashMap<String, String> searchStrings = new HashMap<String, String>();
 
         for(int i=0; i < searchResult.size(); i++){
-            searchStrings.put(searchResult.get(i).name, Double.toString(searchResult.get(i).sugar));
+            searchStrings.put(searchResult.get(i).name, Double.toString(searchResult.get(i).sugarServing));
         }
 
         Log.d("get count", Integer.toString(adapter1.getCount()));
@@ -327,7 +327,7 @@ public class SearchActivity extends AppCompatActivity {
             final Food currentItem = getItem(position);
 
             resultTxtVw.setText(currentItem.name);
-            sugarTxtVw.setText(Double.toString(currentItem.sugar));
+            sugarTxtVw.setText(Double.toString(currentItem.sugarServing));
             addBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

@@ -146,7 +146,7 @@ public class SearchReturn extends AppCompatActivity {
         HashMap<String, String> searchStrings = new HashMap<String, String>();
 
         for(int i=0; i < searchResult.size(); i++){
-            searchStrings.put(searchResult.get(i).name, Double.toString(searchResult.get(i).sugar));
+            searchStrings.put(searchResult.get(i).name, Double.toString(searchResult.get(i).sugarServing));
         }
 
         Log.d("get count", Integer.toString(adapter1.getCount()));
@@ -223,7 +223,7 @@ public class SearchReturn extends AppCompatActivity {
         if(foods != null){
             Intent intent = new Intent();
             intent.putExtra("Name", foods.name);
-            intent.putExtra("Sugar", foods.sugar);
+            intent.putExtra("Sugar", foods.sugarServing);
             intent.putExtra("Barcode", foods.barcode);
             intent.putExtra("ID", foods.foodID);
             setResult(RESULT_OK, intent);
@@ -354,7 +354,7 @@ public class SearchReturn extends AppCompatActivity {
             final Food currentItem = getItem(position);
 
             resultTxtVw.setText(currentItem.name);
-            sugarTxtVw.setText(Double.toString(currentItem.sugar));
+            sugarTxtVw.setText(Double.toString(currentItem.sugarServing));
             addBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -476,13 +476,13 @@ public class SearchReturn extends AppCompatActivity {
                 //sugarContentText.setText(fetchedMap.get(2) + "g");
 
                 Food food = new Food();
-                food.sugar = Double.parseDouble(fetchedMap.get(2));
+                food.sugarServing = Double.parseDouble(fetchedMap.get(2));
                 food.name = fetchedMap.get(0);
                 food.barcode = searchRequest;
 
                 Intent intent = new Intent();
                 intent.putExtra("Name", food.name);
-                intent.putExtra("Sugar", food.sugar);
+                intent.putExtra("Sugar", food.sugarServing);
                 intent.putExtra("Barcode", food.barcode);
                 intent.putExtra("ID", food.foodID);
                 setResult(RESULT_OK, intent);

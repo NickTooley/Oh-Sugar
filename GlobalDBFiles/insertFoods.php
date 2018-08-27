@@ -5,8 +5,10 @@ include 'connect.inc.php';
 session_start();?>
 
 <?php
+  $rest_json = file_get_contents("php://input");
+  $_POST = json_decode($rest_json, true);
   
-  if (isset($_POST['leaveSubmit'])){
+  if (isset($_POST['foodInsert'])){
     $date = date('Y-m-d H:i:s');
 
 
@@ -19,21 +21,36 @@ session_start();?>
     $insertFood->bindParam(':date', $date);
 
 	
-	$foodjson = $_POST['foods'];
-	$foodarr = json_decode($foodjson, true);
 	
-	for($i = 0; $i < $count($foodarr); $i++){
-		$foodname = $_POST['name'];
-		$sugar = $_POST['sugar'];
-		$barcode = $_POST['barcode'];
-		$category = $_POST['category'];
+	$foods = $_POST['foods'];
+	
+	print_r($foods);
+	
+	for($i = 0; $i < count($foods); $i++){
+		echo("\n");
+		print_r($foods[$i]['name']);
+		echo("\n");
+		print_r($foods[$i]['sugar']);
+		echo("\n");
+		print_r($foods[$i]['barcode']);
+		echo("\n");
+		print_r($foods[$i]['category']);
+		echo("\n");
+		
+		$foodName = $foods[$i]['name'];
+		$sugar = $foods[$i]['sugar'];
+		$barcode = $foods[$i]['barcode'];
+		$category = $foods[$i]['category'];
+		
+		$insertFood->execute();
+		echo("Food INSERTED\n \n");
 	}
-    
+  }
 
     
   else{
-
-      include 'leaveRequestForm.html.php';
+		echo "didnt make it here \n \n";
+		print_r($_POST);
 
   }
 

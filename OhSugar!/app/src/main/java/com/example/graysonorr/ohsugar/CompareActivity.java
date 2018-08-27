@@ -125,7 +125,7 @@ public class CompareActivity extends AppCompatActivity {
     private void showOutput(Food food, TextView name, TextView sugar){
         name.setText(food.name);
         SharedPreferences sharedPref = CompareActivity.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
-        sugar.setText(Integer.toString((int)(food.sugar / sharedPref.getFloat("floatMeasure", 1.0f) + 0.5d)));
+        sugar.setText(Integer.toString((int)(food.sugarServing / sharedPref.getFloat("floatMeasure", 1.0f) + 0.5d)));
     }
 
     private void showOutput(String name, Double sugar, TextView nameTv, TextView sugarTv){

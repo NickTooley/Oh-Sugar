@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.IInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.graysonorr.ohsugar.db.AppDatabase;
 import com.example.graysonorr.ohsugar.db.Food;
+import com.example.graysonorr.ohsugar.db.utils.GlobalDBUtils;
 import com.example.graysonorr.ohsugar.db.utils.dbinit;
 
 import org.jsoup.Connection;
@@ -108,7 +110,7 @@ public class BarcodeRetrieval extends AppCompatActivity {
         SharedPreferences sharedPref = BarcodeRetrieval.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
         String abbrev = sharedPref.getString("abbreviation", "g");
         Float measure = sharedPref.getFloat("floatMeasure", 1.0f);
-        sugarContentText.setText((food.sugar / measure) + abbrev);
+        sugarContentText.setText((food.sugarServing / measure) + abbrev);
     }
 
     private void fetchData(String barcode) {
@@ -149,6 +151,7 @@ public class BarcodeRetrieval extends AppCompatActivity {
 
             ArrayList<String> searchResultMap = new ArrayList<String>();
             double sugarContent = 0;
+            double sugarperhundred = 0;
 
             try {
                 Connection.Response response = Jsoup.connect("https://shop.countdown.co.nz/shop/searchproducts?search=" + searchRequest).timeout(7000).execute();
@@ -179,24 +182,49 @@ public class BarcodeRetrieval extends AppCompatActivity {
                     Document doc2 = Jsoup.connect("https://shop.countdown.co.nz" + productURL).get();
                     Log.d("Connect?", doc2.outerHtml());
                     Elements nutritional = doc2.select("td");
+                    Elements headers = doc2.select("th");
+
+                    int incrementCount = 0;
+
+                    for (Element headings : headers) {
+                        if(headings.html().equals("Per 100g")){
+                            break;
+                        }else{
+                            incrementCount++;
+                        }
+                    }
+
+
 
                     for (Element nutritionals : nutritional) {
                         if (nutritionals.html().equals("Sugars")) {
                             String sugarOGString = nutritionals.nextElementSibling().html();
                             String sugarString = sugarOGString.substring(0, sugarOGString.length() - 1);
                             sugarContent = Double.parseDouble(sugarString);
+
+                            Element nextNutritional = nutritionals;
+                            for(int i=0; i < incrementCount;i++){
+                                nextNutritional = nextNutritional.nextElementSibling();
+                            }
+
+                            String sugarHundredOG = nextNutritional.html();
+                            sugarHundredOG = sugarHundredOG.substring(0, sugarHundredOG.length() - 1);
+                            Log.d("Double check", Integer.toString(incrementCount));
+                            Log.d("Double check", sugarHundredOG);
+                            sugarperhundred = Double.parseDouble(sugarHundredOG);
                         }
                     }
                     searchResultMap.add(Double.toString(sugarContent));
-                }
+                    searchResultMap.add(Double.toString(sugarperhundred));
 
+
+                }
 
                 }catch(IOException e){
                     return null;
                 }
 
                 return searchResultMap;
-
 
         }
 
@@ -213,9 +241,14 @@ public class BarcodeRetrieval extends AppCompatActivity {
                 //sugarContentText.setText(fetchedMap.get(2) + "g");
 
                 Food food = new Food();
-                food.sugar = Double.parseDouble(fetchedMap.get(2));
+                food.sugarServing = Double.parseDouble(fetchedMap.get(2));
+                food.sugar100 = Double.parseDouble(fetchedMap.get(3));
                 food.name = fetchedMap.get(0);
                 food.barcode = searchRequest;
+
+                AppDatabase db = AppDatabase.getInMemoryDatabase(getApplicationContext());
+                db.foodDao().insertFood(food);
+                GlobalDBUtils.insertFood(food, BarcodeRetrieval.this);
 
                 showOutput(food);
 

@@ -15,6 +15,9 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.graysonorr.ohsugar.db.Food;
+import com.example.graysonorr.ohsugar.db.utils.GlobalDBUtils;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -22,6 +25,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -87,10 +91,12 @@ public class BasicSugarContent extends AppCompatActivity {
 
     }
 
-    private void fillText(double sugar){
+    private void fillText(ArrayList<Double> sugar){
         SharedPreferences sharedPref = BasicSugarContent.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
         TextView tvSugar = (TextView) findViewById(R.id.foodSugar);
-        tvSugar.setText(Double.toString(sugar/sharedPref.getFloat("floatMeasure", 1.0f)) + " " + sharedPref.getString("abbreviation", "g"));
+        tvSugar.setText(Double.toString(sugar.get(0)/sharedPref.getFloat("floatMeasure", 1.0f)) + " " + sharedPref.getString("abbreviation", "g"));
+        TextView tvSugar100 = (TextView) findViewById(R.id.foodSugar100);
+        tvSugar100.setText(Double.toString(sugar.get(1)) + "g per 100g");
     }
 
     private void fillText(){
@@ -101,10 +107,11 @@ public class BasicSugarContent extends AppCompatActivity {
 
 
 
-    class AsyncScraper extends AsyncTask<String, Void, Double> {
+    class AsyncScraper extends AsyncTask<String, Void, ArrayList<String>> {
         HashMap<String, String> toReturn;
         private Context context;
         private String searchRequest;
+        ArrayList<String> allContent;
 
         public AsyncScraper(Context context, String search){
             this.context = context;
@@ -112,10 +119,13 @@ public class BasicSugarContent extends AppCompatActivity {
             searchRequest = search.replace(' ', '+');
         }
 
-        protected Double doInBackground(String... search){
+        protected ArrayList<String> doInBackground(String... search){
 
-            HashMap<String, String> searchResultMap = new HashMap<String, String>();
-            double sugarContent = 0;
+            ArrayList<String> allContent = new ArrayList<String>();
+            ArrayList<Double> searchResultMap = new ArrayList<Double>();
+            //HashMap<String, String> searchResultMap = new HashMap<String, String>();
+            double sugarContent = 101;
+            double sugarperhundred = 0;
 
             try{
                 Document doc = Jsoup.connect("https://shop.countdown.co.nz"+searchRequest).get();
@@ -123,19 +133,45 @@ public class BasicSugarContent extends AppCompatActivity {
 
                 Elements nutritional = doc.select("td");
 
-                /**while(nutritional.next().html() != "Sugars"){
-                    String sugarString = nutritional.next().html();
-                    Log.d("test", sugarString);
-                }**/
+                Elements headers = doc.select("th");
+
+                int incrementCount = 0;
+
+                for (Element headings : headers) {
+                    if(headings.html().equals("Per 100g")){
+                        break;
+                    }else{
+                        incrementCount++;
+                    }
+                }
 
                 for(Element nutritionals: nutritional){
                     if(nutritionals.html().equals("Sugars")){
                         String sugarOGString = nutritionals.nextElementSibling().html();
                         String sugarString = sugarOGString.substring(0, sugarOGString.length() - 1);
                         sugarContent = Double.parseDouble(sugarString);
+
+                        Element nextNutritional = nutritionals;
+                        for(int i=0; i < incrementCount;i++){
+                            nextNutritional = nextNutritional.nextElementSibling();
+                        }
+
+                        String sugarHundredOG = nextNutritional.html();
+                        sugarHundredOG = sugarHundredOG.substring(0, sugarHundredOG.length() - 1);
+                        Log.d("Double check", Integer.toString(incrementCount));
+                        Log.d("Double check", sugarHundredOG);
+                        sugarperhundred = Double.parseDouble(sugarHundredOG);
                     }
 
                 }
+
+                searchResultMap.add(sugarContent);
+                searchResultMap.add(sugarperhundred);
+
+                allContent.add(Double.toString(sugarContent));
+                allContent.add(Double.toString(sugarperhundred));
+
+
 
 
 
@@ -150,10 +186,14 @@ public class BasicSugarContent extends AppCompatActivity {
 
                     if (m.find( )) {
                         Log.d("Barcode", m.group(1) );
+
+                        allContent.add(m.group(1));
                     }else {
                         Log.d("uhh", "NO MATCH");
                     }
                 }
+
+
 
 
 
@@ -166,15 +206,31 @@ public class BasicSugarContent extends AppCompatActivity {
 
             }
 
-            return sugarContent;
+            //return sugarContent;
+            //return searchResultMap;
+            return allContent;
         }
 
-        protected void onPostExecute(Double fetchedSugar){
+        protected void onPostExecute(ArrayList<String> allContent){
 
-            if(fetchedSugar == 0){
+            if(Double.parseDouble(allContent.get(0)) == 101){
 
             }else{
+                ArrayList<Double> fetchedSugar = new ArrayList<Double>();
+                fetchedSugar.add(Double.parseDouble(allContent.get(0)));
+                fetchedSugar.add(Double.parseDouble(allContent.get(1)));
                 fillText(fetchedSugar);
+
+                Food food = new Food();
+                food.name = productName;
+                if(allContent.size() == 3) {
+                    food.barcode = allContent.get(2);
+                }
+                food.sugarServing = Double.parseDouble(allContent.get(0));
+                food.sugar100 = Double.parseDouble(allContent.get(1));
+
+                GlobalDBUtils.insertFood(food, BasicSugarContent.this);
+
             }
 
         }

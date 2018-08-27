@@ -44,7 +44,7 @@ public class MoreInfoActivity extends AppCompatActivity {
         TextView sugarLevel = (TextView) findViewById(R.id.MsrmntTxtVw);
 
         foodProduct.setText(food.name);
-        sugarLevel.setText(Double.toString(food.sugar));
+        sugarLevel.setText(Double.toString(food.sugarServing));
 
     }
 }
