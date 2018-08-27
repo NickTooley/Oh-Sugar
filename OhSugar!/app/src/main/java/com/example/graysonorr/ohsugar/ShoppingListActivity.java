@@ -17,8 +17,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.graysonorr.ohsugar.db.AppDatabase;
 import com.example.graysonorr.ohsugar.db.Food;
@@ -28,6 +30,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ShoppingListActivity extends AppCompatActivity {
 
@@ -53,6 +56,14 @@ public class ShoppingListActivity extends AppCompatActivity {
         TextView toolBarTitle = findViewById(R.id.toolbar_title);
         Typeface customFont = Typeface.createFromAsset(getAssets(), getString(R.string.font));
         toolBarTitle.setTypeface(customFont);
+
+        Button save = (Button) findViewById(R.id.saveBtn);
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowDialog();
+            }
+        });
 
         db = AppDatabase.getInMemoryDatabase(getApplicationContext());
 
@@ -167,7 +178,6 @@ public class ShoppingListActivity extends AppCompatActivity {
                     });
                     AlertDialog alert = builder.create();
                     alert.show();
-
                 }
             });
 
@@ -224,11 +234,63 @@ public class ShoppingListActivity extends AppCompatActivity {
 
         double totalSugar = 0.00;
 
-      for(Food f : getShoppingList()){
-          totalSugar += f.sugar/conversions.getFloat("floatMeasure", 1);
-      }
+        for(Food f : getShoppingList()){
+            totalSugar += f.sugar/conversions.getFloat("floatMeasure", 1);
+        }
 
         TextView units = (TextView) findViewById(R.id.unitsTxtVw);
         units.setText(String.format("%.2f ", totalSugar) + conversions.getString("stringMeasure", null));
+    }
+
+    public void ShowDialog(){
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.save_dialog, null);
+        dialogBuilder.setView(dialogView);
+
+        final EditText listName = (EditText) dialogView.findViewById(R.id.edit1);
+
+        dialogBuilder.setTitle("Save your shopping list");
+        dialogBuilder.setMessage("Name your shopping list: ");
+        dialogBuilder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Save(listName.getText().toString());
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        AlertDialog b = dialogBuilder.create();
+        b.show();
+    }
+
+    public void Save(String listName){
+        SharedPreferences sharedPreferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        Map<String,?> keys = sharedPreferences.getAll();
+
+        boolean alreadyUsed = false;
+
+        for(Map.Entry<String, ?> lists : keys.entrySet()){
+            if(lists.getKey().toString().equals(listName)){
+                alreadyUsed = true;
+            }
+        }
+
+        if(!alreadyUsed){
+            Gson gson = new Gson();
+            String json = gson.toJson(getShoppingList());
+            editor.putString(listName, json);
+            editor.commit();
+            Toast.makeText(ShoppingListActivity.this, "List saved successfully", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(ShoppingListActivity.this, "Sorry that name is already used for a saved list", Toast.LENGTH_SHORT).show();
+        }
     }
 }

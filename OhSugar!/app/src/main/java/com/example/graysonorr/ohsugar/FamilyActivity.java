@@ -5,9 +5,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,31 +45,35 @@ public class FamilyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_family);
 
+        TextView toolBarTitle = findViewById(R.id.toolbar_title);
+        Typeface customFont = Typeface.createFromAsset(getAssets(), getString(R.string.font));
+        toolBarTitle.setTypeface(customFont);
+
         final Spinner gSpinner = (Spinner) findViewById(R.id.genderSpinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.genderArray, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                R.array.genderArray, R.layout.spinner_item);
+        adapter.setDropDownViewResource(R.layout.spinner_item);
         gSpinner.setAdapter(adapter);
 
         final Spinner aSpinner = (Spinner) findViewById(R.id.ageSpinner);
         ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this,
-                R.array.ageArray, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                R.array.ageArray, R.layout.spinner_item);
+        adapter.setDropDownViewResource(R.layout.spinner_item);
         aSpinner.setAdapter(adapter2);
 
         TextView add = (TextView) findViewById(R.id.addBtn);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addMember(gSpinner.getSelectedItem().toString(), aSpinner.getSelectedItem().toString());
-                updateActivity();
+                AddMember(gSpinner.getSelectedItem().toString(), aSpinner.getSelectedItem().toString());
+                UpdateActivity();
             }
         });
 
-        updateActivity();
+        UpdateActivity();
     }
 
-    public void addMember(String gender, String age){
+    public void AddMember(String gender, String age){
         SharedPreferences sharedPreferences = getSharedPreferences("Family", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -83,6 +92,8 @@ public class FamilyActivity extends AppCompatActivity {
         gson = new Gson();
         json = gson.toJson(family);
         editor.putString("family", json);
+        editor.commit();
+        editor.putInt("familySugar", GetRecommendedSugar());
         editor.commit();
     }
 
@@ -120,8 +131,8 @@ public class FamilyActivity extends AppCompatActivity {
             remove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), FamilyActivity.class);
-                    startActivity(intent);
+                    RemoveMember(currentItem);
+                    UpdateActivity();
                 }
             });
 
@@ -134,19 +145,50 @@ public class FamilyActivity extends AppCompatActivity {
         }
     }
 
-    public void updateActivity(){
+    public void UpdateActivity(){
         FamilyArrayAdapter adapter3 = new FamilyArrayAdapter
                 (FamilyActivity.this, R.layout.family_member, getFamily());
         ListView lv = (ListView) findViewById(R.id.lstVw);
         lv.setAdapter(adapter3);
 
-        int totalRecsugar = 0 ;
+        TextView recSugar = (TextView) findViewById(R.id.totalRecSugar);
+        SharedPreferences sharedPreferences = getSharedPreferences("Family", MODE_PRIVATE);
+        recSugar.setText("Recommended sugar for family: " + sharedPreferences.getInt("familySugar", 0) + "g");
+    }
 
-        for(Person p : getFamily()){
-            totalRecsugar += p.recSugar;
+    public void RemoveMember(Person p){
+        SharedPreferences sharedPreferences = getSharedPreferences("Family", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("family", null);
+        Type type = new TypeToken<ArrayList<Person>>() {}.getType();
+
+        ArrayList<Person> family = gson.fromJson(json, type);
+
+        if(family == null){
+            family = new ArrayList<>();
         }
 
-        TextView recSugar = (TextView) findViewById(R.id.totalRecSugar);
-        recSugar.setText("Recommended sugar for family: " + totalRecsugar + "g");
+        for(int i=0; i < family.size(); i++){
+            if (family.get(i).personID.equals(p.personID)){
+                family.remove(i);
+            }
+        }
+
+        gson = new Gson();
+        json = gson.toJson(family);
+        editor.putString("family", json);
+        editor.commit();
+        editor.putInt("familySugar", GetRecommendedSugar());
+        editor.commit();
+    }
+
+    public Integer GetRecommendedSugar(){
+        Integer sugar = 0;
+        for(Person p : getFamily()){
+            sugar += p.recSugar;
+        }
+        return sugar;
     }
 }

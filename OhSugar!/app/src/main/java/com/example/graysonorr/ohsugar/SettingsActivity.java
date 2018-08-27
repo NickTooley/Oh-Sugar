@@ -49,6 +49,16 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        TextView loadShopList = (TextView) findViewById(R.id.button2);
+
+        loadShopList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), LoadShoppingList.class);
+                startActivity(intent);
+            }
+        });
+
         TextView familyBtn = (TextView) findViewById(R.id.button3);
 
         familyBtn.setOnClickListener(new View.OnClickListener() {

@@ -315,7 +315,6 @@ public class SearchActivity extends AppCompatActivity {
             }else{
                 //returnValues();
             }
-
         }
 
     }
