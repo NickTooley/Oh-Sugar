@@ -51,7 +51,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         TextView familyBtn = (TextView) findViewById(R.id.button3);
 
-        conversionsBtn.setOnClickListener(new View.OnClickListener() {
+        familyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), FamilyActivity.class);
@@ -59,11 +59,16 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        Shader textShader=new LinearGradient(0, 0, conversionsBtn.getMeasuredWidth() / 2, 0,
+                new int[]{Color.parseColor("#fc552e"),Color.parseColor("#f9398e")},
+                new float[]{0, 1}, Shader.TileMode.CLAMP);
+        familyBtn.getPaint().setShader(textShader);
+
         conversionsBtn.measure(0,0);
 
         Log.d("conversionswidth", Integer.toString(conversionsBtn.getMeasuredWidth()));
 
-        Shader textShader=new LinearGradient(0, 0, conversionsBtn.getMeasuredWidth() / 2, 0,
+        Shader textShader2=new LinearGradient(0, 0, conversionsBtn.getMeasuredWidth() / 2, 0,
                 new int[]{Color.parseColor("#fc552e"),Color.parseColor("#f9398e")},
                 new float[]{0, 1}, Shader.TileMode.CLAMP);
         conversionsBtn.getPaint().setShader(textShader);
@@ -72,7 +77,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         shoppingListBtn.measure(0,0);
 
-        Shader textShader2=new LinearGradient(0, 0, shoppingListBtn.getMeasuredWidth() / 2, 0,
+        Shader textShader3=new LinearGradient(0, 0, shoppingListBtn.getMeasuredWidth() / 2, 0,
                 new int[]{Color.parseColor("#fc552e"),Color.parseColor("#f9398e")},
                 new float[]{0, 1}, Shader.TileMode.CLAMP);
         shoppingListBtn.getPaint().setShader(textShader2);
