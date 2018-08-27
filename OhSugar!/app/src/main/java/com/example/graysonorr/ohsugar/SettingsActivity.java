@@ -49,6 +49,16 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        TextView familyBtn = (TextView) findViewById(R.id.button3);
+
+        conversionsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), FamilyActivity.class);
+                startActivity(intent);
+            }
+        });
+
         conversionsBtn.measure(0,0);
 
         Log.d("conversionswidth", Integer.toString(conversionsBtn.getMeasuredWidth()));

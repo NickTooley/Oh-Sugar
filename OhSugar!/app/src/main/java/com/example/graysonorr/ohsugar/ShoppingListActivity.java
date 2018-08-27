@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -122,14 +123,15 @@ public class ShoppingListActivity extends AppCompatActivity {
             View customView = inflater.inflate(R.layout.food_item, container, false);
 
             TextView name = (TextView) customView.findViewById(R.id.foodName);
-            TextView sugar = (TextView) customView.findViewById(R.id.foodSugar);
+            TextView sugarV = (TextView) customView.findViewById(R.id.sugarValue);
+            TextView sugarM = (TextView) customView.findViewById(R.id.sugarMeasurement);
             Button remove = (Button) customView.findViewById(R.id.AddBtn);
 
             final Food currentItem = getItem(position);
 
             name.setText(currentItem.name);
-            sugar.setText(Double.toString(currentItem.sugar) + " " + conversions.getString("abbreviation", null));
-
+            sugarV.setText(String.format("%.2f", currentItem.sugar/conversions.getFloat("floatMeasure", 1)));
+            sugarM.setText(conversions.getString("abbreviation", null));
 
             name.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -218,11 +220,11 @@ public class ShoppingListActivity extends AppCompatActivity {
 
         double totalSugar = 0.00;
 
-        for(Food f : getShoppingList()){
-            totalSugar += f.sugar;
-        }
+      for(Food f : getShoppingList()){
+          totalSugar += f.sugar/conversions.getFloat("floatMeasure", 1);
+      }
 
         TextView units = (TextView) findViewById(R.id.unitsTxtVw);
-        units.setText(Double.toString(totalSugar) + " " + conversions.getString("stringMeasure", null));
+        units.setText(String.format("%.2f ", totalSugar) + conversions.getString("stringMeasure", null));
     }
 }

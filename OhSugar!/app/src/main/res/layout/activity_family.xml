@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
-    tools:context=".WelcomeActivity">
+    tools:context=".FamilyActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="settings"
+                android:text="family"
                 android:textColor="#ffffff"
                 android:textSize="25sp" />
 
@@ -52,52 +52,19 @@
             android:paddingTop="100dp"
             android:paddingHorizontal="50dp">
 
-
-            <TextView
-                android:id="@+id/button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                android:background="@drawable/long_btn"
-                android:paddingBottom="8dp"
-                android:paddingLeft="60dp"
-                android:paddingRight="60dp"
-                android:paddingTop="5dp"
-                android:text="conversions"
-                android:textAlignment="center"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                android:textSize="28sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/button2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                android:background="@drawable/long_btn"
-                android:paddingBottom="8dp"
-                android:paddingLeft="60dp"
-                android:paddingRight="60dp"
-                android:paddingTop="5dp"
-                android:text="shopping list"
-                android:textAlignment="center"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                android:textSize="28sp"
-                android:textStyle="bold" />
-
             <TextView
                 android:id="@+id/button3"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/long_btn"
                 android:paddingBottom="8dp"
-                android:paddingLeft="60dp"
-                android:paddingRight="60dp"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
                 android:paddingTop="5dp"
-                android:text="family"
+                android:text="Add family member"
                 android:textAlignment="center"
                 android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                android:textSize="28sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
