@@ -1,6 +1,7 @@
 package com.example.graysonorr.ohsugar;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -102,24 +103,27 @@ public class SearchReturn extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String currentQRCode;
-        if (requestCode == 1) {
-            currentQRCode = data.getStringExtra("nada");
-            if(currentQRCode!=null) {
-                fetchBarcodeData(currentQRCode);
-            }
-        }else if (requestCode == 2){
-            if(data.getStringExtra("Name") == null){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK) {
+            String currentQRCode;
+            if (requestCode == 1) {
+                currentQRCode = data.getStringExtra("nada");
+                if (currentQRCode != null) {
+                    fetchBarcodeData(currentQRCode);
+                }
+            } else if (requestCode == 2) {
+                if (data.getStringExtra("Name") == null) {
 
-            }else{
-                String name = data.getStringExtra("Name");
-                Double sugar = data.getDoubleExtra("Sugar", 1.0);
+                } else {
+                    String name = data.getStringExtra("Name");
+                    Double sugar = data.getDoubleExtra("Sugar", 1.0);
 
-                Intent intent = new Intent();
-                intent.putExtra("Name", name);
-                intent.putExtra("Sugar", sugar);
-                setResult(1, intent);
-                finish();
+                    Intent intent = new Intent();
+                    intent.putExtra("Name", name);
+                    intent.putExtra("Sugar", sugar);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
             }
         }
     }
@@ -222,7 +226,7 @@ public class SearchReturn extends AppCompatActivity {
             intent.putExtra("Sugar", foods.sugar);
             intent.putExtra("Barcode", foods.barcode);
             intent.putExtra("ID", foods.foodID);
-            setResult(1, intent);
+            setResult(RESULT_OK, intent);
             finish();
             //populateListView(foods);
         }else{
@@ -257,11 +261,19 @@ public class SearchReturn extends AppCompatActivity {
         HashMap<String, String> toReturn;
         private Context context;
         private String searchRequest;
+        private ProgressDialog dialog;
 
         public AsyncScraper(Context context, String search){
             this.context = context;
             this.searchRequest = search;
             searchRequest = search.replace(' ', '+');
+            dialog = new ProgressDialog(context);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog.setMessage("Searching Products");
+            dialog.show();
         }
 
         protected HashMap<String, String> doInBackground(String... search){
@@ -310,6 +322,9 @@ public class SearchReturn extends AppCompatActivity {
         }
 
         protected void onPostExecute(HashMap<String, String> fetchedMap){
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
             //CountdownScraper.returnValues();
             toReturn = fetchedMap;
             if(fetchedMap != null) {
@@ -388,11 +403,19 @@ public class SearchReturn extends AppCompatActivity {
         HashMap<String, String> toReturn;
         private Context context;
         private String searchRequest;
+        private ProgressDialog dialog;
 
         public BarcodeAsyncScraper(Context context, String search){
             this.context = context;
             this.searchRequest = search;
             searchRequest = search.replace(' ', '+');
+            dialog = new ProgressDialog(context);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog.setMessage("Retrieving barcode information");
+            dialog.show();
         }
 
         protected ArrayList<String> doInBackground(String... search){
@@ -442,6 +465,10 @@ public class SearchReturn extends AppCompatActivity {
         }
 
         protected void onPostExecute(ArrayList<String> fetchedMap){
+
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
             //CountdownScraper.returnValues();
             //toReturn = fetchedMap;
             if(fetchedMap != null) {
@@ -458,7 +485,7 @@ public class SearchReturn extends AppCompatActivity {
                 intent.putExtra("Sugar", food.sugar);
                 intent.putExtra("Barcode", food.barcode);
                 intent.putExtra("ID", food.foodID);
-                setResult(1, intent);
+                setResult(RESULT_OK, intent);
                 finish();
 
                 //showOutput(food);

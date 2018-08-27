@@ -34,14 +34,14 @@ public class CountdownScraper extends AppCompatActivity {
     public void returnValues(HashMap<String, String> searchResults){
         Intent intent = new Intent();
         intent.putExtra("countdownMap", searchResults);
-        setResult(1, intent);
+        setResult(RESULT_OK, intent);
         finish();
     }
 
     public void returnValues(){
         Intent intent = new Intent();
         intent.putExtra("countdownMap", "nada");
-        setResult(1, intent);
+        setResult(RESULT_OK, intent);
         finish();
     }
 

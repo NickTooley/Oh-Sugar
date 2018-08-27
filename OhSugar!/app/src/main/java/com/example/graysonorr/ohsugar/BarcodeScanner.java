@@ -111,7 +111,7 @@ public class BarcodeScanner extends AppCompatActivity {
                 String message = barcodes.valueAt(0).displayValue;
                 Intent intent = new Intent();
                 intent.putExtra("nada", message);
-                setResult(1, intent);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         }
