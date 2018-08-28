@@ -49,7 +49,7 @@ public abstract class GlobalDBUtils {
             FoodObjects.put("sugar1", food.sugarServing);
             FoodObjects.put("sugar2", food.sugar100);
             FoodObjects.put("barcode", food.barcode);
-            FoodObjects.put("categories", null);
+            FoodObjects.put("category", food.category);
             JSONArr = new JSONArray();
             JSONArr.put(FoodObjects);
             toPass.put("foods", JSONArr);

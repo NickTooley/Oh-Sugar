@@ -128,7 +128,7 @@ public class BarcodeRetrieval extends AppCompatActivity {
 
     }
 
-    class AsyncScraper extends AsyncTask<String, Void, ArrayList<String>> {
+    class AsyncScraper extends AsyncTask<String, Void, Food> {
         HashMap<String, String> toReturn;
         private Context context;
         private String searchRequest;
@@ -147,7 +147,14 @@ public class BarcodeRetrieval extends AppCompatActivity {
             dialog.show();
         }
 
-        protected ArrayList<String> doInBackground(String... search) {
+        protected Food doInBackground(String... search) {
+
+            Food food = new Food();
+            food.name = null;
+            food.sugarServing = 101;
+            food.sugar100 = 101;
+            food.barcode = searchRequest;
+            food.category = null;
 
             ArrayList<String> searchResultMap = new ArrayList<String>();
             double sugarContent = 0;
@@ -171,18 +178,28 @@ public class BarcodeRetrieval extends AppCompatActivity {
 
 
                     for (Element URLs : searchResultsURL) {
-                        //   Log.d("URLs", URLs.attr("href"));
+
                     }
 
                     String productName = searchResults.get(0);
+                    food.name = productName;
                     String productURL = searchResultsURL.get(0).attr("href");
                     searchResultMap.add(productName);
                     searchResultMap.add(productURL);
 
                     Document doc2 = Jsoup.connect("https://shop.countdown.co.nz" + productURL).get();
-                    Log.d("Connect?", doc2.outerHtml());
                     Elements nutritional = doc2.select("td");
                     Elements headers = doc2.select("th");
+                    Elements breadcrumbs = doc2.select("span[itemprop='name']");
+
+                    ArrayList<String> crumbList = new ArrayList<String>();
+
+                    for(Element crumbs: breadcrumbs){
+                        crumbList.add(crumbs.html());
+                        Log.d("Crumbs", crumbs.html());
+                    }
+
+                    food.category = crumbList.get(crumbList.size()-1);
 
                     int incrementCount = 0;
 
@@ -214,6 +231,9 @@ public class BarcodeRetrieval extends AppCompatActivity {
                             sugarperhundred = Double.parseDouble(sugarHundredOG);
                         }
                     }
+
+                    food.sugarServing = sugarContent;
+                    food.sugar100 = sugarperhundred;
                     searchResultMap.add(Double.toString(sugarContent));
                     searchResultMap.add(Double.toString(sugarperhundred));
 
@@ -224,11 +244,12 @@ public class BarcodeRetrieval extends AppCompatActivity {
                     return null;
                 }
 
-                return searchResultMap;
+                //return searchResultMap;
+                return food;
 
         }
 
-        protected void onPostExecute(ArrayList<String> fetchedMap){
+        protected void onPostExecute(Food food){
 
             if (dialog.isShowing()) {
                 dialog.dismiss();
@@ -236,15 +257,15 @@ public class BarcodeRetrieval extends AppCompatActivity {
 
             //CountdownScraper.returnValues();
             //toReturn = fetchedMap;
-            if(fetchedMap != null) {
+            if(food.name != null) {
                 //productNameText.setText(fetchedMap.get(0));
                 //sugarContentText.setText(fetchedMap.get(2) + "g");
 
-                Food food = new Food();
-                food.sugarServing = Double.parseDouble(fetchedMap.get(2));
-                food.sugar100 = Double.parseDouble(fetchedMap.get(3));
-                food.name = fetchedMap.get(0);
-                food.barcode = searchRequest;
+//                Food food = new Food();
+//                food.sugarServing = Double.parseDouble(fetchedMap.get(2));
+//                food.sugar100 = Double.parseDouble(fetchedMap.get(3));
+//                food.name = fetchedMap.get(0);
+//                food.barcode = searchRequest;
 
                 AppDatabase db = AppDatabase.getInMemoryDatabase(getApplicationContext());
                 db.foodDao().insertFood(food);

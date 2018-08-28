@@ -21,6 +21,7 @@ public class Food {
     public String name;
     public double sugarServing;
     public double sugar100;
+    public String category;
     public boolean onShopList;
 
 }
