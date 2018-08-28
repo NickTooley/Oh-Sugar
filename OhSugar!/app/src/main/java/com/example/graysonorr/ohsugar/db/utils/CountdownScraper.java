@@ -114,7 +114,7 @@ public abstract class CountdownScraper {
 
             int incrementCount = 0;
             for (Element headings : headers) {
-                if(headings.html().equals("Per 100g")){
+                if(headings.html().equals("Per 100g") || headings.html().equals("Per 100ml")){
                     break;
                 }else{
                     incrementCount++;
