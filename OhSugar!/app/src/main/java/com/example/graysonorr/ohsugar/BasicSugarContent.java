@@ -15,8 +15,10 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.graysonorr.ohsugar.db.AppDatabase;
 import com.example.graysonorr.ohsugar.db.Food;
-import com.example.graysonorr.ohsugar.db.utils.GlobalDBUtils;
+import com.example.graysonorr.ohsugar.db.utils.*;
+import com.example.graysonorr.ohsugar.db.utils.CountdownScraper;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -107,7 +109,7 @@ public class BasicSugarContent extends AppCompatActivity {
 
 
 
-    class AsyncScraper extends AsyncTask<String, Void, ArrayList<String>> {
+    class AsyncScraper extends AsyncTask<String, Void, Food> {
         HashMap<String, String> toReturn;
         private Context context;
         private String searchRequest;
@@ -119,118 +121,21 @@ public class BasicSugarContent extends AppCompatActivity {
             searchRequest = search.replace(' ', '+');
         }
 
-        protected ArrayList<String> doInBackground(String... search){
-
-            ArrayList<String> allContent = new ArrayList<String>();
-            ArrayList<Double> searchResultMap = new ArrayList<Double>();
-            //HashMap<String, String> searchResultMap = new HashMap<String, String>();
-            double sugarContent = 101;
-            double sugarperhundred = 0;
-
-            try{
-                Document doc = Jsoup.connect("https://shop.countdown.co.nz"+searchRequest).get();
-                Log.d("test", doc.title());
-
-                Elements nutritional = doc.select("td");
-
-                Elements headers = doc.select("th");
-
-                int incrementCount = 0;
-
-                for (Element headings : headers) {
-                    if(headings.html().equals("Per 100g")){
-                        break;
-                    }else{
-                        incrementCount++;
-                    }
-                }
-
-                for(Element nutritionals: nutritional){
-                    if(nutritionals.html().equals("Sugars")){
-                        String sugarOGString = nutritionals.nextElementSibling().html();
-                        String sugarString = sugarOGString.substring(0, sugarOGString.length() - 1);
-                        sugarContent = Double.parseDouble(sugarString);
-
-                        Element nextNutritional = nutritionals;
-                        for(int i=0; i < incrementCount;i++){
-                            nextNutritional = nextNutritional.nextElementSibling();
-                        }
-
-                        String sugarHundredOG = nextNutritional.html();
-                        sugarHundredOG = sugarHundredOG.substring(0, sugarHundredOG.length() - 1);
-                        Log.d("Double check", Integer.toString(incrementCount));
-                        Log.d("Double check", sugarHundredOG);
-                        sugarperhundred = Double.parseDouble(sugarHundredOG);
-                    }
-
-                }
-
-                searchResultMap.add(sugarContent);
-                searchResultMap.add(sugarperhundred);
-
-                allContent.add(Double.toString(sugarContent));
-                allContent.add(Double.toString(sugarperhundred));
-
-
-
-
-
-                Elements barcode = doc.select(".product-image");
-
-                for(Element barcodes: barcode){
-                    String barcodeString = barcodes.attr("src");
-                    Log.d("Full Barcode", barcodeString);
-                    String pattern = "(?<=\\/Content\\/ProductImages\\/large\\/)(.*)(?=\\.jpg\\/)";
-                    Pattern r = Pattern.compile(pattern);
-                    Matcher m = r.matcher(barcodeString);
-
-                    if (m.find( )) {
-                        Log.d("Barcode", m.group(1) );
-
-                        allContent.add(m.group(1));
-                    }else {
-                        Log.d("uhh", "NO MATCH");
-                    }
-                }
-
-
-
-
-
-
-                //Double sugars = Double.parseDouble(sugarString);
-
-
-
-            }catch(IOException e){
-
-            }
-
-            //return sugarContent;
-            //return searchResultMap;
-            return allContent;
+        protected Food doInBackground(String... search){
+            Food food = CountdownScraper.retrieveFoodDataURL(searchRequest, productName);
+            return food;
         }
 
-        protected void onPostExecute(ArrayList<String> allContent){
+        protected void onPostExecute(Food food){
 
-            if(Double.parseDouble(allContent.get(0)) == 101){
-
-            }else{
-                ArrayList<Double> fetchedSugar = new ArrayList<Double>();
-                fetchedSugar.add(Double.parseDouble(allContent.get(0)));
-                fetchedSugar.add(Double.parseDouble(allContent.get(1)));
-                fillText(fetchedSugar);
-
-                Food food = new Food();
-                food.name = productName;
-                if(allContent.size() == 3) {
-                    food.barcode = allContent.get(2);
-                }
-                food.sugarServing = Double.parseDouble(allContent.get(0));
-                food.sugar100 = Double.parseDouble(allContent.get(1));
-
+            if(food != null){
+                AppDatabase db = AppDatabase.getInMemoryDatabase(getApplicationContext());
+                db.foodDao().insertFood(food);
                 GlobalDBUtils.insertFood(food, BasicSugarContent.this);
-
+                ArrayList<Double> fetchedSugar = new ArrayList<Double>();
+                fetchedSugar.add(food.sugarServing);
+                fetchedSugar.add(food.sugar100);
+                fillText(fetchedSugar);
             }
 
         }
