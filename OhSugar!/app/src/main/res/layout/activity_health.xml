@@ -44,6 +44,19 @@
 
         </FrameLayout>
 
+        <TextView
+            android:id="@+id/RecSugarTotal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Rec Sugar:"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/ListSugarTotal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="List Sugar:"
+            android:textSize="30sp" />
 
 
     </LinearLayout>

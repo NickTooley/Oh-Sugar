@@ -109,38 +109,68 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_margin="15dp"
+            android:layout_margin="10dp"
             android:background="@android:color/darker_gray" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <ListView
                 android:id="@+id/lstVw"
                 android:layout_width="match_parent"
-                android:layout_height="290dp"
+                android:layout_height="250dp"
                 android:paddingHorizontal="25dp"/>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_margin="15dp"
+                android:layout_margin="10dp"
                 android:background="@android:color/darker_gray" />
-
-            <TextView
-                android:id="@+id/totalRecSugar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Total recommended sugar:"
-                android:paddingLeft="30dp"/>
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="30dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="4dp"
+                    android:text="Recommended sugar total:"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/totalRecSugar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="4dp"
+                    android:text="00"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="g"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textSize="18sp" />
+            </LinearLayout>
+        </LinearLayout>
+
     </LinearLayout>
-
-
 
 
 </android.support.constraint.ConstraintLayout>

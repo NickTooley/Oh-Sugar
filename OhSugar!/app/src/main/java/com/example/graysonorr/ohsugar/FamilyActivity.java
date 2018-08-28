@@ -20,6 +20,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -153,7 +154,7 @@ public class FamilyActivity extends AppCompatActivity {
 
         TextView recSugar = (TextView) findViewById(R.id.totalRecSugar);
         SharedPreferences sharedPreferences = getSharedPreferences("Family", MODE_PRIVATE);
-        recSugar.setText("Recommended sugar for family: " + sharedPreferences.getInt("familySugar", 0) + "g");
+        recSugar.setText(Integer.toString(sharedPreferences.getInt("familySugar", 0)));
     }
 
     public void RemoveMember(Person p){

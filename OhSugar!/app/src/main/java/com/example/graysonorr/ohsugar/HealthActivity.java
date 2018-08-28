@@ -1,5 +1,6 @@
 package com.example.graysonorr.ohsugar;
 
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -25,5 +26,11 @@ public class HealthActivity extends AppCompatActivity {
         TextView toolBarTitle = findViewById(R.id.toolbar_title);
         Typeface customFont = Typeface.createFromAsset(getAssets(), getString(R.string.font));
         toolBarTitle.setTypeface(customFont);
+
+        TextView recSugar = (TextView) findViewById(R.id.RecSugarTotal);
+        TextView listSugar = (TextView) findViewById(R.id.ListSugarTotal);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("Family", MODE_PRIVATE);
+        recSugar.setText("Rec Sugar: " + Integer.toString(sharedPreferences.getInt("familySugar", 0)) + "g");
     }
 }

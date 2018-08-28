@@ -45,10 +45,7 @@ public class LoadShoppingList extends AppCompatActivity {
         Typeface customFont = Typeface.createFromAsset(getAssets(), getString(R.string.font));
         toolBarTitle.setTypeface(customFont);
 
-        ListsArrayAdapter adapter3 = new ListsArrayAdapter
-                (LoadShoppingList.this, R.layout.saved_lists, GetShoppingLists());
-        ListView lv = (ListView) findViewById(R.id.ListView);
-        lv.setAdapter(adapter3);
+        UpdateActivity();
     }
 
     public class ListsArrayAdapter extends ArrayAdapter<String> {
@@ -61,10 +58,14 @@ public class LoadShoppingList extends AppCompatActivity {
             View customView = inflater.inflate(R.layout.saved_lists, container, false);
 
             TextView name = (TextView) customView.findViewById(R.id.ListName);
+            TextView sugar = (TextView) customView.findViewById(R.id.sugar);
+            Button preview = (Button) customView.findViewById(R.id.PrevBtn);
+            final Button delete = (Button) customView.findViewById(R.id.DelBtn);
 
             final String currentItem = getItem(position);
 
             name.setText(currentItem);
+            sugar.setText("Sugar total: " + Double.toString(GetSugar(currentItem)));
 
             name.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -84,6 +85,30 @@ public class LoadShoppingList extends AppCompatActivity {
                             LoadShoppingList(currentItem);
                             Intent intent = new Intent(LoadShoppingList.this, ShoppingListActivity.class);
                             startActivity(intent);
+                        }
+                    });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
+            });
+
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(LoadShoppingList.this);
+                    builder.setTitle("Delete " + currentItem + " from your saved lists?");
+                    builder.setMessage("Are you sure?");
+                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Delete(currentItem);
+                            UpdateActivity();
                         }
                     });
                     AlertDialog alert = builder.create();
@@ -126,5 +151,37 @@ public class LoadShoppingList extends AppCompatActivity {
         json = gson.toJson(shoppinglist);
         editor2.putString("shopping list", json);
         editor2.commit();
+    }
+
+    public void Delete(String listName){
+        SharedPreferences preferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
+        preferences.edit().remove(listName).commit();
+    }
+
+    public void UpdateActivity(){
+        ListsArrayAdapter adapter3 = new ListsArrayAdapter
+                (LoadShoppingList.this, R.layout.saved_lists, GetShoppingLists());
+        ListView lv = (ListView) findViewById(R.id.ListView);
+        lv.setAdapter(adapter3);
+    }
+
+    public Double GetSugar(String listName){
+        SharedPreferences sharedPreferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString(listName, null);
+        Type type = new TypeToken<ArrayList<Food>>() {
+        }.getType();
+
+        ArrayList<Food> shoppingList = gson.fromJson(json, type);
+
+        double totalSugar = 0.00;
+
+        for(Food f : shoppingList){
+            totalSugar += f.sugar;
+        }
+
+        return totalSugar;
     }
 }
