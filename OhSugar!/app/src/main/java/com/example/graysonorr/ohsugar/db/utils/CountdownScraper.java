@@ -60,15 +60,18 @@ public abstract class CountdownScraper {
                 for (Element URLs : searchResultsURL) {
 
                 }
+                if(searchResults.size() > 0) {
+                    String productName = searchResults.get(0);
+                    food.name = productName;
+                    String productURL = searchResultsURL.get(0).attr("href");
+                    searchResultMap.add(productName);
+                    searchResultMap.add(productURL);
 
-                String productName = searchResults.get(0);
-                food.name = productName;
-                String productURL = searchResultsURL.get(0).attr("href");
-                searchResultMap.add(productName);
-                searchResultMap.add(productURL);
-
-                Food newFood = retrieveFoodDataURL(productURL, productName);
-                food = newFood;
+                    Food newFood = retrieveFoodDataURL(productURL, productName);
+                    food = newFood;
+                }else{
+                    return null;
+                }
             }
 
         }catch(IOException e){

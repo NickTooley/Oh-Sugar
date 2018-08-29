@@ -114,9 +114,7 @@ public class SearchReturn extends AppCompatActivity {
                     fetchBarcodeData(currentQRCode);
                 }
             } else if (requestCode == 2) {
-                if (data.getStringExtra("Name") == null) {
-
-                } else {
+                if (data.getStringExtra("Name") != null){
                     String name = data.getStringExtra("Name");
                     Double sugar = data.getDoubleExtra("Sugar", 1.0);
 

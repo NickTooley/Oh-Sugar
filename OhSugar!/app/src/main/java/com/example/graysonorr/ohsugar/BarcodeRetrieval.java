@@ -158,7 +158,7 @@ public class BarcodeRetrieval extends AppCompatActivity {
                 dialog.dismiss();
             }
 
-            if(food.name != null) {
+            if(food != null) {
 
                 AppDatabase db = AppDatabase.getInMemoryDatabase(getApplicationContext());
                 db.foodDao().insertFood(food);
