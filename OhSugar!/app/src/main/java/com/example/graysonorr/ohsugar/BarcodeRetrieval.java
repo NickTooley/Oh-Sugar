@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.IInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,7 +19,8 @@ import android.widget.TextView;
 
 import com.example.graysonorr.ohsugar.db.AppDatabase;
 import com.example.graysonorr.ohsugar.db.Food;
-import com.example.graysonorr.ohsugar.db.utils.dbinit;
+import com.example.graysonorr.ohsugar.db.utils.*;
+import com.example.graysonorr.ohsugar.db.utils.CountdownScraper;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -108,7 +110,7 @@ public class BarcodeRetrieval extends AppCompatActivity {
         SharedPreferences sharedPref = BarcodeRetrieval.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
         String abbrev = sharedPref.getString("abbreviation", "g");
         Float measure = sharedPref.getFloat("floatMeasure", 1.0f);
-        sugarContentText.setText((food.sugar / measure) + abbrev);
+        sugarContentText.setText((food.sugarServing / measure) + abbrev);
     }
 
     private void fetchData(String barcode) {
@@ -126,7 +128,7 @@ public class BarcodeRetrieval extends AppCompatActivity {
 
     }
 
-    class AsyncScraper extends AsyncTask<String, Void, ArrayList<String>> {
+    class AsyncScraper extends AsyncTask<String, Void, Food> {
         HashMap<String, String> toReturn;
         private Context context;
         private String searchRequest;
@@ -145,82 +147,25 @@ public class BarcodeRetrieval extends AppCompatActivity {
             dialog.show();
         }
 
-        protected ArrayList<String> doInBackground(String... search) {
-
-            ArrayList<String> searchResultMap = new ArrayList<String>();
-            double sugarContent = 0;
-
-            try {
-                Connection.Response response = Jsoup.connect("https://shop.countdown.co.nz/shop/searchproducts?search=" + searchRequest).timeout(7000).execute();
-
-                int statusCode = response.statusCode();
-
-                if (statusCode != 200) {
-                    return null;
-                } else {
-                    Document doc = Jsoup.connect("https://shop.countdown.co.nz/shop/searchproducts?search=" + searchRequest).get();
-                    Log.d("test", doc.title());
-
-                    Elements newsHeadlines = doc.select(".gridProductStamp-name");
-                    List<String> searchResults = doc.select(".gridProductStamp-name").eachText();
-                    Elements searchResultsURL = doc.select(".gridProductStamp-imageLink");
-                    //List<String> searchResultsURL = doc.select("._jumpTop").eachText();
-
-
-                    for (Element URLs : searchResultsURL) {
-                        //   Log.d("URLs", URLs.attr("href"));
-                    }
-
-                    String productName = searchResults.get(0);
-                    String productURL = searchResultsURL.get(0).attr("href");
-                    searchResultMap.add(productName);
-                    searchResultMap.add(productURL);
-
-                    Document doc2 = Jsoup.connect("https://shop.countdown.co.nz" + productURL).get();
-                    Log.d("Connect?", doc2.outerHtml());
-                    Elements nutritional = doc2.select("td");
-
-                    for (Element nutritionals : nutritional) {
-                        if (nutritionals.html().equals("Sugars")) {
-                            String sugarOGString = nutritionals.nextElementSibling().html();
-                            String sugarString = sugarOGString.substring(0, sugarOGString.length() - 1);
-                            sugarContent = Double.parseDouble(sugarString);
-                        }
-                    }
-                    searchResultMap.add(Double.toString(sugarContent));
-                }
-
-
-                }catch(IOException e){
-                    return null;
-                }
-
-                return searchResultMap;
-
-
+        protected Food doInBackground(String... search) {
+            Food food = CountdownScraper.retrieveFoodDataBarcode(searchRequest);
+            return food;
         }
 
-        protected void onPostExecute(ArrayList<String> fetchedMap){
+        protected void onPostExecute(Food food){
 
             if (dialog.isShowing()) {
                 dialog.dismiss();
             }
 
-            //CountdownScraper.returnValues();
-            //toReturn = fetchedMap;
-            if(fetchedMap != null) {
-                //productNameText.setText(fetchedMap.get(0));
-                //sugarContentText.setText(fetchedMap.get(2) + "g");
+            if(food != null) {
 
-                Food food = new Food();
-                food.sugar = Double.parseDouble(fetchedMap.get(2));
-                food.name = fetchedMap.get(0);
-                food.barcode = searchRequest;
+                AppDatabase db = AppDatabase.getInMemoryDatabase(getApplicationContext());
+                db.foodDao().insertFood(food);
+                GlobalDBUtils.insertFood(food, BarcodeRetrieval.this);
 
                 showOutput(food);
 
-                //populateListView(fetchedMap);
-                //returnValues(fetchedMap);
             }else{
                 //returnValues();
             }

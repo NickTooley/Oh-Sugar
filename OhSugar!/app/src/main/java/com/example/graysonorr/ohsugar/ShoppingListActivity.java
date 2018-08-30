@@ -111,7 +111,7 @@ public class ShoppingListActivity extends AppCompatActivity {
                     Food item = new Food();
 
                     item.name = name;
-                    item.sugar = sugar;
+                    item.sugarServing = sugar;
 
                     shoppinglist.add(item);
 

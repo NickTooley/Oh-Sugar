@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.example.graysonorr.ohsugar.db.AppDatabase;
 import com.example.graysonorr.ohsugar.db.Food;
@@ -47,6 +48,13 @@ public class CompareActivity extends AppCompatActivity {
         TextView toolBarTitle = findViewById(R.id.toolbar_title);
         Typeface customFont = Typeface.createFromAsset(getAssets(), getString(R.string.font));
         toolBarTitle.setTypeface(customFont);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_top);
+            setSupportActionBar(toolbar);
+            //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            //getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         SharedPreferences sharedPref = CompareActivity.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
 
@@ -125,7 +133,7 @@ public class CompareActivity extends AppCompatActivity {
     private void showOutput(Food food, TextView name, TextView sugar){
         name.setText(food.name);
         SharedPreferences sharedPref = CompareActivity.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
-        sugar.setText(Integer.toString((int)(food.sugar / sharedPref.getFloat("floatMeasure", 1.0f) + 0.5d)));
+        sugar.setText(Integer.toString((int)(food.sugarServing / sharedPref.getFloat("floatMeasure", 1.0f) + 0.5d)));
     }
 
     private void showOutput(String name, Double sugar, TextView nameTv, TextView sugarTv){
