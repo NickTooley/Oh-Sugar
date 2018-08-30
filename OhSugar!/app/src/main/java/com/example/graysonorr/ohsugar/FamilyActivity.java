@@ -132,29 +132,51 @@ public class FamilyActivity extends AppCompatActivity {
             remove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    RemoveMember(currentItem);
-                    UpdateActivity();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(FamilyActivity.this);
+                    builder.setTitle("Remove family member from family");
+                    builder.setMessage("Are you sure?");
+                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            RemoveMember(currentItem);
+                            UpdateActivity();
+                        }
+                    });
+                    AlertDialog alert = builder.create();
+                    alert.show();
                 }
             });
 
-
+            SharedPreferences conversions = getSharedPreferences("conversions", MODE_PRIVATE);
             gender.setText("Gender: " + currentItem.gender);
             age.setText("Age: " + currentItem.age);
-            recSugar.setText("Recommended sugar: " + currentItem.recSugar);
+            recSugar.setText("Recommended sugar: "
+                                + currentItem.recSugar/conversions.getFloat("floatMeasure",0)
+                                + conversions.getString("abbreviation", null));
 
             return customView;
         }
     }
 
     public void UpdateActivity(){
+        SharedPreferences conversions = getSharedPreferences("conversions", MODE_PRIVATE);
+
         FamilyArrayAdapter adapter3 = new FamilyArrayAdapter
                 (FamilyActivity.this, R.layout.family_member, getFamily());
         ListView lv = (ListView) findViewById(R.id.lstVw);
         lv.setAdapter(adapter3);
 
         TextView recSugar = (TextView) findViewById(R.id.totalRecSugar);
+        TextView sugUnits = (TextView) findViewById(R.id.units);
         SharedPreferences sharedPreferences = getSharedPreferences("Family", MODE_PRIVATE);
-        recSugar.setText(Integer.toString(sharedPreferences.getInt("familySugar", 0)));
+        recSugar.setText(Float.toString(((sharedPreferences.getInt("familySugar", 0)))/conversions.getFloat("floatMeasure",0)));
+        sugUnits.setText(conversions.getString("abbreviation", null));
     }
 
     public void RemoveMember(Person p){
