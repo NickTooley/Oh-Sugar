@@ -1,6 +1,7 @@
 package com.example.graysonorr.ohsugar;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -354,11 +355,21 @@ public class SearchReturn extends AppCompatActivity {
         HashMap<String, String> toReturn;
         private Context context;
         private String searchRequest;
+        private ProgressDialog dialog;
+
 
         public BarcodeAsyncScraper(Context context, String search){
             this.context = context;
             this.searchRequest = search;
             searchRequest = search.replace(' ', '+');
+            dialog = new ProgressDialog(context);
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog.setMessage("Retrieving barcode information");
+            dialog.show();
         }
 
         protected Food doInBackground(String... search) {
@@ -366,15 +377,12 @@ public class SearchReturn extends AppCompatActivity {
             return food;
         }
 
-<<<<<<< HEAD
-        protected void onPostExecute(ArrayList<String> fetchedMap){
-=======
+
         protected void onPostExecute(final Food food){
 
             if (dialog.isShowing()) {
                 dialog.dismiss();
             }
->>>>>>> b61671f2d52b353832bfa306d6210599bf46c090
             //CountdownScraper.returnValues();
             //toReturn = fetchedMap;
             if(food != null) {

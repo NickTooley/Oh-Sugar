@@ -1,5 +1,6 @@
 package com.example.graysonorr.ohsugar;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -131,76 +132,22 @@ public class BarcodeRetrieval extends AppCompatActivity {
         HashMap<String, String> toReturn;
         private Context context;
         private String searchRequest;
+        private ProgressDialog dialog;
 
         public AsyncScraper(Context context, String search){
             this.context = context;
             this.searchRequest = search;
             searchRequest = search.replace(' ', '+');
+            dialog = new ProgressDialog(context);
         }
 
-<<<<<<< HEAD
-        protected ArrayList<String> doInBackground(String... search) {
-
-            ArrayList<String> searchResultMap = new ArrayList<String>();
-            double sugarContent = 0;
-
-            try {
-                Connection.Response response = Jsoup.connect("https://shop.countdown.co.nz/shop/searchproducts?search=" + searchRequest).timeout(2000).execute();
-
-                int statusCode = response.statusCode();
-
-                if (statusCode != 200) {
-                    return null;
-                } else {
-                    Document doc = Jsoup.connect("https://shop.countdown.co.nz/shop/searchproducts?search=" + searchRequest).get();
-                    Log.d("test", doc.title());
-
-                    Elements newsHeadlines = doc.select(".gridProductStamp-name");
-                    List<String> searchResults = doc.select(".gridProductStamp-name").eachText();
-                    Elements searchResultsURL = doc.select(".gridProductStamp-imageLink");
-                    //List<String> searchResultsURL = doc.select("._jumpTop").eachText();
-
-
-                    for (Element URLs : searchResultsURL) {
-                        //   Log.d("URLs", URLs.attr("href"));
-                    }
-
-                    String productName = searchResults.get(0);
-                    String productURL = searchResultsURL.get(0).attr("href");
-                    searchResultMap.add(productName);
-                    searchResultMap.add(productURL);
-
-                    Document doc2 = Jsoup.connect("https://shop.countdown.co.nz" + productURL).get();
-                    Log.d("Connect?", doc2.outerHtml());
-                    Elements nutritional = doc2.select("td");
-
-                    for (Element nutritionals : nutritional) {
-                        if (nutritionals.html().equals("Sugars")) {
-                            String sugarOGString = nutritionals.nextElementSibling().html();
-                            String sugarString = sugarOGString.substring(0, sugarOGString.length() - 1);
-                            sugarContent = Double.parseDouble(sugarString);
-                        }
-                    }
-                    searchResultMap.add(Double.toString(sugarContent));
-                }
-
-
-                }catch(IOException e){
-                    return null;
-                }
-
-                return searchResultMap;
-
-
+        @Override
+        protected void onPreExecute() {
+            dialog.setMessage("Retrieving barcode information");
+            dialog.show();
         }
 
-        protected void onPostExecute(ArrayList<String> fetchedMap){
-            //CountdownScraper.returnValues();
-            //toReturn = fetchedMap;
-            if(fetchedMap != null) {
-                //productNameText.setText(fetchedMap.get(0));
-                //sugarContentText.setText(fetchedMap.get(2) + "g");
-=======
+
         protected Food doInBackground(String... search) {
             Food food = CountdownScraper.retrieveFoodDataBarcode(searchRequest);
             return food;
@@ -213,7 +160,6 @@ public class BarcodeRetrieval extends AppCompatActivity {
             }
 
             if(food != null) {
->>>>>>> b61671f2d52b353832bfa306d6210599bf46c090
 
                 AppDatabase db = AppDatabase.getInMemoryDatabase(getApplicationContext());
                 db.foodDao().insertFood(food);

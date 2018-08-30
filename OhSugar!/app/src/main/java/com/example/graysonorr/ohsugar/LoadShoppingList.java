@@ -179,7 +179,7 @@ public class LoadShoppingList extends AppCompatActivity {
         double totalSugar = 0.00;
 
         for(Food f : shoppingList){
-            totalSugar += f.sugar;
+            totalSugar += f.sugarServing;
         }
 
         return totalSugar;
