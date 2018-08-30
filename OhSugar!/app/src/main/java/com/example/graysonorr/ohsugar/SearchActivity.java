@@ -30,6 +30,7 @@ import android.widget.TextView;
 
 import com.example.graysonorr.ohsugar.db.AppDatabase;
 import com.example.graysonorr.ohsugar.db.Food;
+import com.example.graysonorr.ohsugar.db.utils.CountdownScraper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -133,7 +134,7 @@ public class SearchActivity extends AppCompatActivity {
         HashMap<String, String> searchStrings = new HashMap<String, String>();
 
         for(int i=0; i < searchResult.size(); i++){
-            searchStrings.put(searchResult.get(i).name, Double.toString(searchResult.get(i).sugar));
+            searchStrings.put(searchResult.get(i).name, Double.toString(searchResult.get(i).sugarServing));
         }
 
         Log.d("get count", Integer.toString(adapter1.getCount()));
@@ -249,47 +250,7 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         protected HashMap<String, String> doInBackground(String... search){
-
-            HashMap<String, String> searchResultMap = new HashMap<String, String>();
-
-            try{
-                Document doc = Jsoup.connect("https://shop.countdown.co.nz/shop/searchproducts?search="+searchRequest).get();
-                Log.d("test", doc.title());
-
-                Elements newsHeadlines = doc.select(".gridProductStamp-name");
-                List<String> searchResults = doc.select(".gridProductStamp-name").eachText();
-                Elements searchResultsURL = doc.select(".gridProductStamp-imageLink");
-                //List<String> searchResultsURL = doc.select("._jumpTop").eachText();
-
-
-                for(Element URLs: searchResultsURL){
-                    //   Log.d("URLs", URLs.attr("href"));
-                }
-
-                if(searchResults.size() > 10) {
-                    for (int i = 0; i < 10; i++) {
-                        String productName = searchResults.get(i).toString();
-                        String productURL = searchResultsURL.get(i).attr("href");
-                        searchResultMap.put(productName, productURL);
-                        Log.d("product2", searchResults.get(i).toString());
-                        Log.d("URL", searchResultsURL.get(i).attr("href"));
-                    }
-                }else{
-                    for (int i = 0; i < searchResults.size(); i++) {
-                        String productName = searchResults.get(i);
-                        String productURL = searchResultsURL.get(i).attr("href");
-                        searchResultMap.put(productName, productURL);
-                        Log.d("product2", searchResults.get(i));
-                        Log.d("URL", searchResultsURL.get(i).attr("href"));
-                    }
-                }
-
-
-
-            }catch(IOException e){
-
-            }
-
+            HashMap<String, String> searchResultMap = CountdownScraper.retrieveFoodList(searchRequest);
             return searchResultMap;
         }
 
@@ -327,7 +288,7 @@ public class SearchActivity extends AppCompatActivity {
             final Food currentItem = getItem(position);
 
             resultTxtVw.setText(currentItem.name);
-            sugarTxtVw.setText(Double.toString(currentItem.sugar));
+            sugarTxtVw.setText(Double.toString(currentItem.sugarServing));
             addBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

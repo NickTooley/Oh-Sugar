@@ -29,6 +29,8 @@ import android.widget.TextView;
 
 import com.example.graysonorr.ohsugar.db.AppDatabase;
 import com.example.graysonorr.ohsugar.db.Food;
+import com.example.graysonorr.ohsugar.db.utils.CountdownScraper;
+import com.example.graysonorr.ohsugar.db.utils.GlobalDBUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -112,9 +114,7 @@ public class SearchReturn extends AppCompatActivity {
                     fetchBarcodeData(currentQRCode);
                 }
             } else if (requestCode == 2) {
-                if (data.getStringExtra("Name") == null) {
-
-                } else {
+                if (data.getStringExtra("Name") != null){
                     String name = data.getStringExtra("Name");
                     Double sugar = data.getDoubleExtra("Sugar", 1.0);
 
@@ -146,7 +146,7 @@ public class SearchReturn extends AppCompatActivity {
         HashMap<String, String> searchStrings = new HashMap<String, String>();
 
         for(int i=0; i < searchResult.size(); i++){
-            searchStrings.put(searchResult.get(i).name, Double.toString(searchResult.get(i).sugar));
+            searchStrings.put(searchResult.get(i).name, Double.toString(searchResult.get(i).sugarServing));
         }
 
         Log.d("get count", Integer.toString(adapter1.getCount()));
@@ -223,7 +223,7 @@ public class SearchReturn extends AppCompatActivity {
         if(foods != null){
             Intent intent = new Intent();
             intent.putExtra("Name", foods.name);
-            intent.putExtra("Sugar", foods.sugar);
+            intent.putExtra("Sugar", foods.sugarServing);
             intent.putExtra("Barcode", foods.barcode);
             intent.putExtra("ID", foods.foodID);
             setResult(RESULT_OK, intent);
@@ -278,47 +278,10 @@ public class SearchReturn extends AppCompatActivity {
 
         protected HashMap<String, String> doInBackground(String... search){
 
-            HashMap<String, String> searchResultMap = new HashMap<String, String>();
 
-            try{
-                Document doc = Jsoup.connect("https://shop.countdown.co.nz/shop/searchproducts?search="+searchRequest).get();
-                Log.d("test", doc.title());
-
-                Elements newsHeadlines = doc.select(".gridProductStamp-name");
-                List<String> searchResults = doc.select(".gridProductStamp-name").eachText();
-                Elements searchResultsURL = doc.select(".gridProductStamp-imageLink");
-                //List<String> searchResultsURL = doc.select("._jumpTop").eachText();
-
-
-                for(Element URLs: searchResultsURL){
-                    //   Log.d("URLs", URLs.attr("href"));
-                }
-
-                if(searchResults.size() > 10) {
-                    for (int i = 0; i < 10; i++) {
-                        String productName = searchResults.get(i).toString();
-                        String productURL = searchResultsURL.get(i).attr("href");
-                        searchResultMap.put(productName, productURL);
-                        Log.d("product2", searchResults.get(i).toString());
-                        Log.d("URL", searchResultsURL.get(i).attr("href"));
-                    }
-                }else{
-                    for (int i = 0; i < searchResults.size(); i++) {
-                        String productName = searchResults.get(i);
-                        String productURL = searchResultsURL.get(i).attr("href");
-                        searchResultMap.put(productName, productURL);
-                        Log.d("product2", searchResults.get(i));
-                        Log.d("URL", searchResultsURL.get(i).attr("href"));
-                    }
-                }
-
-
-
-            }catch(IOException e){
-
-            }
-
+            HashMap<String, String> searchResultMap = CountdownScraper.retrieveFoodList(searchRequest);
             return searchResultMap;
+
         }
 
         protected void onPostExecute(HashMap<String, String> fetchedMap){
@@ -354,7 +317,7 @@ public class SearchReturn extends AppCompatActivity {
             final Food currentItem = getItem(position);
 
             resultTxtVw.setText(currentItem.name);
-            sugarTxtVw.setText(Double.toString(currentItem.sugar));
+            sugarTxtVw.setText(Double.toString(currentItem.sugarServing));
             addBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -399,7 +362,7 @@ public class SearchReturn extends AppCompatActivity {
 
 
 
-    class BarcodeAsyncScraper extends AsyncTask<String, Void, ArrayList<String>> {
+    class BarcodeAsyncScraper extends AsyncTask<String, Void, Food> {
         HashMap<String, String> toReturn;
         private Context context;
         private String searchRequest;
@@ -418,71 +381,28 @@ public class SearchReturn extends AppCompatActivity {
             dialog.show();
         }
 
-        protected ArrayList<String> doInBackground(String... search){
-
-            ArrayList<String> searchResultMap = new ArrayList<String>();
-            double sugarContent = 0;
-
-            try{
-                Document doc = Jsoup.connect("https://shop.countdown.co.nz/shop/searchproducts?search="+searchRequest).get();
-                Log.d("test", doc.title());
-
-                Elements newsHeadlines = doc.select(".gridProductStamp-name");
-                List<String> searchResults = doc.select(".gridProductStamp-name").eachText();
-                Elements searchResultsURL = doc.select(".gridProductStamp-imageLink");
-                //List<String> searchResultsURL = doc.select("._jumpTop").eachText();
-
-
-                for(Element URLs: searchResultsURL){
-                    //   Log.d("URLs", URLs.attr("href"));
-                }
-
-                String productName = searchResults.get(0);
-                String productURL = searchResultsURL.get(0).attr("href");
-                searchResultMap.add(productName);
-                searchResultMap.add(productURL);
-
-                Document doc2 = Jsoup.connect("https://shop.countdown.co.nz"+productURL).get();
-
-                Elements nutritional = doc2.select("td");
-
-                for(Element nutritionals: nutritional){
-                    if(nutritionals.html().equals("Sugars")){
-                        String sugarOGString = nutritionals.nextElementSibling().html();
-                        String sugarString = sugarOGString.substring(0, sugarOGString.length() - 1);
-                        sugarContent = Double.parseDouble(sugarString);
-                    }
-                }
-                searchResultMap.add(Double.toString(sugarContent));
-
-
-
-            }catch(IOException e){
-
-            }
-
-            return searchResultMap;
+        protected Food doInBackground(String... search) {
+            Food food = CountdownScraper.retrieveFoodDataBarcode(searchRequest);
+            return food;
         }
 
-        protected void onPostExecute(ArrayList<String> fetchedMap){
+        protected void onPostExecute(final Food food){
 
             if (dialog.isShowing()) {
                 dialog.dismiss();
             }
             //CountdownScraper.returnValues();
             //toReturn = fetchedMap;
-            if(fetchedMap != null) {
-                //productNameText.setText(fetchedMap.get(0));
-                //sugarContentText.setText(fetchedMap.get(2) + "g");
+            if(food != null) {
 
-                Food food = new Food();
-                food.sugar = Double.parseDouble(fetchedMap.get(2));
-                food.name = fetchedMap.get(0);
-                food.barcode = searchRequest;
+                AppDatabase db = AppDatabase.getInMemoryDatabase(getApplicationContext());
+                db.foodDao().insertFood(food);
+                GlobalDBUtils.insertFood(food, SearchReturn.this);
 
                 Intent intent = new Intent();
                 intent.putExtra("Name", food.name);
-                intent.putExtra("Sugar", food.sugar);
+                intent.putExtra("Sugar", food.sugarServing);
+                intent.putExtra("Sugar100", food.sugar100);
                 intent.putExtra("Barcode", food.barcode);
                 intent.putExtra("ID", food.foodID);
                 setResult(RESULT_OK, intent);

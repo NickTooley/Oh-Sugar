@@ -37,7 +37,7 @@ public class FoodAdapter extends ArrayAdapter<Food> {
        //SharedPreferences sharedPref = FoodAdapter.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
 
        foodName.setText(food.name);
-       foodSugar.setText(Double.toString(food.sugar) + "g of sugar");
+       foodSugar.setText(Double.toString(food.sugarServing) + "g of sugar");
 
 
        return convertView;

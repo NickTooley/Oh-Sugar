@@ -45,7 +45,7 @@ public class FoodAdapterWClickListen extends ArrayAdapter<Food> {
         //SharedPreferences sharedPref = FoodAdapter.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
 
         foodName.setText(food.name);
-        foodSugar.setText(Double.toString(food.sugar) + "g of sugar");
+        foodSugar.setText(Double.toString(food.sugarServing) + "g of sugar");
 
         Button btn = (Button) convertViewFnl.findViewById(R.id.AddBtn);
 
@@ -54,7 +54,7 @@ public class FoodAdapterWClickListen extends ArrayAdapter<Food> {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.putExtra("Name", food.name);
-                intent.putExtra("Sugar", food.sugar);
+                intent.putExtra("Sugar", food.sugarServing);
                 intent.putExtra("Barcode", food.barcode);
                 intent.putExtra("ID", food.foodID);
                 ((Activity)mContext).setResult(RESULT_OK, intent);

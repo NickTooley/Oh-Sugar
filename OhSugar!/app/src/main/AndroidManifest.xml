@@ -40,7 +40,6 @@
         <activity android:name=".ConversionsActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".HealthActivity" />
-        <activity android:name=".CountdownScraper" />
         <activity android:name=".BasicSugarContent" />
         <activity android:name=".SearchReturn" />
         <activity android:name=".BasicSugarContentReturn"></activity>

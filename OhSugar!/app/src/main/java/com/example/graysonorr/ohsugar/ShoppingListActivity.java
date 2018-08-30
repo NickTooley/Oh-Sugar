@@ -99,7 +99,7 @@ public class ShoppingListActivity extends AppCompatActivity {
                     Food item = new Food();
 
                     item.name = name;
-                    item.sugar = sugar;
+                    item.sugarServing = sugar;
 
                     shoppinglist.add(item);
 
@@ -132,7 +132,7 @@ public class ShoppingListActivity extends AppCompatActivity {
             final Food currentItem = getItem(position);
 
             name.setText(currentItem.name);
-            sugar.setText(Double.toString(currentItem.sugar) + " " + conversions.getString("abbreviation", null));
+            sugar.setText(Double.toString(currentItem.sugarServing) + " " + conversions.getString("abbreviation", null));
 
 
             name.setOnClickListener(new View.OnClickListener() {
@@ -223,7 +223,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         double totalSugar = 0.00;
 
         for(Food f : getShoppingList()){
-            totalSugar += f.sugar;
+            totalSugar += f.sugarServing;
         }
 
         TextView units = (TextView) findViewById(R.id.unitsTxtVw);
