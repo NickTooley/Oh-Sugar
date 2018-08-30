@@ -50,6 +50,7 @@ public class SearchActivity extends AppCompatActivity {
     private AppDatabase db;
     private ListView lv;
     private AutoCompleteTextView searchText;
+    SharedPreferences conversions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,7 @@ public class SearchActivity extends AppCompatActivity {
         lv = (ListView) findViewById(R.id.searchResults);
 
         db = AppDatabase.getInMemoryDatabase(getApplicationContext());
+        conversions = getSharedPreferences("conversions", Context.MODE_PRIVATE);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, db.foodDao().getAllNames());
@@ -90,6 +92,13 @@ public class SearchActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 Search();
                 return false;
+            }
+        });
+
+        searchText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick (AdapterView<?> parent, View view, int position, long id) {
+                Search();
             }
         });
 
@@ -267,7 +276,6 @@ public class SearchActivity extends AppCompatActivity {
             }else{
                 //returnValues();
             }
-
         }
 
     }
@@ -282,13 +290,15 @@ public class SearchActivity extends AppCompatActivity {
             View customView = inflater.inflate(R.layout.food_item, container, false);
 
             TextView resultTxtVw = (TextView) customView.findViewById(R.id.foodName);
-            TextView sugarTxtVw = (TextView) customView.findViewById(R.id.foodSugar);
+            TextView sugarV = (TextView) customView.findViewById(R.id.sugarValue);
+            TextView sugarM = (TextView) customView.findViewById(R.id.sugarMeasurement);
             Button addBtn = (Button) customView.findViewById(R.id.AddBtn);
 
             final Food currentItem = getItem(position);
 
             resultTxtVw.setText(currentItem.name);
-            sugarTxtVw.setText(Double.toString(currentItem.sugarServing));
+            sugarV.setText(String.format("%.2f", currentItem.sugar/conversions.getFloat("floatMeasure", 1)));
+            sugarM.setText(conversions.getString("abbreviation", null));
             addBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

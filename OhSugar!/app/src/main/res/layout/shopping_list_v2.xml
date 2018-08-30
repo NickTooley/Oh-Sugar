@@ -25,16 +25,27 @@
 
             <TextView
                 android:id="@+id/toolbar_title"
-                android:paddingTop="40dp"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:paddingTop="40dp"
+                android:paddingRight="35dp"
+                android:paddingLeft="85dp"
                 android:text="shopping list"
                 android:textColor="#ffffff"
                 android:textSize="25sp" />
 
+            <Button
+                android:id="@+id/saveBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save"
+                android:layout_marginTop="45dp"/>
+
 
         </android.support.v7.widget.Toolbar>
+
+
 
         <FrameLayout
             android:layout_width="match_parent"

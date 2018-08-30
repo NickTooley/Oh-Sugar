@@ -90,10 +90,7 @@ public class ConversionsActivity extends AppCompatActivity {
                 }
                 editor.putString("stringMeasure", selected);
                 editor.apply();
-
                 Log.d("sharedPrefs", sharedPref.getString("stringMeasure", "Cannot find"));
-
-
             }
         });
     }
