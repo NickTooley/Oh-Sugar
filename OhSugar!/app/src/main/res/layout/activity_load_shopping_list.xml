@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
-    tools:context=".WelcomeActivity">
+    tools:context=".LoadShoppingList">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,39 +25,44 @@
 
             <TextView
                 android:id="@+id/toolbar_title"
-                android:paddingTop="40dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="health"
+                android:paddingTop="40dp"
+                android:text="load shopping list"
                 android:textColor="#ffffff"
                 android:textSize="25sp" />
 
 
         </android.support.v7.widget.Toolbar>
 
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/mask_gradient"
             android:layout_gravity="bottom">
-
-
         </FrameLayout>
 
-        <TextView
-            android:id="@+id/RecSugarTotal"
+        <LinearLayout
+            android:id="@+id/thisOne"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Rec Sugar:"
-            android:textSize="30sp" />
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingBottom="20dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:fitsSystemWindows="true">
 
-        <TextView
-            android:id="@+id/ListSugarTotal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="List Sugar:"
-            android:textSize="30sp" />
+            <ListView
+                android:id="@+id/ListView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="9" />
+
+        </LinearLayout>
 
 
     </LinearLayout>

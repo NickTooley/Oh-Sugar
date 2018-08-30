@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.IInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,7 +18,8 @@ import android.widget.TextView;
 
 import com.example.graysonorr.ohsugar.db.AppDatabase;
 import com.example.graysonorr.ohsugar.db.Food;
-import com.example.graysonorr.ohsugar.db.utils.dbinit;
+import com.example.graysonorr.ohsugar.db.utils.*;
+import com.example.graysonorr.ohsugar.db.utils.CountdownScraper;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -107,7 +109,7 @@ public class BarcodeRetrieval extends AppCompatActivity {
         SharedPreferences sharedPref = BarcodeRetrieval.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
         String abbrev = sharedPref.getString("abbreviation", "g");
         Float measure = sharedPref.getFloat("floatMeasure", 1.0f);
-        sugarContentText.setText((food.sugar / measure) + abbrev);
+        sugarContentText.setText((food.sugarServing / measure) + abbrev);
     }
 
     private void fetchData(String barcode) {
@@ -125,7 +127,7 @@ public class BarcodeRetrieval extends AppCompatActivity {
 
     }
 
-    class AsyncScraper extends AsyncTask<String, Void, ArrayList<String>> {
+    class AsyncScraper extends AsyncTask<String, Void, Food> {
         HashMap<String, String> toReturn;
         private Context context;
         private String searchRequest;
@@ -136,6 +138,7 @@ public class BarcodeRetrieval extends AppCompatActivity {
             searchRequest = search.replace(' ', '+');
         }
 
+<<<<<<< HEAD
         protected ArrayList<String> doInBackground(String... search) {
 
             ArrayList<String> searchResultMap = new ArrayList<String>();
@@ -197,16 +200,27 @@ public class BarcodeRetrieval extends AppCompatActivity {
             if(fetchedMap != null) {
                 //productNameText.setText(fetchedMap.get(0));
                 //sugarContentText.setText(fetchedMap.get(2) + "g");
+=======
+        protected Food doInBackground(String... search) {
+            Food food = CountdownScraper.retrieveFoodDataBarcode(searchRequest);
+            return food;
+        }
 
-                Food food = new Food();
-                food.sugar = Double.parseDouble(fetchedMap.get(2));
-                food.name = fetchedMap.get(0);
-                food.barcode = searchRequest;
+        protected void onPostExecute(Food food){
+
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+
+            if(food != null) {
+>>>>>>> b61671f2d52b353832bfa306d6210599bf46c090
+
+                AppDatabase db = AppDatabase.getInMemoryDatabase(getApplicationContext());
+                db.foodDao().insertFood(food);
+                GlobalDBUtils.insertFood(food, BarcodeRetrieval.this);
 
                 showOutput(food);
 
-                //populateListView(fetchedMap);
-                //returnValues(fetchedMap);
             }else{
                 //returnValues();
             }

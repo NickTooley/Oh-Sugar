@@ -42,9 +42,10 @@ try
         $createQuery ="CREATE TABLE Foods
         (
             foodID         	INT(20)       NOT NULL    AUTO_INCREMENT,
-            foodName       	VARCHAR(20)   NOT NULL,
-			sugar		   	FLOAT(5,2)	  NOT NULL,
-			barcode			VARCHAR(13),
+            foodName       	VARCHAR(50)   NOT NULL    UNIQUE,
+			sugarPerServe  	FLOAT(5,2)	  NOT NULL,
+            sugarPer100     FLOAT(5,2)    NOT NULL,
+			barcode			VARCHAR(13)   UNIQUE,
 			category		VARCHAR(30),
 			dateAdded		DATETIME,
             

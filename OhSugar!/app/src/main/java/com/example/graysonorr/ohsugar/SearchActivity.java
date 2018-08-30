@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import com.example.graysonorr.ohsugar.db.AppDatabase;
 import com.example.graysonorr.ohsugar.db.Food;
+import com.example.graysonorr.ohsugar.db.utils.CountdownScraper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -48,6 +49,7 @@ public class SearchActivity extends AppCompatActivity {
     private AppDatabase db;
     private ListView lv;
     private AutoCompleteTextView searchText;
+    SharedPreferences conversions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,7 @@ public class SearchActivity extends AppCompatActivity {
         lv = (ListView) findViewById(R.id.searchResults);
 
         db = AppDatabase.getInMemoryDatabase(getApplicationContext());
+        conversions = getSharedPreferences("conversions", Context.MODE_PRIVATE);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, db.foodDao().getAllNames());
@@ -88,6 +91,13 @@ public class SearchActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 Search();
                 return false;
+            }
+        });
+
+        searchText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick (AdapterView<?> parent, View view, int position, long id) {
+                Search();
             }
         });
 
@@ -132,7 +142,7 @@ public class SearchActivity extends AppCompatActivity {
         HashMap<String, String> searchStrings = new HashMap<String, String>();
 
         for(int i=0; i < searchResult.size(); i++){
-            searchStrings.put(searchResult.get(i).name, Double.toString(searchResult.get(i).sugar));
+            searchStrings.put(searchResult.get(i).name, Double.toString(searchResult.get(i).sugarServing));
         }
 
         Log.d("get count", Integer.toString(adapter1.getCount()));
@@ -240,47 +250,7 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         protected HashMap<String, String> doInBackground(String... search){
-
-            HashMap<String, String> searchResultMap = new HashMap<String, String>();
-
-            try{
-                Document doc = Jsoup.connect("https://shop.countdown.co.nz/shop/searchproducts?search="+searchRequest).get();
-                Log.d("test", doc.title());
-
-                Elements newsHeadlines = doc.select(".gridProductStamp-name");
-                List<String> searchResults = doc.select(".gridProductStamp-name").eachText();
-                Elements searchResultsURL = doc.select(".gridProductStamp-imageLink");
-                //List<String> searchResultsURL = doc.select("._jumpTop").eachText();
-
-
-                for(Element URLs: searchResultsURL){
-                    //   Log.d("URLs", URLs.attr("href"));
-                }
-
-                if(searchResults.size() > 10) {
-                    for (int i = 0; i < 10; i++) {
-                        String productName = searchResults.get(i).toString();
-                        String productURL = searchResultsURL.get(i).attr("href");
-                        searchResultMap.put(productName, productURL);
-                        Log.d("product2", searchResults.get(i).toString());
-                        Log.d("URL", searchResultsURL.get(i).attr("href"));
-                    }
-                }else{
-                    for (int i = 0; i < searchResults.size(); i++) {
-                        String productName = searchResults.get(i);
-                        String productURL = searchResultsURL.get(i).attr("href");
-                        searchResultMap.put(productName, productURL);
-                        Log.d("product2", searchResults.get(i));
-                        Log.d("URL", searchResultsURL.get(i).attr("href"));
-                    }
-                }
-
-
-
-            }catch(IOException e){
-
-            }
-
+            HashMap<String, String> searchResultMap = CountdownScraper.retrieveFoodList(searchRequest);
             return searchResultMap;
         }
 
@@ -293,7 +263,6 @@ public class SearchActivity extends AppCompatActivity {
             }else{
                 //returnValues();
             }
-
         }
 
     }
@@ -308,13 +277,15 @@ public class SearchActivity extends AppCompatActivity {
             View customView = inflater.inflate(R.layout.food_item, container, false);
 
             TextView resultTxtVw = (TextView) customView.findViewById(R.id.foodName);
-            TextView sugarTxtVw = (TextView) customView.findViewById(R.id.foodSugar);
+            TextView sugarV = (TextView) customView.findViewById(R.id.sugarValue);
+            TextView sugarM = (TextView) customView.findViewById(R.id.sugarMeasurement);
             Button addBtn = (Button) customView.findViewById(R.id.AddBtn);
 
             final Food currentItem = getItem(position);
 
             resultTxtVw.setText(currentItem.name);
-            sugarTxtVw.setText(Double.toString(currentItem.sugar));
+            sugarV.setText(String.format("%.2f", currentItem.sugar/conversions.getFloat("floatMeasure", 1)));
+            sugarM.setText(conversions.getString("abbreviation", null));
             addBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

@@ -8,12 +8,15 @@ import android.graphics.*;
 import android.os.*;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.*;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.*;
 
 import com.example.graysonorr.ohsugar.db.AppDatabase;
+import com.example.graysonorr.ohsugar.db.Food;
+import com.example.graysonorr.ohsugar.db.utils.GlobalDBUtils;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -128,6 +131,12 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         });
 
+        Food food = new Food();
+        food.name = "testName";
+        food.barcode = "9327482393214";
+        food.sugarServing = 14.2;
+
+        //GlobalDBUtils.insertFood(food, WelcomeActivity.this);
 
 
 
