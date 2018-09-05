@@ -44,6 +44,29 @@
 
         </FrameLayout>
 
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/graph"
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                app:srcCompat="@drawable/graph" />
+
+            <ImageView
+                android:id="@+id/arrow"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_alignBottom="@+id/graph"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="21dp"
+                app:srcCompat="@drawable/ic_arrow_back_black_24dp" />
+        </RelativeLayout>
+
         <TextView
             android:id="@+id/RecSugarTotal"
             android:layout_width="match_parent"
