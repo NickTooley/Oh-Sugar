@@ -35,9 +35,10 @@ public class HealthActivity extends AppCompatActivity {
         toolBarTitle.setTypeface(customFont);
 
         SharedPreferences sharedPreferences = getSharedPreferences("Family", MODE_PRIVATE);
+        SharedPreferences sharedPreferences2 = getSharedPreferences("Shopping List", MODE_PRIVATE);
 
         arrow = (ImageView) findViewById(R.id.arrow);
-        float percentage = ((((float)193/(float)sharedPreferences.getInt("familySugar", 0))*100)/180)*100;
+        float percentage = (((sharedPreferences2.getFloat("list sugar", 0)/(float)sharedPreferences.getInt("familySugar", 0))*100)/180)*100;
 
         rotateNeedle(0, Math.round(percentage));
 
@@ -45,7 +46,7 @@ public class HealthActivity extends AppCompatActivity {
         TextView listSugar = (TextView) findViewById(R.id.ListSugarTotal);
 
         recSugar.setText("Rec Sugar: " + Integer.toString(sharedPreferences.getInt("familySugar", 0)) + "g");
-        listSugar.setText(Float.toString(percentage));
+        listSugar.setText("List sugar: " + Float.toString(sharedPreferences2.getFloat("list sugar", 0)));
     }
 
     public void rotateNeedle(int startPoint, int endPoint){

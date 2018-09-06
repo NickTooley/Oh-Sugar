@@ -133,7 +133,7 @@ public class ShoppingListActivity extends AppCompatActivity {
             super(context, resource, objects);
         }
 
-        public View getView(int position, View convertView, ViewGroup container) {
+        public View getView(final int position, View convertView, ViewGroup container) {
             LayoutInflater inflater = LayoutInflater.from(ShoppingListActivity.this);
             View customView = inflater.inflate(R.layout.food_item, container, false);
 
@@ -172,7 +172,7 @@ public class ShoppingListActivity extends AppCompatActivity {
                     builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            removeFromShoppingList(currentItem);
+                            removeFromShoppingList(position);
                             updateActivity();
                         }
                     });
@@ -200,7 +200,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         return shoppinglist;
     }
 
-    public void removeFromShoppingList(Food item){
+    public void removeFromShoppingList(int position){
         SharedPreferences sharedPreferences = getSharedPreferences("Shopping List", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -214,11 +214,7 @@ public class ShoppingListActivity extends AppCompatActivity {
             shoppinglist = new ArrayList<>();
         }
 
-        for(int i=0; i < shoppinglist.size(); i++){
-            if (shoppinglist.get(i).foodID == item.foodID){
-                shoppinglist.remove(i);
-            }
-        }
+        shoppinglist.remove(position);
 
         gson = new Gson();
         json = gson.toJson(shoppinglist);
@@ -232,14 +228,19 @@ public class ShoppingListActivity extends AppCompatActivity {
         ListView lv = (ListView) findViewById(R.id.ListView);
         lv.setAdapter(adapter1);
 
-        double totalSugar = 0.00;
+        Float totalSugar = 0.00f;
 
         for(Food f : getShoppingList()){
-            totalSugar += f.sugarServing/conversions.getFloat("floatMeasure", 1);
+            totalSugar += (float)f.sugarServing;
         }
 
         TextView units = (TextView) findViewById(R.id.unitsTxtVw);
-        units.setText(String.format("%.2f ", totalSugar) + conversions.getString("stringMeasure", null));
+        units.setText(String.format("%.2f ", totalSugar/conversions.getFloat("floatMeasure", 1)) + conversions.getString("stringMeasure", null));
+
+        SharedPreferences sharedPreferences = getSharedPreferences("Shopping List", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putFloat("list sugar", totalSugar);
+        editor.commit();
     }
 
     public void ShowDialog(){
