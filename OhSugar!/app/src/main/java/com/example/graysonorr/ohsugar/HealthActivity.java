@@ -16,8 +16,6 @@ import android.widget.TextView;
 
 public class HealthActivity extends AppCompatActivity {
 
-    ImageView arrow;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -37,26 +35,10 @@ public class HealthActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("Family", MODE_PRIVATE);
         SharedPreferences sharedPreferences2 = getSharedPreferences("Shopping List", MODE_PRIVATE);
 
-        arrow = (ImageView) findViewById(R.id.arrow);
-        float percentage = (((sharedPreferences2.getFloat("list sugar", 0)/(float)sharedPreferences.getInt("familySugar", 0))*100)/180)*100;
-
-        rotateNeedle(0, Math.round(percentage));
-
         TextView recSugar = (TextView) findViewById(R.id.RecSugarTotal);
         TextView listSugar = (TextView) findViewById(R.id.ListSugarTotal);
 
         recSugar.setText("Rec Sugar: " + Integer.toString(sharedPreferences.getInt("familySugar", 0)) + "g");
         listSugar.setText("List sugar: " + Float.toString(sharedPreferences2.getFloat("list sugar", 0)));
-    }
-
-    public void rotateNeedle(int startPoint, int endPoint){
-        RotateAnimation rotateAnimation1 = new RotateAnimation(startPoint, endPoint,
-                Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f);
-
-        rotateAnimation1.setInterpolator(new LinearInterpolator());
-        rotateAnimation1.setDuration(1000);
-        rotateAnimation1.setFillAfter(true);
-        arrow.startAnimation(rotateAnimation1);
     }
 }

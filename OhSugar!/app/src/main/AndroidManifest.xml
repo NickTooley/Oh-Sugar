@@ -44,7 +44,8 @@
         <activity android:name=".SearchReturn" />
         <activity android:name=".BasicSugarContentReturn" />
         <activity android:name=".FamilyActivity" />
-        <activity android:name=".LoadShoppingList"></activity>
+        <activity android:name=".LoadShoppingList" />
+        <activity android:name=".list_select"></activity>
     </application>
 
 </manifest>
