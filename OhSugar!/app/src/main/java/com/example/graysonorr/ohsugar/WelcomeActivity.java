@@ -76,7 +76,8 @@ public class WelcomeActivity extends AppCompatActivity {
         shoppingListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ShoppingListActivity.class);
+                //Intent intent = new Intent(getApplicationContext(), ShoppingListActivity.class);
+                Intent intent = new Intent(getApplicationContext(), Shopping_List.class);
                 startActivity(intent);
             }
         });
