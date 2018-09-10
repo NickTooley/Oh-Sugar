@@ -137,7 +137,7 @@ public class SearchReturn extends AppCompatActivity {
         lv.setAdapter(null);
 
         List<Food> searchResult = db.foodDao().searchByName("%"+searchText.getText().toString()+"%");
-
+        Log.d("foods", Double.toString(searchResult.get(0).sugarServing));
         FoodAdapterWClickListen adapter1 = new FoodAdapterWClickListen
                 (this, searchResult);
         ListView lv = (ListView) findViewById(R.id.searchResults);
@@ -153,8 +153,8 @@ public class SearchReturn extends AppCompatActivity {
         int adaptCount = adapter1.getCount();
         if(adaptCount == 0) {
             fetchTextData(searchText.getText().toString());
-        }else if(adaptCount > 0 && adaptCount < 10){
-            int fillNum = 10 - adaptCount;
+        }else {
+            //int fillNum = 10 - adaptCount;
             //fetchTextData(searchText.getText().toString(), searchStrings, fillNum);
         }
 

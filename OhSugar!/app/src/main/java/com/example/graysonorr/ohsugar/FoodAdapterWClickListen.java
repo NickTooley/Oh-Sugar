@@ -3,6 +3,7 @@ package com.example.graysonorr.ohsugar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,13 +40,18 @@ public class FoodAdapterWClickListen extends ArrayAdapter<Food> {
 
         final View convertViewFnl = convertView;
 
+        Log.d("foods", Double.toString(food.sugarServing));
+        Log.d("foods", food.name);
+
         TextView foodName = (TextView) convertViewFnl.findViewById(R.id.foodName);
-        TextView foodSugar = (TextView) convertViewFnl.findViewById(R.id.foodSugar);
+        TextView foodSugar = (TextView) convertViewFnl.findViewById(R.id.sugarValue);
+        TextView foodSugarMeasurement = (TextView) convertViewFnl.findViewById(R.id.sugarMeasurement);
 
         //SharedPreferences sharedPref = FoodAdapter.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
 
         foodName.setText(food.name);
-        foodSugar.setText(Double.toString(food.sugarServing) + "g of sugar");
+        foodSugar.setText(Double.toString(food.sugarServing));
+        foodSugarMeasurement.setText("g of sugar");
 
         Button btn = (Button) convertViewFnl.findViewById(R.id.AddBtn);
 

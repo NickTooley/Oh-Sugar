@@ -1,5 +1,6 @@
 package com.example.graysonorr.ohsugar;
 
+import android.app.ProgressDialog;
 import android.content.*;
 import android.os.*;
 import android.support.v7.app.*;
@@ -9,7 +10,15 @@ import android.view.animation.*;
 import android.widget.ImageView;
 
 import com.example.graysonorr.ohsugar.db.AppDatabase;
+import com.example.graysonorr.ohsugar.db.Food;
+import com.example.graysonorr.ohsugar.db.utils.CountdownScraper;
+import com.example.graysonorr.ohsugar.db.utils.GlobalDBUtils;
 import com.example.graysonorr.ohsugar.db.utils.dbinit;
+
+import java.util.HashMap;
+import java.util.List;
+
+import static com.example.graysonorr.ohsugar.db.utils.GlobalDBUtils.retrieveFoods;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -21,6 +30,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         AppDatabase db = AppDatabase.getInMemoryDatabase(getApplicationContext());
         dbinit.populateAsync(db);
 
+        AsyncScraper scraper = new AsyncScraper(this, db);
+        scraper.execute();
 
         ImageView splashIconImgView = findViewById(R.id.img_view_splash_icon);
         Animation downAnimation = AnimationUtils.loadAnimation(this, R.anim.down);
@@ -51,9 +62,9 @@ public class SplashScreenActivity extends AppCompatActivity {
             public void run() {
                 try {
                     sleep(2500);
-                    Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
-                    startActivity(intent);
-                    finish();
+//                    Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
+//                    startActivity(intent);
+//                    finish();
                     super.run();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -61,5 +72,43 @@ public class SplashScreenActivity extends AppCompatActivity {
             }
         };
         timer.start();
+    }
+
+    class AsyncScraper extends AsyncTask<String, Void, List<Food>> {
+        private Context context;
+        private ProgressDialog dialog;
+        private AppDatabase db;
+
+        public AsyncScraper(Context context, AppDatabase db){
+            this.context = context;
+            dialog = new ProgressDialog(context);
+            this.db = db;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog.setMessage("Retrieving database information");
+            dialog.show();
+        }
+
+
+        protected List<Food> doInBackground(String... search) {
+            List<Food> food = GlobalDBUtils.retrieveFoods("2018-03-20");
+            return food;
+        }
+
+        protected void onPostExecute(List<Food> food){
+
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+
+            dbinit.populateAsync(db, food);
+            Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
+            startActivity(intent);
+            finish();
+
+        }
+
     }
 }

@@ -7,6 +7,7 @@ import com.example.graysonorr.ohsugar.db.AppDatabase;
 import com.example.graysonorr.ohsugar.db.Food;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by toolnj1 on 2/08/2018.
@@ -22,6 +23,31 @@ public class dbinit {
 
         PopulateDbAsync task = new PopulateDbAsync(db);
         task.execute();
+    }
+
+    public static void populateAsync(final AppDatabase db, List<Food> foods){
+
+        PopulateDbAsyncList task = new PopulateDbAsyncList(db, foods);
+        task.execute();
+
+    }
+
+    private static class PopulateDbAsyncList extends AsyncTask<Void, Void, Void> {
+
+        private final AppDatabase mDb;
+        private final List<Food> foods;
+
+        PopulateDbAsyncList(AppDatabase db, List<Food> foods) {
+            mDb = db;
+            this.foods = foods;
+        }
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            populateWithList(mDb, foods);
+            return null;
+        }
+
     }
 
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
@@ -50,6 +76,14 @@ public class dbinit {
         food.sugarServing = sugar;
         db.foodDao().insertFood(food);
         return food;
+    }
+
+    private static void populateWithList(AppDatabase db, List<Food> foods){
+
+        for(Food food: foods){
+            db.foodDao().insertFood(food);
+        }
+
     }
 
     private static void populateWithTestData(AppDatabase db) {

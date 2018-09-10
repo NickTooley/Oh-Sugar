@@ -11,6 +11,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -27,12 +30,53 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by toolnj1 on 27/08/2018.
  */
 
 public abstract class GlobalDBUtils {
+
+    public static List<Food> retrieveFoods(String date){
+
+        List<Food> allFoods = new ArrayList<Food>();
+
+        try{
+            Document doc = Jsoup.connect("http://kate.ict.op.ac.nz/~toolnj1/ohsugar/retrieveFoods.php?date=" + date).get();
+            Log.d("test", doc.title());
+
+            Elements foods = doc.select(".food");
+            //Log.d("foods", foods.html());
+
+            for (Element food : foods) {
+                Food item = new Food();
+
+                Document doc2 = Jsoup.parse(food.html());
+                Element name = doc2.selectFirst(".name");
+                item.name = name.html();
+                Element sugar = doc2.selectFirst(".sugar");
+                item.sugarServing = Double.parseDouble(sugar.html());
+                Element sugar100 = doc2.selectFirst(".sugar100");
+                item.sugar100 = Double.parseDouble(sugar100.html());
+                Element barcode = doc2.selectFirst(".barcode");
+                item.barcode = barcode.html();
+                Element category = doc2.selectFirst(".category");
+                item.category = category.html();
+
+                Log.d("item", item.name);
+
+
+            }
+
+
+        }catch (Exception e){
+            return null;
+        }
+
+
+        return allFoods;
+    }
 
     public static void insertFood(Food food, Context context){
 
