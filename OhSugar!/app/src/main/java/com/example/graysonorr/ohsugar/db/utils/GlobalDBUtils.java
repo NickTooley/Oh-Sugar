@@ -38,13 +38,14 @@ import java.util.List;
 
 public abstract class GlobalDBUtils {
 
-    public static List<Food> retrieveFoods(String date){
+    public static List<Food> retrieveFoods(String date, Context context){
 
         List<Food> allFoods = new ArrayList<Food>();
+        String newDate = "";
 
         try{
-//            Document doc = Jsoup.connect("http://kate.ict.op.ac.nz/~toolnj1/ohsugar/retrieveFoods.php?date=" + date).get();
-            Document doc = Jsoup.connect("http://kate.ict.op.ac.nz/~toolnj1/ohsugar/retrieveFoods.php?date=2018-09-12 03:43:17").get();
+            Document doc = Jsoup.connect("http://kate.ict.op.ac.nz/~toolnj1/ohsugar/retrieveFoods.php?date=" + date).get();
+//            Document doc = Jsoup.connect("http://kate.ict.op.ac.nz/~toolnj1/ohsugar/retrieveFoods.php?date=2018-09-12 03:43:17").get();
             Log.d("test", doc.title());
 
             Elements foods = doc.select(".food");
@@ -73,13 +74,16 @@ public abstract class GlobalDBUtils {
 
             }
 
-            String newDate = doc.selectFirst("#date").html();
+            newDate = doc.selectFirst("#date").html();
             Log.d("New Date", newDate);
 
         }catch (Exception e){
             return null;
         }
-
+        android.content.SharedPreferences sharedPref = context.getApplicationContext().getSharedPreferences("syncDate", Context.MODE_PRIVATE);
+        android.content.SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("syncDate", newDate);
+        editor.apply();
 
         return allFoods;
     }

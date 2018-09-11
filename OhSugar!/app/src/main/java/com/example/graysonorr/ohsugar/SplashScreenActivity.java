@@ -103,7 +103,9 @@ public class SplashScreenActivity extends AppCompatActivity {
 
 
         protected List<Food> doInBackground(String... search) {
-            List<Food> food = GlobalDBUtils.retrieveFoods("2018-03-20");
+            SharedPreferences sharedPref = SplashScreenActivity.this.getSharedPreferences("syncDate", Context.MODE_PRIVATE);
+            String date = sharedPref.getString("syncDate", "");
+            List<Food> food = GlobalDBUtils.retrieveFoods(date, getApplicationContext());
             return food;
         }
 
