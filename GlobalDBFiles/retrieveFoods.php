@@ -9,6 +9,8 @@ session_start();
 <?php
 
 if(isset($_GET['date'])){
+
+	$currDate = $date = date('Y-m-d H:i:s');
 	
 	$lastSync = $_GET['date'];
 	
@@ -27,6 +29,7 @@ if(isset($_GET['date'])){
 		echo("<div class='category'>$row[category]</div>");
 		echo("</div>");
 	}
+	echo("<div id='date'>$currDate</div>");
 }
 
 

@@ -79,6 +79,13 @@ public class ShoppingListActivity extends AppCompatActivity {
             }
         });
 
+        addItem.measure(0,0);
+
+        android.graphics.Shader textShader=new android.graphics.LinearGradient(0, 0, addItem.getMeasuredWidth() / 2, 0,
+                new int[]{android.graphics.Color.parseColor("#fc552e"),android.graphics.Color.parseColor("#f9398e")},
+                new float[]{0, 1}, android.graphics.Shader.TileMode.CLAMP);
+        addItem.getPaint().setShader(textShader);
+
         updateActivity();
     }
 

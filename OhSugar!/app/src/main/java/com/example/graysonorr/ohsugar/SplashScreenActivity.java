@@ -22,10 +22,16 @@ import static com.example.graysonorr.ohsugar.db.utils.GlobalDBUtils.retrieveFood
 
 public class SplashScreenActivity extends AppCompatActivity {
 
+    public Boolean animFinished;
+    public Boolean dbLoadFinished;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+
+        animFinished = false;
+        dbLoadFinished = false;
 
         AppDatabase db = AppDatabase.getInMemoryDatabase(getApplicationContext());
         dbinit.populateAsync(db);
@@ -62,9 +68,13 @@ public class SplashScreenActivity extends AppCompatActivity {
             public void run() {
                 try {
                     sleep(2500);
-//                    Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
-//                    startActivity(intent);
-//                    finish();
+                    if(dbLoadFinished){
+                        Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }else{
+                        animFinished = true;
+                    }
                     super.run();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -88,7 +98,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             dialog.setMessage("Retrieving database information");
-            dialog.show();
+            //dialog.show();
         }
 
 
@@ -104,9 +114,13 @@ public class SplashScreenActivity extends AppCompatActivity {
             }
 
             dbinit.populateAsync(db, food);
+            if(animFinished){
             Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
             startActivity(intent);
             finish();
+            }else{
+                dbLoadFinished = true;
+            }
 
         }
 

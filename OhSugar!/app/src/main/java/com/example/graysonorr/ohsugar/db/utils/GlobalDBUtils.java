@@ -43,10 +43,12 @@ public abstract class GlobalDBUtils {
         List<Food> allFoods = new ArrayList<Food>();
 
         try{
-            Document doc = Jsoup.connect("http://kate.ict.op.ac.nz/~toolnj1/ohsugar/retrieveFoods.php?date=" + date).get();
+//            Document doc = Jsoup.connect("http://kate.ict.op.ac.nz/~toolnj1/ohsugar/retrieveFoods.php?date=" + date).get();
+            Document doc = Jsoup.connect("http://kate.ict.op.ac.nz/~toolnj1/ohsugar/retrieveFoods.php?date=2018-09-12 03:43:17").get();
             Log.d("test", doc.title());
 
             Elements foods = doc.select(".food");
+
             //Log.d("foods", foods.html());
 
             for (Element food : foods) {
@@ -64,11 +66,15 @@ public abstract class GlobalDBUtils {
                 Element category = doc2.selectFirst(".category");
                 item.category = category.html();
 
+                allFoods.add(item);
+
                 Log.d("item", item.name);
 
 
             }
 
+            String newDate = doc.selectFirst("#date").html();
+            Log.d("New Date", newDate);
 
         }catch (Exception e){
             return null;
