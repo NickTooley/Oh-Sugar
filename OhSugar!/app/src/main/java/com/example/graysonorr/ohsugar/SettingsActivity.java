@@ -15,7 +15,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
+
+import com.example.graysonorr.ohsugar.db.AppDatabase;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -92,9 +95,25 @@ public class SettingsActivity extends AppCompatActivity {
                 new float[]{0, 1}, Shader.TileMode.CLAMP);
         shoppingListBtn.getPaint().setShader(textShader2);
 
+        TextView resetDB = (TextView) findViewById(R.id.resetDbBtn);
 
+        resetDB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppDatabase db = AppDatabase.getInMemoryDatabase(getApplicationContext());
+                db.foodDao().deleteAll();
 
+                SharedPreferences sharedPref = getSharedPreferences("syncDate", Context.MODE_PRIVATE);
+                android.content.SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("syncDate", "");
+                editor.apply();
 
+                Toast.makeText(getApplicationContext(), "DB Successfully deleted", Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+        resetDB.getPaint().setShader(textShader2);
 
     }
     @Override

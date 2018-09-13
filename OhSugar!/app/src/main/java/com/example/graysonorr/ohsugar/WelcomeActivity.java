@@ -61,7 +61,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         //Snippet end
 
-        Button settingsBtn = (Button) findViewById(R.id.settingsBtn);
+        ImageView settingsBtn = (ImageView) findViewById(R.id.settingsBtn);
 
         settingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +71,7 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         });
 
-        Button shoppingListBtn = (Button) findViewById(R.id.listBtn);
+        ImageView shoppingListBtn = (ImageView) findViewById(R.id.listBtn);
 
         shoppingListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +81,7 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         });
 
-        Button helpBtn = (Button) findViewById(R.id.helpBtn);
+        ImageView helpBtn = (ImageView) findViewById(R.id.helpBtn);
 
         helpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,7 +91,7 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         });
 
-        Button scanBtn = (Button) findViewById(R.id.cameraBtn);
+        ImageView scanBtn = (ImageView) findViewById(R.id.cameraBtn);
 
         scanBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +101,7 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         });
 
-        Button compareBtn = (Button) findViewById(R.id.compareBtn);
+        ImageView compareBtn = (ImageView) findViewById(R.id.compareBtn);
 
         compareBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,7 +111,7 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         });
 
-        Button searchBtn = (Button) findViewById(R.id.searchBtn);
+        ImageView searchBtn = (ImageView) findViewById(R.id.searchBtn);
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,7 +121,7 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         });
 
-        Button healthBtn = (Button) findViewById(R.id.healthBtn);
+        ImageView healthBtn = (ImageView) findViewById(R.id.healthBtn);
 
         healthBtn.setOnClickListener(new View.OnClickListener() {
             @Override

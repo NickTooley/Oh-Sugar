@@ -48,6 +48,8 @@ public abstract class GlobalDBUtils {
 //            Document doc = Jsoup.connect("http://kate.ict.op.ac.nz/~toolnj1/ohsugar/retrieveFoods.php?date=2018-09-12 03:43:17").get();
             Log.d("test", doc.title());
 
+            //Jsoup.
+
             Elements foods = doc.select(".food");
 
             //Log.d("foods", foods.html());
@@ -78,7 +80,7 @@ public abstract class GlobalDBUtils {
             Log.d("New Date", newDate);
 
         }catch (Exception e){
-            return null;
+            return allFoods;
         }
         android.content.SharedPreferences sharedPref = context.getApplicationContext().getSharedPreferences("syncDate", Context.MODE_PRIVATE);
         android.content.SharedPreferences.Editor editor = sharedPref.edit();
