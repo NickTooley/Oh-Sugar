@@ -1,11 +1,16 @@
 package com.example.graysonorr.ohsugar;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -22,6 +27,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Shopping_List extends AppCompatActivity {
 
@@ -50,16 +56,9 @@ public class Shopping_List extends AppCompatActivity {
         TextView recSug = (TextView) findViewById(R.id.recSugar);
         TextView difference = (TextView) findViewById(R.id.difference);
 
-        Button edit = (Button) findViewById(R.id.editBtn);
         Button load = (Button) findViewById(R.id.loadBtn);
-        Button newList = (Button) findViewById(R.id.newBtn);
-
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
+        Button resetList = (Button) findViewById(R.id.resetBtn);
+        Button compList = (Button) findViewById(R.id.completeBtn);
 
         load.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,11 +68,17 @@ public class Shopping_List extends AppCompatActivity {
             }
         });
 
-        newList.setOnClickListener(new View.OnClickListener() {
+        resetList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Shopping_List.this, CreateShopList.class);
-                startActivity(intent);
+
+            }
+        });
+
+        compList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
 
@@ -91,17 +96,17 @@ public class Shopping_List extends AppCompatActivity {
             recSug.setText((Double.toString(list.getRecSugar())));
             difference.setText((Double.toString(list.getRecSugar()-list.getTotalSugar())));
 
-            ArrayAdapter adapter1 = new ArrayAdapter
-                    (Shopping_List.this, android.R.layout.simple_list_item_1, list.getList());
+            ShoppingListArrayAdapter adapter1 = new ShoppingListArrayAdapter
+                    (Shopping_List.this, R.layout.food_item, list.getList());
             ListView lv = (ListView) findViewById(R.id.ListView);
             lv.setAdapter(adapter1);
         }
         else{
-            name.setText("None");
-            time.setText("None");
-            totSug.setText("None");
-            recSug.setText("None");
-            difference.setText("None");
+            name.setText("Name");
+            time.setText("Timestamp");
+            totSug.setText("Total");
+            recSug.setText("Goal");
+            difference.setText("Difference");
 
             ArrayList<String> x =  new ArrayList<>();
             x.add("None");
@@ -110,8 +115,48 @@ public class Shopping_List extends AppCompatActivity {
                     (Shopping_List.this, android.R.layout.simple_list_item_1, x);
             ListView lv = (ListView) findViewById(R.id.ListView);
             lv.setAdapter(adapter1);
+        }
+    }
 
-            edit.setEnabled(false);
+    public class ShoppingListArrayAdapter extends ArrayAdapter<Food> {
+        public ShoppingListArrayAdapter(Context context, int resource, List<Food> objects) {
+            super(context, resource, objects);
+        }
+
+        public View getView(final int position, View convertView, ViewGroup container) {
+            LayoutInflater inflater = LayoutInflater.from(Shopping_List.this);
+            final View customView = inflater.inflate(R.layout.food_item, container, false);
+
+            SharedPreferences conversions = getSharedPreferences("conversions",MODE_PRIVATE);
+
+            TextView name = (TextView) customView.findViewById(R.id.foodName);
+            TextView sugarV = (TextView) customView.findViewById(R.id.sugarValue);
+            TextView sugarM = (TextView) customView.findViewById(R.id.sugarMeasurement);
+            Button moreInfo = (Button) customView.findViewById(R.id.AddBtn);
+
+            final Food currentItem = getItem(position);
+
+            name.setText(currentItem.name);
+            sugarV.setText(String.format("%.2f", currentItem.sugarServing/conversions.getFloat("floatMeasure", 1)));
+            sugarM.setText(conversions.getString("abbreviation", null));
+
+            name.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+
+            moreInfo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Shopping_List.this, MoreInfoActivity.class);
+                    intent.putExtra("ID", currentItem.foodID);
+                    startActivity(intent);
+                }
+            });
+
+            return customView;
         }
     }
 }

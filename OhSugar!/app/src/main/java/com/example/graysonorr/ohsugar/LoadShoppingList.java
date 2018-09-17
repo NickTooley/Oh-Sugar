@@ -46,6 +46,16 @@ public class LoadShoppingList extends AppCompatActivity {
         Typeface customFont = Typeface.createFromAsset(getAssets(), getString(R.string.font));
         toolBarTitle.setTypeface(customFont);
 
+        TextView create = (TextView) findViewById(R.id.createBtn);
+        create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoadShoppingList.this, CreateShopList.class);
+                startActivity(intent);
+                UpdateActivity();
+            }
+        });
+
         UpdateActivity();
     }
 

@@ -61,7 +61,7 @@ public class CreateShopList extends AppCompatActivity {
         list = new ArrayList<>();
 
         totalSug = (TextView) findViewById(R.id.totalSugar);
-        totalSug.setText("Total sugar: 0.00");
+        totalSug.setText("0.00");
         sugGoal = (EditText) findViewById(R.id.sugarGoal);
         SharedPreferences familyPreferences = getSharedPreferences("Family", MODE_PRIVATE);
         sugGoal.setText(Integer.toString(familyPreferences.getInt("familySugar", 0)));

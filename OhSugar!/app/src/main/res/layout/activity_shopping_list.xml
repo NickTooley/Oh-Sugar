@@ -126,27 +126,27 @@
                 android:layout_marginTop="10dp">
 
                 <Button
-                    android:id="@+id/editBtn"
-                    android:layout_width="60dp"
+                    android:id="@+id/resetBtn"
+                    android:layout_width="80dp"
                     android:layout_height="60dp"
-                    android:layout_marginHorizontal="20dp"
-                    android:text="edit"
+                    android:layout_marginHorizontal="10dp"
+                    android:text="reset"
+                    android:layout_weight="1"/>
+
+                <Button
+                    android:id="@+id/completeBtn"
+                    android:layout_width="80dp"
+                    android:layout_height="60dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:text="comp"
                     android:layout_weight="1"/>
 
                 <Button
                     android:id="@+id/loadBtn"
-                    android:layout_width="60dp"
+                    android:layout_width="80dp"
                     android:layout_height="60dp"
-                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginHorizontal="10dp"
                     android:text="load"
-                    android:layout_weight="1"/>
-
-                <Button
-                    android:id="@+id/newBtn"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginHorizontal="20dp"
-                    android:text="New"
                     android:layout_weight="1"/>
             </LinearLayout>
 
