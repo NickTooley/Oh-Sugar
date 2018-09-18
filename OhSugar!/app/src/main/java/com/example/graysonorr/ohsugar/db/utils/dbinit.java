@@ -81,7 +81,9 @@ public class dbinit {
     private static void populateWithList(AppDatabase db, List<Food> foods){
 
         for(Food food: foods){
-            db.foodDao().insertFood(food);
+            long test = db.foodDao().insertFood(food);
+            Log.d("new ID", String.valueOf(test));
+
         }
 
     }

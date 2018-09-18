@@ -25,7 +25,10 @@ public interface FoodDao {
     Food findByID(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertFood(Food food);
+    long insertFood(Food food);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertFoodReplace(Food food);
 
     @Query("DELETE FROM Food")
     void deleteAll();
