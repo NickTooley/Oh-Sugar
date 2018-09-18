@@ -1,5 +1,6 @@
 package com.example.graysonorr.ohsugar;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +20,10 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.example.graysonorr.ohsugar.db.AppDatabase;
+import com.example.graysonorr.ohsugar.db.Food;
+import com.example.graysonorr.ohsugar.db.utils.GlobalDBUtils;
+
+import java.util.List;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -115,11 +120,62 @@ public class SettingsActivity extends AppCompatActivity {
 
         resetDB.getPaint().setShader(textShader2);
 
+        TextView updateDB = (TextView) findViewById(R.id.updateDbBtn);
+
+        updateDB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppDatabase db = AppDatabase.getInMemoryDatabase(getApplicationContext());
+
+                AsyncScraper scraper = new AsyncScraper(SettingsActivity.this, db);
+                scraper.execute();
+
+            }
+        });
+
     }
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+
+    class AsyncScraper extends AsyncTask<String, Void, List<Food>> {
+        private Context context;
+        private ProgressDialog dialog;
+        private AppDatabase db;
+
+        public AsyncScraper(Context context, AppDatabase db){
+            this.context = context;
+            dialog = new ProgressDialog(context);
+            this.db = db;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog.setMessage("Retrieving database information");
+            dialog.show();
+        }
+
+
+        protected List<Food> doInBackground(String... search) {
+            SharedPreferences sharedPref = SettingsActivity.this.getSharedPreferences("syncDate", Context.MODE_PRIVATE);
+            String date = sharedPref.getString("syncDate", "");
+            List<Food> food = GlobalDBUtils.retrieveFoods(date, getApplicationContext());
+            return food;
+        }
+
+        protected void onPostExecute(List<Food> food){
+
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+
+            Toast.makeText(getApplicationContext(), "DB Successfully Updated", Toast.LENGTH_LONG).show();
+
+        }
+
     }
 }
 
