@@ -115,7 +115,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
 
-            dbinit.populateAsync(db, food);
             if(animFinished){
             Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
             startActivity(intent);

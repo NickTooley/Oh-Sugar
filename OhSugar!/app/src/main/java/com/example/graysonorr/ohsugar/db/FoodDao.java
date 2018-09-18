@@ -2,6 +2,7 @@ package com.example.graysonorr.ohsugar.db;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public interface FoodDao {
     @Query("SELECT * FROM Food WHERE foodID = :id")
     Food findByID(int id);
 
-    @Insert(onConflict = IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertFood(Food food);
 
     @Query("DELETE FROM Food")

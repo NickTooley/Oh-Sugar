@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.graysonorr.ohsugar.db.AppDatabase;
 import com.example.graysonorr.ohsugar.db.Food;
 
 import org.json.JSONArray;
@@ -86,6 +87,9 @@ public abstract class GlobalDBUtils {
         android.content.SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("syncDate", newDate);
         editor.apply();
+
+        AppDatabase db = AppDatabase.getInMemoryDatabase(context);
+        dbinit.populateAsync(db, allFoods);
 
         return allFoods;
     }
