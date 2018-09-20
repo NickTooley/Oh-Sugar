@@ -33,12 +33,19 @@ public class HealthActivity extends AppCompatActivity {
         toolBarTitle.setTypeface(customFont);
 
         SharedPreferences sharedPreferences = getSharedPreferences("Family", MODE_PRIVATE);
-        SharedPreferences sharedPreferences2 = getSharedPreferences("Shopping List", MODE_PRIVATE);
 
+<<<<<<< HEAD
+=======
+        arrow = (ImageView) findViewById(R.id.arrow);
+        float percentage = ((((float)193/(float)sharedPreferences.getInt("familySugar", 0))*100)/180)*100;
+
+        rotateNeedle(0, Math.round(percentage));
+
+>>>>>>> parent of 5c4bfda... Fixed removal from shopping list and worked on performance activity
         TextView recSugar = (TextView) findViewById(R.id.RecSugarTotal);
         TextView listSugar = (TextView) findViewById(R.id.ListSugarTotal);
 
         recSugar.setText("Rec Sugar: " + Integer.toString(sharedPreferences.getInt("familySugar", 0)) + "g");
-        listSugar.setText("List sugar: " + Float.toString(sharedPreferences2.getFloat("list sugar", 0)));
+        listSugar.setText(Float.toString(percentage));
     }
 }
