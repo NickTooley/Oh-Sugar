@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.graysonorr.ohsugar.db.Food;
+import com.example.graysonorr.ohsugar.db.ShoppingList;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -45,6 +46,16 @@ public class LoadShoppingList extends AppCompatActivity {
         Typeface customFont = Typeface.createFromAsset(getAssets(), getString(R.string.font));
         toolBarTitle.setTypeface(customFont);
 
+        TextView create = (TextView) findViewById(R.id.createBtn);
+        create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoadShoppingList.this, CreateShopList.class);
+                startActivity(intent);
+                UpdateActivity();
+            }
+        });
+
         UpdateActivity();
     }
 
@@ -65,7 +76,7 @@ public class LoadShoppingList extends AppCompatActivity {
             final String currentItem = getItem(position);
 
             name.setText(currentItem);
-            sugar.setText("Sugar total: " + Double.toString(GetSugar(currentItem)));
+            sugar.setText("Sugar total: ---");
 
             name.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -83,7 +94,7 @@ public class LoadShoppingList extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             LoadShoppingList(currentItem);
-                            Intent intent = new Intent(LoadShoppingList.this, ShoppingListActivity.class);
+                            Intent intent = new Intent(LoadShoppingList.this, Shopping_List.class);
                             startActivity(intent);
                         }
                     });
@@ -127,7 +138,9 @@ public class LoadShoppingList extends AppCompatActivity {
         ArrayList<String> savedLists = new ArrayList();
 
         for(Map.Entry<String, ?> lists : keys.entrySet()){
-            savedLists.add(lists.getKey().toString());
+            if(!lists.getKey().toString().equals("current list")){
+                savedLists.add(lists.getKey().toString());
+            }
         }
 
         return savedLists;
@@ -137,20 +150,17 @@ public class LoadShoppingList extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        SharedPreferences sharedPreferences2 = getSharedPreferences("Shopping List", MODE_PRIVATE);
-        SharedPreferences.Editor editor2 = sharedPreferences2.edit();
-
         Gson gson = new Gson();
         String json = sharedPreferences.getString(listName, null);
-        Type type = new TypeToken<ArrayList<Food>>() {
+        Type type = new TypeToken<ShoppingList>() {
         }.getType();
 
-        ArrayList<Food> shoppinglist = gson.fromJson(json, type);
+        ShoppingList list = gson.fromJson(json, type);
 
         gson = new Gson();
-        json = gson.toJson(shoppinglist);
-        editor2.putString("shopping list", json);
-        editor2.commit();
+        json = gson.toJson(list);
+        editor.putString("current list", json);
+        editor.commit();
     }
 
     public void Delete(String listName){
@@ -165,7 +175,7 @@ public class LoadShoppingList extends AppCompatActivity {
         lv.setAdapter(adapter3);
     }
 
-    public Double GetSugar(String listName){
+    /*public Double GetSugar(String listName){
         SharedPreferences sharedPreferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -183,5 +193,5 @@ public class LoadShoppingList extends AppCompatActivity {
         }
 
         return totalSugar;
-    }
+    }*/
 }
