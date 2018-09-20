@@ -47,5 +47,19 @@ public class HealthActivity extends AppCompatActivity {
 
         recSugar.setText("Rec Sugar: " + Integer.toString(sharedPreferences.getInt("familySugar", 0)) + "g");
         listSugar.setText(Float.toString(percentage));
+<<<<<<< HEAD
+=======
+    }
+
+    public void rotateNeedle(int startPoint, int endPoint){
+        RotateAnimation rotateAnimation1 = new RotateAnimation(startPoint, endPoint,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
+
+        rotateAnimation1.setInterpolator(new LinearInterpolator());
+        rotateAnimation1.setDuration(1000);
+        rotateAnimation1.setFillAfter(true);
+        arrow.startAnimation(rotateAnimation1);
+>>>>>>> parent of 5c4bfda... Fixed removal from shopping list and worked on performance activity
     }
 }
