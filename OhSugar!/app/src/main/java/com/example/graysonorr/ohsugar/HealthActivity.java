@@ -55,7 +55,7 @@ public class HealthActivity extends AppCompatActivity {
                 Animation.RELATIVE_TO_SELF, 0.5f);
 
         rotateAnimation1.setInterpolator(new LinearInterpolator());
-        rotateAnimation1.setDuration(1000);
+        rotateAnimation1.setDuration(100);
         rotateAnimation1.setFillAfter(true);
         arrow.startAnimation(rotateAnimation1);
     }
