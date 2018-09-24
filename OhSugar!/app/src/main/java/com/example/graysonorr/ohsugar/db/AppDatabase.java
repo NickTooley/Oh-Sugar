@@ -7,6 +7,8 @@ import android.content.Context;
 
 import com.example.graysonorr.ohsugar.db.Food;
 import com.example.graysonorr.ohsugar.db.FoodDao;
+import com.huma.room_for_asset.RoomAsset;
+
 
 /**
  * Created by toolnj1 on 1/08/2018.
@@ -21,12 +23,21 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public static AppDatabase getInMemoryDatabase(Context context) {
         if (INSTANCE == null) {
-            INSTANCE =
-                    Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "Main Database")
-                            // To simplify the codelab, allow queries on the main thread.
-                            // Don't do this on a real app! See PersistenceBasicSample for an example.
-                            .allowMainThreadQueries()
-                            .build();
+//            INSTANCE =
+//                    Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "maindb.db")
+//                            // To simplify the codelab, allow queries on the main thread.
+//                            // Don't do this on a real app! See PersistenceBasicSample for an example.
+//                            .allowMainThreadQueries()
+//                            .build();
+
+//            INSTANCE =
+//                    Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "Main Database")
+//                            // To simplify the codelab, allow queries on the main thread.
+//                            // Don't do this on a real app! See PersistenceBasicSample for an example.
+//                            .build();
+
+            INSTANCE = RoomAsset.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "maindb.db").allowMainThreadQueries().build();
+
         }
         return INSTANCE;
     }

@@ -45,7 +45,7 @@ try
             foodName       	VARCHAR(50)   NOT NULL    UNIQUE,
 			sugarPerServe  	FLOAT(5,2)	  NOT NULL,
             sugarPer100     FLOAT(5,2)    NOT NULL,
-			barcode			VARCHAR(13)   UNIQUE,
+			barcode			VARCHAR(13),
 			category		VARCHAR(30),
 			dateAdded		DATETIME,
             

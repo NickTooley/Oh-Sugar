@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -90,7 +91,7 @@ public class SearchReturn extends AppCompatActivity {
             }
         });
 
-        Button scanBtn = (Button) findViewById(R.id.scanBtn);
+        ImageView scanBtn = (ImageView) findViewById(R.id.scanBtn);
 
         scanBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,7 +138,7 @@ public class SearchReturn extends AppCompatActivity {
         lv.setAdapter(null);
 
         List<Food> searchResult = db.foodDao().searchByName("%"+searchText.getText().toString()+"%");
-        Log.d("foods", Double.toString(searchResult.get(0).sugarServing));
+        //Log.d("foods", Double.toString(searchResult.get(0).sugarServing));
         FoodAdapterWClickListen adapter1 = new FoodAdapterWClickListen
                 (this, searchResult);
         ListView lv = (ListView) findViewById(R.id.searchResults);

@@ -80,7 +80,7 @@ public class SettingsActivity extends AppCompatActivity {
         Shader textShader=new LinearGradient(0, 0, conversionsBtn.getMeasuredWidth() / 2, 0,
                 new int[]{Color.parseColor("#fc552e"),Color.parseColor("#f9398e")},
                 new float[]{0, 1}, Shader.TileMode.CLAMP);
-        familyBtn.getPaint().setShader(textShader);
+
 
         conversionsBtn.measure(0,0);
 
@@ -89,7 +89,7 @@ public class SettingsActivity extends AppCompatActivity {
         Shader textShader2=new LinearGradient(0, 0, conversionsBtn.getMeasuredWidth() / 2, 0,
                 new int[]{Color.parseColor("#fc552e"),Color.parseColor("#f9398e")},
                 new float[]{0, 1}, Shader.TileMode.CLAMP);
-        conversionsBtn.getPaint().setShader(textShader);
+        conversionsBtn.getPaint().setShader(textShader2);
 
         TextView shoppingListBtn = (TextView) findViewById(R.id.button2);
 
@@ -119,6 +119,7 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
         resetDB.getPaint().setShader(textShader2);
+        familyBtn.getPaint().setShader(textShader2);
 
         TextView updateDB = (TextView) findViewById(R.id.updateDbBtn);
 
@@ -132,6 +133,8 @@ public class SettingsActivity extends AppCompatActivity {
 
             }
         });
+
+        updateDB.getPaint().setShader(textShader2);
 
     }
     @Override
