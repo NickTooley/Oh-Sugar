@@ -50,35 +50,18 @@ public class Shopping_List extends AppCompatActivity {
         Typeface customFont = Typeface.createFromAsset(getAssets(), getString(R.string.font));
         toolBarTitle.setTypeface(customFont);
 
-        TextView name = (TextView) findViewById(R.id.listName);
+        //TextView name = (TextView) findViewById(R.id.listName);
         TextView time = (TextView) findViewById(R.id.time);
         TextView totSug = (TextView) findViewById(R.id.totalSugar);
         TextView recSug = (TextView) findViewById(R.id.recSugar);
-        TextView difference = (TextView) findViewById(R.id.difference);
+       // TextView difference = (TextView) findViewById(R.id.difference);
 
-        Button load = (Button) findViewById(R.id.loadBtn);
-        Button resetList = (Button) findViewById(R.id.resetBtn);
-        Button compList = (Button) findViewById(R.id.completeBtn);
+        Button menu = (Button) findViewById(R.id.menuBtn);
 
-        load.setOnClickListener(new View.OnClickListener() {
+        menu.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Shopping_List.this, LoadShoppingList.class);
-                startActivity(intent);
-            }
-        });
-
-        resetList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-        compList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
+            public void onClick(View v) {
+                //Create dialog fragment with save, load, create options...
             }
         });
 
@@ -90,11 +73,11 @@ public class Shopping_List extends AppCompatActivity {
         ShoppingList list = gson.fromJson(json, type);
 
         if(list != null){
-            name.setText(list.getName());
+            //name.setText(list.getName());
             time.setText(list.getTimestamp());
             totSug.setText(Double.toString(list.getTotalSugar()));
             recSug.setText((Double.toString(list.getRecSugar())));
-            difference.setText((Double.toString(list.getRecSugar()-list.getTotalSugar())));
+            //difference.setText((Double.toString(list.getRecSugar()-list.getTotalSugar())));
 
             ShoppingListArrayAdapter adapter1 = new ShoppingListArrayAdapter
                     (Shopping_List.this, R.layout.food_item, list.getList());
@@ -102,11 +85,11 @@ public class Shopping_List extends AppCompatActivity {
             lv.setAdapter(adapter1);
         }
         else{
-            name.setText("Name");
+            //name.setText("Name");
             time.setText("Timestamp");
             totSug.setText("Total");
             recSug.setText("Goal");
-            difference.setText("Difference");
+            //difference.setText("Difference");
 
             ArrayList<String> x =  new ArrayList<>();
             x.add("None");

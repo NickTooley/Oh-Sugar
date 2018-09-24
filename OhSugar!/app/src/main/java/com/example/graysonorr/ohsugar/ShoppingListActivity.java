@@ -57,11 +57,12 @@ public class ShoppingListActivity extends AppCompatActivity {
         Typeface customFont = Typeface.createFromAsset(getAssets(), getString(R.string.font));
         toolBarTitle.setTypeface(customFont);
 
-        Button save = (Button) findViewById(R.id.saveBtn);
-        save.setOnClickListener(new View.OnClickListener() {
+        Button menu = (Button) findViewById(R.id.menuBtn);
+        menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShowDialog();
+                //ShowDialog(); used for saving
+                //Show dialog for save, load, create
             }
         });
 

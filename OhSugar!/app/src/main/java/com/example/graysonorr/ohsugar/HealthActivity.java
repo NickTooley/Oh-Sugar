@@ -14,6 +14,8 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.LineChart;
+
 public class HealthActivity extends AppCompatActivity {
 
     @Override
@@ -32,34 +34,6 @@ public class HealthActivity extends AppCompatActivity {
         Typeface customFont = Typeface.createFromAsset(getAssets(), getString(R.string.font));
         toolBarTitle.setTypeface(customFont);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("Family", MODE_PRIVATE);
-
-<<<<<<< HEAD
-=======
-        arrow = (ImageView) findViewById(R.id.arrow);
-        float percentage = ((((float)193/(float)sharedPreferences.getInt("familySugar", 0))*100)/180)*100;
-
-        rotateNeedle(0, Math.round(percentage));
-
->>>>>>> parent of 5c4bfda... Fixed removal from shopping list and worked on performance activity
-        TextView recSugar = (TextView) findViewById(R.id.RecSugarTotal);
-        TextView listSugar = (TextView) findViewById(R.id.ListSugarTotal);
-
-        recSugar.setText("Rec Sugar: " + Integer.toString(sharedPreferences.getInt("familySugar", 0)) + "g");
-        listSugar.setText(Float.toString(percentage));
-<<<<<<< HEAD
-=======
-    }
-
-    public void rotateNeedle(int startPoint, int endPoint){
-        RotateAnimation rotateAnimation1 = new RotateAnimation(startPoint, endPoint,
-                Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f);
-
-        rotateAnimation1.setInterpolator(new LinearInterpolator());
-        rotateAnimation1.setDuration(1000);
-        rotateAnimation1.setFillAfter(true);
-        arrow.startAnimation(rotateAnimation1);
->>>>>>> parent of 5c4bfda... Fixed removal from shopping list and worked on performance activity
+        LineChart chart = (LineChart) findViewById(R.id.chart);
     }
 }

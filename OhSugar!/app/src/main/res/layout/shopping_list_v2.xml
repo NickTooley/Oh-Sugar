@@ -36,10 +36,10 @@
                 android:textSize="25sp" />
 
             <Button
-                android:id="@+id/saveBtn"
+                android:id="@+id/menuBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Save"
+                android:text="Menu"
                 android:layout_marginTop="45dp"/>
 
 
