@@ -152,7 +152,7 @@ public class ShoppingListActivity extends AppCompatActivity {
 
         public View getView(int position, View convertView, ViewGroup container) {
             LayoutInflater inflater = LayoutInflater.from(ShoppingListActivity.this);
-            View customView = inflater.inflate(R.layout.food_item, container, false);
+            View customView = inflater.inflate(R.layout.list_item, container, false);
 
             TextView name = (TextView) customView.findViewById(R.id.foodName);
             TextView sugarV = (TextView) customView.findViewById(R.id.sugarValue);
@@ -245,7 +245,7 @@ public class ShoppingListActivity extends AppCompatActivity {
 
     public void updateActivity(){
         ShoppingListArrayAdapter adapter1 = new ShoppingListArrayAdapter
-                (ShoppingListActivity.this, R.layout.food_item, getShoppingList());
+                (ShoppingListActivity.this, R.layout.list_item, getShoppingList());
         ListView lv = (ListView) findViewById(R.id.ListView);
         lv.setAdapter(adapter1);
 
