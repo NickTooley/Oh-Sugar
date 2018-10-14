@@ -3,6 +3,7 @@ package com.example.graysonorr.ohsugar;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,9 +15,14 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 
+import java.util.List;
+
 public class HealthActivity extends AppCompatActivity {
+
+    private BarChart barChart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +40,8 @@ public class HealthActivity extends AppCompatActivity {
         Typeface customFont = Typeface.createFromAsset(getAssets(), getString(R.string.font));
         toolBarTitle.setTypeface(customFont);
 
-        LineChart chart = (LineChart) findViewById(R.id.chart);
+        barChart = (BarChart) findViewById(R.id.chart);
+
     }
+
 }

@@ -22,6 +22,10 @@ public class ShoppingList {
         this.recSugar = recSugar;
     }
 
+    public void AddToList(Food item){
+        list.add(item);
+    }
+
     public String getName() {return name;}
     public void setName(String name){ this.name = name; }
 

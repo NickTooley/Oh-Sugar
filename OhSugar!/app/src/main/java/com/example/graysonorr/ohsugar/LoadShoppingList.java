@@ -94,7 +94,7 @@ public class LoadShoppingList extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             LoadShoppingList(currentItem);
-                            Intent intent = new Intent(LoadShoppingList.this, Shopping_List.class);
+                            Intent intent = new Intent(LoadShoppingList.this, ShoppingListActivity.class);
                             startActivity(intent);
                         }
                     });
