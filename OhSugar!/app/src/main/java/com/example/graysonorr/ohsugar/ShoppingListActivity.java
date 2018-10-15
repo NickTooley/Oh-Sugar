@@ -101,8 +101,10 @@ public class ShoppingListActivity extends AppCompatActivity {
                 addItem.setPadding(0,25,0,0);
             }
         }
+    if (getShoppingList() != null){
+        UpdateActivity();
+    }
 
-        updateActivity();
     }
 
     @Override
