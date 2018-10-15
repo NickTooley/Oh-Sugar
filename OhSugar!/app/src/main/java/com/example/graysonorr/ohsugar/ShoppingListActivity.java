@@ -6,7 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.style.UpdateAppearance;
@@ -85,10 +87,22 @@ public class ShoppingListActivity extends AppCompatActivity {
             }
         });
 
-        if (getShoppingList() != null){
-            UpdateActivity();
+        addItem.measure(0,0);
+
+        android.graphics.Shader textShader=new android.graphics.LinearGradient(0, 0, addItem.getMeasuredWidth() / 2, 0,
+                new int[]{android.graphics.Color.parseColor("#fc552e"),android.graphics.Color.parseColor("#f9398e")},
+                new float[]{0, 1}, android.graphics.Shader.TileMode.CLAMP);
+        addItem.getPaint().setShader(textShader);
+
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                Log.d("Build check", "hello");
+                addItem.setBackground(ContextCompat.getDrawable(this, R.drawable.longbtn2));
+                addItem.setPadding(0,25,0,0);
+            }
         }
 
+        updateActivity();
     }
 
     @Override
@@ -140,7 +154,7 @@ public class ShoppingListActivity extends AppCompatActivity {
 
         public View getView(int position, View convertView, ViewGroup container) {
             LayoutInflater inflater = LayoutInflater.from(ShoppingListActivity.this);
-            View customView = inflater.inflate(R.layout.food_item, container, false);
+            View customView = inflater.inflate(R.layout.list_item, container, false);
 
             TextView name = (TextView) customView.findViewById(R.id.foodName);
             TextView sugarV = (TextView) customView.findViewById(R.id.sugarValue);

@@ -24,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -101,7 +102,7 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-        Button scanBtn = (Button) findViewById(R.id.scanBtn);
+        ImageView scanBtn = (ImageView) findViewById(R.id.scanBtn);
 
         scanBtn.setOnClickListener(new View.OnClickListener() {
             @Override

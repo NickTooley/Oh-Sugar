@@ -34,13 +34,15 @@
 
 
         </android.support.v7.widget.Toolbar>
-        <FrameLayout
+
+        <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/mask"
-            android:layout_gravity="bottom">
+            android:layout_gravity="bottom"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/mask">
 
-        </FrameLayout>
+        </ImageView>
 
         <LinearLayout
             android:id="@+id/contentLayout"
@@ -75,15 +77,16 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <Button
+                        <ImageView
                             android:id="@+id/listBtn"
                             android:layout_width="60dp"
                             android:layout_height="60dp"
-                            android:layout_marginRight="5dp"
-                            android:layout_marginLeft="5dp"
                             android:layout_marginBottom="5dp"
-                            android:background="@drawable/list_btn"
-                            android:text="" />
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:scaleType="fitXY"
+                            android:text=""
+                            app:srcCompat="@drawable/list_btn" />
 
                         <TextView
                             android:id="@+id/textView"
@@ -100,14 +103,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
-                    <Button
+                    <ImageView
+                        android:scaleType="fitXY"
                         android:id="@+id/healthBtn"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_marginRight="5dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginBottom="5dp"
-                        android:background="@drawable/health_btn"
+                        app:srcCompat="@drawable/health_btn"
                         android:text="" />
 
                         <TextView
@@ -125,14 +129,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
-                    <Button
+                    <ImageView
+                        android:scaleType="fitXY"
                         android:id="@+id/compareBtn"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_marginRight="5dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginBottom="5dp"
-                        android:background="@drawable/compare_btn"
+                        app:srcCompat="@drawable/compare_btn"
                         android:text="" />
                         <TextView
                             android:id="@+id/textView3"
@@ -148,14 +153,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
-                    <Button
+                    <ImageView
+                        android:scaleType="fitXY"
                         android:id="@+id/searchBtn"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_marginRight="5dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginBottom="5dp"
-                        android:background="@drawable/search_btn"
+                        app:srcCompat="@drawable/search_btn"
                         android:text="" />
                         <TextView
                             android:id="@+id/textView4"
@@ -180,14 +186,15 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                    <Button
+                    <ImageView
+                        android:scaleType="fitXY"
                         android:id="@+id/cameraBtn"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_marginRight="5dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginBottom="5dp"
-                        android:background="@drawable/camera_btn"
+                        app:srcCompat="@drawable/camera_btn"
                         android:text="" />
 
                         <TextView
@@ -205,14 +212,15 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
 
-                    <Button
+                    <ImageView
+                        android:scaleType="fitXY"
                         android:id="@+id/helpBtn"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_marginRight="5dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginBottom="5dp"
-                        android:background="@drawable/help_btn"
+                        app:srcCompat="@drawable/help_btn"
                         android:text="" />
                         <TextView
                             android:id="@+id/textView6"
@@ -229,14 +237,15 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                    <Button
+                    <ImageView
+                        android:scaleType="fitXY"
                         android:id="@+id/settingsBtn"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_marginRight="5dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginBottom="5dp"
-                        android:background="@drawable/settings_btn"
+                        app:srcCompat="@drawable/settings_btn"
                         android:text="" />
 
                         <TextView
