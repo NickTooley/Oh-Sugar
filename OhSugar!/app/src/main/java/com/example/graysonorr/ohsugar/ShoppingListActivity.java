@@ -85,7 +85,10 @@ public class ShoppingListActivity extends AppCompatActivity {
             }
         });
 
-        UpdateActivity();
+        if (getShoppingList() != null){
+            UpdateActivity();
+        }
+
     }
 
     @Override
@@ -122,7 +125,7 @@ public class ShoppingListActivity extends AppCompatActivity {
                     editor.putString("current list", json);
                     editor.commit();
 
-                UpdateActivity();
+                    UpdateActivity();
             }
 
 
@@ -188,10 +191,8 @@ public class ShoppingListActivity extends AppCompatActivity {
     }
 
     public ShoppingList getShoppingList(){
-        //SharedPreferences sharedPreferences = getSharedPreferences("Shopping List", MODE_PRIVATE);
         SharedPreferences sharedPreferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
         Gson gson = new Gson();
-        //String json = sharedPreferences.getString("shopping list", null);
         String json = sharedPreferences.getString("current list", null);
         Type type = new TypeToken<ShoppingList>() {}.getType();
 
@@ -241,6 +242,9 @@ public class ShoppingListActivity extends AppCompatActivity {
         TextView title = (TextView) findViewById(R.id.TitleTxtVw);
         title.setText(list.getName());
 
+        TextView goal = (TextView) findViewById(R.id.GoalTxtVw);
+        goal.setText("Sugar Goal: " + Double.toString(list.getRecSugar()));
+
         double totalSugar = 0.00;
 
         for(Food f : list.getList()){
@@ -254,17 +258,44 @@ public class ShoppingListActivity extends AppCompatActivity {
     public void ShowSaveDialog(){
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.save_dialog, null);
-        dialogBuilder.setView(dialogView);
+        //View dialogView = inflater.inflate(R.layout.save_dialog, null);
+        //dialogBuilder.setView(dialogView);
 
-        final EditText listName = (EditText) dialogView.findViewById(R.id.edit1);
+        //final EditText listName = (EditText) dialogView.findViewById(R.id.edit1);
 
-        dialogBuilder.setTitle("Save your shopping list");
-        dialogBuilder.setMessage("Name your shopping list: ");
+        dialogBuilder.setTitle("Save " + getShoppingList().getName() + " to your shopping lists?");
+        //dialogBuilder.setMessage("Name your shopping list: ");
         dialogBuilder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Save(listName.getText().toString());
+                Save(getShoppingList().getName());
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        AlertDialog b = dialogBuilder.create();
+        b.show();
+    }
+
+    public void ShowUpdateDialog(){
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.update_dialog, null);
+        dialogBuilder.setView(dialogView);
+
+        final EditText goal = (EditText) dialogView.findViewById(R.id.edit1);
+
+        dialogBuilder.setTitle("Update current lists sugar goal");
+        dialogBuilder.setMessage("Sugar Goal: ");
+        dialogBuilder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                getShoppingList().setRecSugar(Double.parseDouble(goal.getText().toString()));
+                UpdateActivity();
             }
         });
         dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -283,11 +314,19 @@ public class ShoppingListActivity extends AppCompatActivity {
         final View dialogView = inflater.inflate(R.layout.menu_dialog, null);
         dialogBuilder.setView(dialogView);
 
+        final Button updateGoal = (Button) dialogView.findViewById(R.id.updateGoalBtn);
         final Button save = (Button) dialogView.findViewById(R.id.saveBtn);
         final Button create = (Button) dialogView.findViewById(R.id.createBtn);
         final Button load = (Button) dialogView.findViewById(R.id.loadBtn);
 
         dialogBuilder.setTitle("Menu");
+
+        updateGoal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShowUpdateDialog();
+            }
+        });
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override

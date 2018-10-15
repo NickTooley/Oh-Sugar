@@ -80,7 +80,7 @@ public class CreateShopList extends AppCompatActivity {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShowDialog();
+                //ShowDialog();
             }
         });
     }
@@ -115,7 +115,7 @@ public class CreateShopList extends AppCompatActivity {
         lv.setAdapter(adapter1);
     }
 
-    public void ShowDialog(){
+    /*public void ShowDialog(){
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.save_dialog, null);
@@ -139,7 +139,7 @@ public class CreateShopList extends AppCompatActivity {
         });
         AlertDialog b = dialogBuilder.create();
         b.show();
-    }
+    }*/
 
     public void Save(String listName){
         SharedPreferences sharedPreferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);

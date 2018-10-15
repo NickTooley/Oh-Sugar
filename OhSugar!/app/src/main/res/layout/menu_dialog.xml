@@ -6,6 +6,12 @@
     android:orientation="vertical">
 
     <Button
+        android:id="@+id/updateGoalBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Update List Sugar Goal" />
+
+    <Button
         android:id="@+id/saveBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
