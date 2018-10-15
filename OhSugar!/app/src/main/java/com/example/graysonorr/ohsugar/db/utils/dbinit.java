@@ -7,6 +7,7 @@ import com.example.graysonorr.ohsugar.db.AppDatabase;
 import com.example.graysonorr.ohsugar.db.Food;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by toolnj1 on 2/08/2018.
@@ -22,6 +23,31 @@ public class dbinit {
 
         PopulateDbAsync task = new PopulateDbAsync(db);
         task.execute();
+    }
+
+    public static void populateAsync(final AppDatabase db, List<Food> foods){
+
+        PopulateDbAsyncList task = new PopulateDbAsyncList(db, foods);
+        task.execute();
+
+    }
+
+    private static class PopulateDbAsyncList extends AsyncTask<Void, Void, Void> {
+
+        private final AppDatabase mDb;
+        private final List<Food> foods;
+
+        PopulateDbAsyncList(AppDatabase db, List<Food> foods) {
+            mDb = db;
+            this.foods = foods;
+        }
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            populateWithList(mDb, foods);
+            return null;
+        }
+
     }
 
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
@@ -52,14 +78,24 @@ public class dbinit {
         return food;
     }
 
-    private static void populateWithTestData(AppDatabase db) {
-        db.foodDao().deleteAll();
+    private static void populateWithList(AppDatabase db, List<Food> foods){
 
-        addFood(db, "9415767422209", "Fresh Up Big Fizz Juicy Orange", 55.9);
-        addFood(db, "9300675036337", "Pumped Lime", 17.0);
-        addFood(db, "9414912300140", "Choysa Classic Tea Bags", 0.0);
-        addFood(db, "9414789100508", "Pepsi 355ml", 38.5);
-        addFood(db, "8886467103407", "Pringles Originals 134g", 0.1);
+        for(Food food: foods){
+            long test = db.foodDao().insertFood(food);
+            Log.d("new ID", String.valueOf(test));
+
+        }
+
+    }
+
+    private static void populateWithTestData(AppDatabase db) {
+//        db.foodDao().deleteAll();
+//
+//        addFood(db, "9415767422209", "Fresh Up Big Fizz Juicy Orange", 55.9);
+//        addFood(db, "9300675036337", "Pumped Lime", 17.0);
+//        addFood(db, "9414912300140", "Choysa Classic Tea Bags", 0.0);
+//        addFood(db, "9414789100508", "Pepsi 355ml", 38.5);
+//        addFood(db, "8886467103407", "Pringles Originals 134g", 0.1);
     }
 
 }

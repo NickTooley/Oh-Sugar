@@ -35,21 +35,22 @@
 
         </android.support.v7.widget.Toolbar>
 
-        <FrameLayout
+        <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:background="@drawable/mask_gradient"
-            android:layout_gravity="bottom">
+            android:scaleType="fitXY">
 
 
-        </FrameLayout>
+        </ImageView>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center_horizontal"
-            android:paddingTop="100dp"
+            android:paddingTop="10dp"
             android:paddingHorizontal="25dp">
 
 
@@ -57,23 +58,23 @@
                 android:id="@+id/button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/long_btn"
-                android:paddingBottom="8dp"
+                android:paddingBottom="12dp"
                 android:paddingLeft="60dp"
                 android:paddingRight="60dp"
-                android:paddingTop="5dp"
+                android:paddingTop="10dp"
                 android:text="conversions"
                 android:textAlignment="center"
                 android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                android:textSize="28sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/button2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/long_btn"
                 android:paddingBottom="12dp"
                 android:paddingLeft="60dp"
@@ -82,22 +83,54 @@
                 android:text="load shopping list"
                 android:textAlignment="center"
                 android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                android:textSize="22sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/button3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/long_btn"
-                android:paddingBottom="8dp"
+                android:paddingBottom="12dp"
                 android:paddingLeft="60dp"
                 android:paddingRight="60dp"
-                android:paddingTop="5dp"
+                android:paddingTop="10dp"
                 android:text="family"
                 android:textAlignment="center"
                 android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                android:textSize="28sp"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/resetDbBtn"
+                android:layout_marginBottom="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/long_btn"
+                android:paddingBottom="12dp"
+                android:paddingLeft="60dp"
+                android:paddingRight="60dp"
+                android:paddingTop="10dp"
+                android:text="delete db"
+                android:textAlignment="center"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/updateDbBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/long_btn"
+                android:paddingBottom="12dp"
+                android:paddingLeft="60dp"
+                android:paddingRight="60dp"
+                android:paddingTop="10dp"
+                android:text="update db"
+                android:textAlignment="center"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
