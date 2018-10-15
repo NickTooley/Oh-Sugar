@@ -20,13 +20,16 @@ public class Person {
 
         switch(age){
             case "4-6":
-                recSugar = 19;
+                //19g per day, 133g per week
+                recSugar = 133;
                 break;
             case "7-11":
-                recSugar = 24;
+                //24g per day, 168g per week
+                recSugar = 168;
                 break;
             default:
-                recSugar = 30;
+                //30g per day, 210g per week
+                recSugar = 210;
                 break;
         }
     }
