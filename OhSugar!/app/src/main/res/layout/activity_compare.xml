@@ -69,8 +69,8 @@
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/long_btn"
                 android:clickable="true"
-                android:maxLines="2"
-                android:minLines="2"
+                android:maxLines="1"
+                android:minLines="1"
                 android:paddingBottom="10dp"
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"
@@ -90,18 +90,18 @@
                 android:id="@+id/compare2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/long_btn"
                 android:clickable="true"
-                android:maxLines="2"
-                android:minLines="2"
+                android:maxLines="1"
+                android:minLines="1"
                 android:paddingBottom="10dp"
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"
                 android:paddingTop="10dp"
                 android:text="Enter a Product"
                 android:textAlignment="center"
-                android:textSize="22sp" />
+                android:textSize="22sp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
