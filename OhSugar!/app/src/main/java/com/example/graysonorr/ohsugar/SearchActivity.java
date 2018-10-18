@@ -140,6 +140,20 @@ public class SearchActivity extends AppCompatActivity {
         ListView lv = (ListView) findViewById(R.id.searchResults);
         lv.setAdapter(adapter1);
 
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("OnClick", "Activated");
+                Food food = (Food)parent.getItemAtPosition(position);
+                int foodID = food.foodID;
+
+                Intent intent = new Intent(getApplicationContext(), MoreInfoActivity.class);
+                intent.putExtra("ID", foodID);
+                startActivity(intent);
+
+            }
+        });
+
         HashMap<String, String> searchStrings = new HashMap<String, String>();
 
         for(int i=0; i < searchResult.size(); i++){
