@@ -250,28 +250,35 @@ public class ShoppingListActivity extends AppCompatActivity {
     }
 
     public void removeFromShoppingList(Food item){
-        SharedPreferences sharedPreferences = getSharedPreferences("Shopping List", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         Gson gson = new Gson();
-        String json = sharedPreferences.getString("shopping list", null);
-        Type type = new TypeToken<ArrayList<Food>>() {}.getType();
+        String json = sharedPreferences.getString("current list", null);
+        Type type = new TypeToken<ShoppingList>() {}.getType();
 
-        ArrayList<Food> shoppinglist = gson.fromJson(json, type);
+        ShoppingList list = gson.fromJson(json, type);
 
-        if(shoppinglist == null){
-            shoppinglist = new ArrayList<>();
-        }
+//        if(shoppinglist == null){
+//            shoppinglist = new ArrayList<>();
+//        }
 
-        for(int i=0; i < shoppinglist.size(); i++){
-            if (shoppinglist.get(i).foodID == item.foodID){
-                shoppinglist.remove(i);
-            }
-        }
+//        for(int i=0; i < shoppinglist.size(); i++){
+//            if (shoppinglist.get(i).foodID == item.foodID){
+//                shoppinglist.remove(i);
+//            }
+//        }
+
+        Log.d("List Before", list.getList().get(0).name);
+        list.RemoveFromList(item);
+//        Log.d("List After", list.getList().get(0).name);
+
 
         gson = new Gson();
-        json = gson.toJson(shoppinglist);
-        editor.putString("shopping list", json);
+        json = gson.toJson(list);
+        Log.d("JSONIn", json);
+        Log.d("Item", item.name);
+        editor.putString("current list", json);
         editor.commit();
     }
 
