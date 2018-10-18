@@ -244,8 +244,10 @@ public class SearchReturn extends AppCompatActivity {
             finish();
             //populateListView(foods);
         }else{
-            BarcodeAsyncScraper scraper = new BarcodeAsyncScraper(this, barcode);
-            scraper.execute();
+            setResult(404);
+            finish();
+//            BarcodeAsyncScraper scraper = new BarcodeAsyncScraper(this, barcode);
+//            scraper.execute();
         }
 
     }

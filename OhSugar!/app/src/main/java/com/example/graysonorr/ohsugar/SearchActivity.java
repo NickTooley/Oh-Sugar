@@ -27,6 +27,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.graysonorr.ohsugar.db.AppDatabase;
 import com.example.graysonorr.ohsugar.db.Food;
@@ -230,7 +231,15 @@ public class SearchActivity extends AppCompatActivity {
         Food foods = db.foodDao().findByBarcode(barcode);
 
         if(foods != null){
-            populateListView(foods);
+//            populateListView(foods);
+            int foodID = foods.foodID;
+
+            Intent intent = new Intent(getApplicationContext(), MoreInfoActivity.class);
+            intent.putExtra("ID", foodID);
+            startActivity(intent);
+
+        }else{
+            Toast.makeText(this, "No items found with that barcode", Toast.LENGTH_LONG).show();
         }
 
     }

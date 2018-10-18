@@ -146,6 +146,8 @@ public class ShoppingListActivity extends AppCompatActivity {
             if (requestCode == 1) {
                 name = data.getStringExtra("Name");
                 sugar = data.getDoubleExtra("Sugar", 1.0);
+                String barcode = data.getStringExtra("Barcode");
+                int id = data.getIntExtra("ID", 0);
 
                 if (name != null) {
                     SharedPreferences sharedPreferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
@@ -158,7 +160,8 @@ public class ShoppingListActivity extends AppCompatActivity {
 
                     ShoppingList list = gson.fromJson(json, type);
 
-                    Food item = new Food();
+                    //Food item = new Food();
+                    Food item = db.foodDao().findByID(id);
 
                     item.name = name;
                     item.sugarServing = sugar;
@@ -175,6 +178,8 @@ public class ShoppingListActivity extends AppCompatActivity {
 
 
             }
+        }else if(resultCode == 404){
+            Toast.makeText(this, "Can not find an item with that barcode", Toast.LENGTH_LONG).show();
         }
     }
 
