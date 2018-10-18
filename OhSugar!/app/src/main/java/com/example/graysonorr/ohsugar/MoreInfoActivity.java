@@ -12,6 +12,9 @@ import android.widget.TextView;
 
 import com.example.graysonorr.ohsugar.db.AppDatabase;
 import com.example.graysonorr.ohsugar.db.Food;
+import com.example.graysonorr.ohsugar.db.ShoppingList;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -47,22 +50,36 @@ public class MoreInfoActivity extends AppCompatActivity {
         String category = food.category;
         if(food.sugar100 > 0) {
             List<Food> healthyAlternative = db.foodDao().searchHealthyAlt(category, food.sugar100);
-            final Food healthy = healthyAlternative.get(0);
 
-            TextView healthyAlt = (TextView) findViewById(R.id.HealthyAltTxtVw);
-            healthyAlt.setText(healthy.name);
-            healthyAlt.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int foodID = healthy.foodID;
+            if(healthyAlternative.size() > 0) {
+                final Food healthy = healthyAlternative.get(0);
 
-                    Intent intent = new Intent(getApplicationContext(), MoreInfoActivity.class);
-                    intent.putExtra("ID", foodID);
-                    startActivity(intent);
-                }
-            });
+                TextView healthyAlt = (TextView) findViewById(R.id.HealthyAltTxtVw);
+                healthyAlt.setText(healthy.name);
+                healthyAlt.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int foodID = healthy.foodID;
+
+                        Intent intent = new Intent(getApplicationContext(), MoreInfoActivity.class);
+                        intent.putExtra("ID", foodID);
+                        startActivity(intent);
+                    }
+                });
+            }
         }
 
+        TextView addToListBtn = (TextView) findViewById(R.id.AddToListTxtVw);
+        addToListBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int foodID = food.foodID;
+
+                Intent intent = new Intent(getApplicationContext(), ShoppingListActivity.class);
+                intent.putExtra("ID", foodID);
+                startActivity(intent);
+            }
+        });
 
 
         TextView foodProduct = (TextView) findViewById(R.id.FoodProductTxtVw);
@@ -70,6 +87,14 @@ public class MoreInfoActivity extends AppCompatActivity {
 
         foodProduct.setText(food.name);
         sugarLevel.setText(Double.toString(food.sugarServing));
+
+        TextView backBtn = (TextView) findViewById(R.id.backTxtVw);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
 
     }

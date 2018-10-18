@@ -101,9 +101,37 @@ public class ShoppingListActivity extends AppCompatActivity {
                 addItem.setPadding(0,25,0,0);
             }
         }
-    if (getShoppingList() != null){
-        UpdateActivity();
-    }
+        if (getShoppingList() != null){
+            UpdateActivity();
+        }
+
+
+        Food food;
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            int value = extras.getInt("ID");
+            food = db.foodDao().findByID(value);
+
+            //To be replaced with AddToList method on Connor's commit
+            SharedPreferences sharedPreferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            Gson gson = new Gson();
+            String json = sharedPreferences.getString("current list", null);
+            Type type = new TypeToken<ShoppingList>() {
+            }.getType();
+
+            ShoppingList list = gson.fromJson(json, type);
+
+            list.AddToList(food);
+
+            gson = new Gson();
+            json = gson.toJson(list);
+            editor.putString("current list", json);
+            editor.commit();
+
+            UpdateActivity();
+        }
 
     }
 

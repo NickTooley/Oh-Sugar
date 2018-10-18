@@ -143,7 +143,6 @@ public class SearchActivity extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("OnClick", "Activated");
                 Food food = (Food)parent.getItemAtPosition(position);
                 int foodID = food.foodID;
 
@@ -304,7 +303,10 @@ public class SearchActivity extends AppCompatActivity {
             addBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    int foodID = currentItem.foodID;
+
                     Intent intent = new Intent(SearchActivity.this, ShoppingListActivity.class);
+                    intent.putExtra("ID", foodID);
                     startActivity(intent);
                 }
             });
