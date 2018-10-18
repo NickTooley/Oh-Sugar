@@ -111,28 +111,42 @@ public class ShoppingListActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             int value = extras.getInt("ID");
+            boolean remove = extras.getBoolean("remove", false);
             food = db.foodDao().findByID(value);
 
-            //To be replaced with AddToList method on Connor's commit
-            SharedPreferences sharedPreferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
+            if(remove){
+                Log.d("bool", "made it here2");
+                removeFromShoppingList(food);
+                UpdateActivity();
+            }else {
+                //To be replaced with AddToList method on Connor's commit
+                SharedPreferences sharedPreferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
 
-            Gson gson = new Gson();
-            String json = sharedPreferences.getString("current list", null);
-            Type type = new TypeToken<ShoppingList>() {
-            }.getType();
+                Gson gson = new Gson();
+                String json = sharedPreferences.getString("current list", null);
+                Type type = new TypeToken<ShoppingList>() {
+                }.getType();
 
-            ShoppingList list = gson.fromJson(json, type);
+                ShoppingList list = gson.fromJson(json, type);
 
-            list.AddToList(food);
+                list.AddToList(food);
 
-            gson = new Gson();
-            json = gson.toJson(list);
-            editor.putString("current list", json);
-            editor.commit();
+                gson = new Gson();
+                json = gson.toJson(list);
+                editor.putString("current list", json);
+                editor.commit();
 
-            UpdateActivity();
+                UpdateActivity();
+            }
         }
+
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        UpdateActivity();
 
     }
 
@@ -306,6 +320,7 @@ public class ShoppingListActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(), MoreInfoActivity.class);
                 intent.putExtra("ID", foodID);
+                intent.putExtra("inList", true);
                 startActivity(intent);
 
             }

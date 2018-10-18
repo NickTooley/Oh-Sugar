@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -39,13 +40,18 @@ public class MoreInfoActivity extends AppCompatActivity {
         Typeface customFont = Typeface.createFromAsset(getAssets(), getString(R.string.font));
         toolBarTitle.setTypeface(customFont);
 
+        boolean inList = false;
+
         db = AppDatabase.getInMemoryDatabase(getApplicationContext());
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             int value = extras.getInt("ID");
             food = db.foodDao().findByID(value);
+            inList = extras.getBoolean("inList", false);
         }
+
+        final boolean inListFinal = inList;
 
         String category = food.category;
         if(food.sugar100 > 0) {
@@ -70,6 +76,9 @@ public class MoreInfoActivity extends AppCompatActivity {
         }
 
         TextView addToListBtn = (TextView) findViewById(R.id.AddToListTxtVw);
+        if(inListFinal){
+            addToListBtn.setText("Remove from list");
+        }
         addToListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,7 +86,12 @@ public class MoreInfoActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(), ShoppingListActivity.class);
                 intent.putExtra("ID", foodID);
+                if(inListFinal) {
+                    Log.d("Bool", "made it");
+                    intent.putExtra("remove", true);
+                }
                 startActivity(intent);
+                finish();
             }
         });
 
