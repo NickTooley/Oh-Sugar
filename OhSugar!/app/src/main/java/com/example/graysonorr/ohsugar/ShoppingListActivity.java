@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -197,14 +198,14 @@ public class ShoppingListActivity extends AppCompatActivity {
             sugarV.setText(String.format("%.2f", currentItem.sugarServing/conversions.getFloat("floatMeasure", 1)));
             sugarM.setText(conversions.getString("abbreviation", null));
 
-            name.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(ShoppingListActivity.this, MoreInfoActivity.class);
-                    intent.putExtra("ID", currentItem.foodID);
-                    startActivity(intent);
-                }
-            });
+//            name.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Intent intent = new Intent(ShoppingListActivity.this, MoreInfoActivity.class);
+//                    intent.putExtra("ID", currentItem.foodID);
+//                    startActivity(intent);
+//                }
+//            });
 
             remove.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -286,9 +287,24 @@ public class ShoppingListActivity extends AppCompatActivity {
         ShoppingList list = getShoppingList();
 
         ShoppingListArrayAdapter adapter1 = new ShoppingListArrayAdapter
-                (ShoppingListActivity.this, R.layout.food_item, list.getList());
+                (ShoppingListActivity.this, R.layout.list_item, list.getList());
         ListView lv = (ListView) findViewById(R.id.ListView);
         lv.setAdapter(adapter1);
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Food food = (Food)parent.getItemAtPosition(position);
+                int foodID = food.foodID;
+                Log.d("foodID passing", Integer.toString(foodID));
+                Log.d("foodID passing", food.name);
+
+                Intent intent = new Intent(getApplicationContext(), MoreInfoActivity.class);
+                intent.putExtra("ID", foodID);
+                startActivity(intent);
+
+            }
+        });
 
         TextView title = (TextView) findViewById(R.id.TitleTxtVw);
         title.setText(list.getName());
