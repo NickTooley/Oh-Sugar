@@ -37,9 +37,9 @@
 
             <Button
                 android:id="@+id/menuBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Menu"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/menu_btn_white"
                 android:layout_marginTop="45dp"/>
 
 
