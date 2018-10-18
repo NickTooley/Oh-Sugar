@@ -5,7 +5,7 @@
     <color name="colorAccent">#ff4081</color>
 
     <!-- Custom Colors -->
-    <color name="colorMainSecondary">#E6E6E6</color>
+    <color name="colorMainSecondary">#ffffff</color>
     <color name="colorTomato">#fc552e</color>
     <color name="colorDeepPink">#f9398e</color>
     <color name="colorLightSlateGray">#8E8F93</color>
