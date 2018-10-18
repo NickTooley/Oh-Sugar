@@ -391,7 +391,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         final Button create = (Button) dialogView.findViewById(R.id.createBtn);
         final Button load = (Button) dialogView.findViewById(R.id.loadBtn);
 
-        dialogBuilder.setTitle("Menu");
+        //dialogBuilder.setTitle("Menu");
 
         updateGoal.setOnClickListener(new View.OnClickListener() {
             @Override

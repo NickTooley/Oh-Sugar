@@ -5,27 +5,44 @@
     android:padding="10dp"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:text="Shopping List Options"
+        android:textAlignment="center"
+        android:textSize="24sp" />
+
     <Button
         android:id="@+id/updateGoalBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Update List Sugar Goal" />
+        android:text="Update List Sugar Goal"
+        android:background="@drawable/long_btn"
+        android:layout_marginBottom="5dp"/>
 
     <Button
         android:id="@+id/saveBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save List" />
+        android:text="Save List"
+        android:background="@drawable/long_btn"
+        android:layout_marginBottom="5dp"/>
 
     <Button
         android:id="@+id/createBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Create List" />
+        android:text="Create List"
+        android:background="@drawable/long_btn"
+        android:layout_marginBottom="5dp"/>
 
     <Button
         android:id="@+id/loadBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Load List" />
+        android:text="Load List"
+        android:background="@drawable/long_btn"
+        android:layout_marginBottom="5dp"/>
 </LinearLayout>
