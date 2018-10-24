@@ -339,11 +339,11 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void addToShoppingList(Food item){
-        SharedPreferences sharedPreferences = getSharedPreferences("Shopping List", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         Gson gson = new Gson();
-        String json = sharedPreferences.getString("shopping list", null);
+        String json = sharedPreferences.getString("current list", null);
         Type type = new TypeToken<ArrayList<Food>>() {}.getType();
 
         ArrayList<Food> shoppinglist = gson.fromJson(json, type);
@@ -356,7 +356,7 @@ public class SearchActivity extends AppCompatActivity {
 
         gson = new Gson();
         json = gson.toJson(shoppinglist);
-        editor.putString("shopping list", json);
+        editor.putString("current list", json);
         editor.commit();
     }
 

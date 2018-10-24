@@ -5,27 +5,68 @@
     android:padding="10dp"
     android:orientation="vertical">
 
-    <Button
+    <TextView
         android:id="@+id/updateGoalBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Update List Sugar Goal" />
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/long_btn"
+        android:paddingBottom="12dp"
+        android:paddingLeft="60dp"
+        android:paddingRight="60dp"
+        android:paddingTop="10dp"
+        android:text="UPDATE"
+        android:textAlignment="center"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
-    <Button
+    <TextView
         android:id="@+id/saveBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save List" />
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/long_btn"
+        android:paddingBottom="12dp"
+        android:paddingLeft="60dp"
+        android:paddingRight="60dp"
+        android:paddingTop="10dp"
+        android:text="SAVE"
+        android:textAlignment="center"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
-    <Button
+    <TextView
         android:id="@+id/createBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Create List" />
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/long_btn"
+        android:paddingBottom="12dp"
+        android:paddingLeft="60dp"
+        android:paddingRight="60dp"
+        android:paddingTop="10dp"
+        android:text="CREATE"
+        android:textAlignment="center"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
-    <Button
+    <TextView
         android:id="@+id/loadBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Load List" />
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/long_btn"
+        android:paddingBottom="12dp"
+        android:paddingLeft="60dp"
+        android:paddingRight="60dp"
+        android:paddingTop="10dp"
+        android:text="LOAD"
+        android:textAlignment="center"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
 </LinearLayout>

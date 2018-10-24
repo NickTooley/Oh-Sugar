@@ -46,21 +46,29 @@ public class LoadShoppingList extends AppCompatActivity {
         Typeface customFont = Typeface.createFromAsset(getAssets(), getString(R.string.font));
         toolBarTitle.setTypeface(customFont);
 
-        /*TextView create = (TextView) findViewById(R.id.createBtn);
-        create.setOnClickListener(new View.OnClickListener() {
+        final TextView deleteAll = (TextView) findViewById(R.id.deleteBtn);
+        deleteAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoadShoppingList.this, CreateShopList.class);
-                startActivity(intent);
-                UpdateActivity();
+                DeleteAllSavedLists();
             }
-        });*/
+        });
 
         UpdateActivity();
     }
 
-    public class ListsArrayAdapter extends ArrayAdapter<String> {
-        public ListsArrayAdapter(Context context, int resource, List<String> objects) {
+    private void DeleteAllSavedLists() {
+        Map<String,?> keys = getSharedPreferences("Saved Lists", MODE_PRIVATE).getAll();
+
+        for(Map.Entry<String,?> list : keys.entrySet()){
+            Delete(list.getKey().toString());
+        }
+
+        UpdateActivity();
+    }
+
+    public class ListsArrayAdapter extends ArrayAdapter<ShoppingList> {
+        public ListsArrayAdapter(Context context, int resource, List<ShoppingList> objects) {
             super(context, resource, objects);
         }
 
@@ -70,19 +78,18 @@ public class LoadShoppingList extends AppCompatActivity {
 
             TextView name = (TextView) customView.findViewById(R.id.ListName);
             TextView sugar = (TextView) customView.findViewById(R.id.sugar);
-            Button preview = (Button) customView.findViewById(R.id.PrevBtn);
             final Button delete = (Button) customView.findViewById(R.id.DelBtn);
 
-            final String currentItem = getItem(position);
+            final ShoppingList currentItem = getItem(position);
 
-            name.setText(currentItem);
-            sugar.setText("Sugar total: ---");
+            name.setText(currentItem.getName());
+            sugar.setText("Sugar total: " + currentItem.getTotalSugar());
 
             name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(LoadShoppingList.this);
-                    builder.setTitle("Load " + currentItem + " to your shopping list?");
+                    builder.setTitle("Load " + currentItem.getName() + " to your shopping list?");
                     builder.setMessage("Are you sure? This will replace your current shopping list.");
                     builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                         @Override
@@ -93,7 +100,7 @@ public class LoadShoppingList extends AppCompatActivity {
                     builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            LoadShoppingList(currentItem);
+                            LoadShoppingList(currentItem.getName());
                             Intent intent = new Intent(LoadShoppingList.this, ShoppingListActivity.class);
                             startActivity(intent);
                         }
@@ -118,7 +125,7 @@ public class LoadShoppingList extends AppCompatActivity {
                     builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Delete(currentItem);
+                            Delete(currentItem.getName());
                             UpdateActivity();
                         }
                     });
@@ -131,15 +138,20 @@ public class LoadShoppingList extends AppCompatActivity {
         }
     }
 
-    public ArrayList<String> GetShoppingLists(){
+    public ArrayList<ShoppingList> GetShoppingLists(){
         SharedPreferences sharedPreferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
 
         Map<String,?> keys = sharedPreferences.getAll();
-        ArrayList<String> savedLists = new ArrayList();
+        ArrayList<ShoppingList> savedLists = new ArrayList();
+
+        Gson gson = new Gson();
 
         for(Map.Entry<String, ?> lists : keys.entrySet()){
             if(!lists.getKey().toString().equals("current list")){
-                savedLists.add(lists.getKey().toString());
+                String json = sharedPreferences.getString(lists.getKey(), null);
+                Type type = new TypeToken<ShoppingList>() {}.getType();
+                ShoppingList list = gson.fromJson(json, type);
+                savedLists.add(list);
             }
         }
 
@@ -147,13 +159,14 @@ public class LoadShoppingList extends AppCompatActivity {
     }
 
     public void LoadShoppingList(String listName){
+        // Add current list to health activity shared prefs
+
         SharedPreferences sharedPreferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         Gson gson = new Gson();
         String json = sharedPreferences.getString(listName, null);
-        Type type = new TypeToken<ShoppingList>() {
-        }.getType();
+        Type type = new TypeToken<ShoppingList>() {}.getType();
 
         ShoppingList list = gson.fromJson(json, type);
 
@@ -174,24 +187,4 @@ public class LoadShoppingList extends AppCompatActivity {
         ListView lv = (ListView) findViewById(R.id.ListView);
         lv.setAdapter(adapter3);
     }
-
-    /*public Double GetSugar(String listName){
-        SharedPreferences sharedPreferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        Gson gson = new Gson();
-        String json = sharedPreferences.getString(listName, null);
-        Type type = new TypeToken<ArrayList<Food>>() {
-        }.getType();
-
-        ArrayList<Food> shoppingList = gson.fromJson(json, type);
-
-        double totalSugar = 0.00;
-
-        for(Food f : shoppingList){
-            totalSugar += f.sugarServing;
-        }
-
-        return totalSugar;
-    }*/
 }
