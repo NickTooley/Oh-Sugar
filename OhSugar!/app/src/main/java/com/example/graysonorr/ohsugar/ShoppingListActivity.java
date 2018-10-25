@@ -146,7 +146,9 @@ public class ShoppingListActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-        UpdateActivity();
+        if(getShoppingList() != null) {
+            UpdateActivity();
+        }
 
     }
 
