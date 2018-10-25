@@ -63,11 +63,11 @@ public class HealthActivity extends AppCompatActivity {
         barChart = (BarChart) findViewById(R.id.chart);
 
         final List<Data> data = new ArrayList<>();
-        data.add(new Data(0f, -200f, "12-29"));
-        data.add(new Data(1f, 22f, "13-29"));
-        data.add(new Data(2f, 124f, "14-29"));
-        data.add(new Data(3f, -60f, "15-29"));
-        data.add(new Data(4f, 35f, "16-29"));
+        data.add(new Data(0f, -200f));
+        data.add(new Data(1f, 22f));
+        data.add(new Data(2f, 124f));
+        data.add(new Data(3f, -60f));
+        data.add(new Data(4f, 35f));
 
         setData(data);
 
@@ -75,26 +75,25 @@ public class HealthActivity extends AppCompatActivity {
         barChart.setPinchZoom(true);
         barChart.setDoubleTapToZoomEnabled(true);
         barChart.setHorizontalScrollBarEnabled(true);
-        barChart.getViewPortHandler().setMaximumScaleX(5f);
-        barChart.getViewPortHandler().setMaximumScaleY(5f);
         barChart.setDescription(null);
-        barChart.setDrawGridBackground(false);
+        barChart.setDrawGridBackground(true);
         barChart.setFitBars(true); // make the x-axis fit exactly all bars
+        barChart.setVisibleXRangeMinimum(5); // change to list.size() -> amount of bars
 
         YAxis left = barChart.getAxisLeft();
         left.setDrawLabels(false); // no axis labels
         left.setDrawAxisLine(false); // no axis line
         left.setDrawGridLines(false); // no grid lines
         left.setDrawZeroLine(true); // draw a zero line
+
         barChart.getAxisRight().setEnabled(false); // no right axis
 
         XAxis xAxis = barChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setTextSize(20f);
-        xAxis.setTextColor(Color.BLACK);
+        xAxis.setGranularity(1f);
+        xAxis.setTextSize(10f);
         xAxis.setDrawAxisLine(true);
         xAxis.setDrawGridLines(false);
-        xAxis.setLabelCount(5, true);
+        xAxis.setLabelRotationAngle(-45);
 
         Legend legend = barChart.getLegend();
         legend.setEnabled(false);
@@ -103,12 +102,12 @@ public class HealthActivity extends AppCompatActivity {
     private class Data{
         public float xVal;
         public float yVal;
-        public String xAxisVal;
+        //public String xAxisVal;
 
-        public Data(float xVal, float yVal, String xAxisVal){
+        public Data(float xVal, float yVal){
             this.xVal = xVal;
             this.yVal = yVal;
-            this.xAxisVal = xAxisVal;
+            //this.xAxisVal = xAxisVal;
         }
     }
 
@@ -117,11 +116,11 @@ public class HealthActivity extends AppCompatActivity {
         List<Integer> colors = new ArrayList<>();
         final List<String> xVal = new ArrayList<>();
 
-        xVal.add("Hello");
-        xVal.add("Hello");
-        xVal.add("Hello");
-        xVal.add("Hello");
-        xVal.add("Hello");
+        xVal.add("10-01-18");
+        xVal.add("15-01-18");
+        xVal.add("17-01-18");
+        xVal.add("01-02-18");
+        xVal.add("09-02-18");
 
         int green = Color.rgb(110,190,102);
         int red = Color.rgb(211, 87, 44);
@@ -147,7 +146,7 @@ public class HealthActivity extends AppCompatActivity {
         data.setValueTextSize(10f);
 
         data.setValueFormatter(new ValueFormatter());
-        data.setBarWidth(0.8f);
+        //data.setBarWidth(0.8f);
 
         XAxis xAxis = barChart.getXAxis();
         xAxis.setValueFormatter(new IAxisValueFormatter() {
