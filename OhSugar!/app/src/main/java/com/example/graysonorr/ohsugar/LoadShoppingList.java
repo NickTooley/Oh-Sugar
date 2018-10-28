@@ -31,6 +31,10 @@ import java.util.Map;
 
 public class LoadShoppingList extends AppCompatActivity {
 
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+    private Gson gson;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -53,6 +57,10 @@ public class LoadShoppingList extends AppCompatActivity {
                 DeleteAllSavedLists();
             }
         });
+
+        sharedPreferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        gson = new Gson();
 
         UpdateActivity();
     }
@@ -139,12 +147,8 @@ public class LoadShoppingList extends AppCompatActivity {
     }
 
     public ArrayList<ShoppingList> GetShoppingLists(){
-        SharedPreferences sharedPreferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
-
         Map<String,?> keys = sharedPreferences.getAll();
         ArrayList<ShoppingList> savedLists = new ArrayList();
-
-        Gson gson = new Gson();
 
         for(Map.Entry<String, ?> lists : keys.entrySet()){
             if(!lists.getKey().toString().equals("current list")){
@@ -161,24 +165,19 @@ public class LoadShoppingList extends AppCompatActivity {
     public void LoadShoppingList(String listName){
         // Add current list to health activity shared prefs
 
-        SharedPreferences sharedPreferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        Gson gson = new Gson();
         String json = sharedPreferences.getString(listName, null);
         Type type = new TypeToken<ShoppingList>() {}.getType();
 
         ShoppingList list = gson.fromJson(json, type);
 
-        gson = new Gson();
         json = gson.toJson(list);
         editor.putString("current list", json);
         editor.commit();
     }
 
     public void Delete(String listName){
-        SharedPreferences preferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
-        preferences.edit().remove(listName).commit();
+        sharedPreferences.edit().remove(listName).commit();
     }
 
     public void UpdateActivity(){

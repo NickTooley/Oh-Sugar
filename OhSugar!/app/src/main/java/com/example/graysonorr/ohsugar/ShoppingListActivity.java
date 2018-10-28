@@ -81,6 +81,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         conversions = getSharedPreferences("conversions", Context.MODE_PRIVATE);
         sharedPreferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
         editor = sharedPreferences.edit();
+        gson = new Gson();
 
         TextView addItem = (TextView) findViewById(R.id.AddToListTxtVw);
 
@@ -110,11 +111,12 @@ public class ShoppingListActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent.hasExtra("item")){
             Food food = db.foodDao().findByID(intent.getIntExtra("item", 0));
-            Toast.makeText(ShoppingListActivity.this,"Working", Toast.LENGTH_SHORT).show();
-            //AddToList(food);
+            AddToList(food);
         }
 
-        if (getShoppingList() != null){
+        if (getShoppingList() == null){
+            ShowCreateDialog();
+        }else{
             UpdateActivity();
         }
     }
@@ -197,14 +199,9 @@ public class ShoppingListActivity extends AppCompatActivity {
     }
 
     public ShoppingList getShoppingList(){
-        gson = new Gson();
         String json = sharedPreferences.getString("current list", null);
         Type type = new TypeToken<ShoppingList>() {}.getType();
         ShoppingList list = gson.fromJson(json, type);
-
-        if(list == null){
-            ShowCreateDialog();
-        }
 
         return list;
     }
@@ -212,6 +209,7 @@ public class ShoppingListActivity extends AppCompatActivity {
     private void AddToList(Food item) {
         ShoppingList shoppingList = getShoppingList();
         shoppingList.AddToList(item);
+        shoppingList.setTotalSugar(shoppingList.getTotalSugar()+item.sugarServing);
         CommitToList("current list", shoppingList);
     }
 
@@ -226,6 +224,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         }
 
         shoppingList.setList(list);
+        shoppingList.setTotalSugar(shoppingList.getTotalSugar()-item.sugarServing);
         CommitToList("current list", shoppingList);
     }
 
@@ -245,12 +244,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         TextView goal = (TextView) findViewById(R.id.GoalTxtVw);
         goal.setText("Sugar Goal: " + Double.toString(list.getRecSugar()));
 
-        double totalSugar = 0.00;
-
-        for(Food f : list.getList()){
-            totalSugar += f.sugarServing/conversions.getFloat("floatMeasure", 1);
-        }
-
+        double totalSugar = list.getTotalSugar()/conversions.getFloat("floatMeasure", 1);
         TextView units = (TextView) findViewById(R.id.unitsTxtVw);
         units.setText(String.format("%.2f ", totalSugar) + conversions.getString("stringMeasure", null));
     }
@@ -389,25 +383,31 @@ public class ShoppingListActivity extends AppCompatActivity {
 
         dialogBuilder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(ShoppingListActivity.this);
-                builder.setTitle("Create new shopping list");
-                builder.setMessage("Are you sure? This will replace your current shopping list.");
-                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Create(name.getText().toString(), sugarGoal.getText().toString());
-                        UpdateActivity();
-                    }
-                });
-                AlertDialog alert = builder.create();
-                alert.show();
+            public void onClick(final DialogInterface dialogInterface, int i) {
+                if (getShoppingList() == null) {
+                    Create(name.getText().toString(), sugarGoal.getText().toString());
+                    UpdateActivity();
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ShoppingListActivity.this);
+                    builder.setTitle("Create new shopping list");
+                    builder.setMessage("Are you sure? This will replace your current shopping list.");
+                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Create(name.getText().toString(), sugarGoal.getText().toString());
+                            UpdateActivity();
+                        }
+                    });
+
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
             }
         });
         dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -416,22 +416,54 @@ public class ShoppingListActivity extends AppCompatActivity {
                 dialogInterface.dismiss();
             }
         });
-        AlertDialog b = dialogBuilder.create();
-        b.show();
+
+        final AlertDialog alert = dialogBuilder.create();
+        alert.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                if(getShoppingList() == null){
+                    alert.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(false);
+                    alert.setCancelable(false);
+                }
+            }
+        });
+
+        alert.show();
     }
 
     public void Create(String name, String sugarGoal){
         // Add current list to health activity shared prefs
+        AddHealthEntry();
 
         ShoppingList list = new ShoppingList(name, new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date()), new ArrayList<Food>(), 0, Double.parseDouble(sugarGoal));
         CommitToList("current list", list);
     }
 
     public void CommitToList(String key, ShoppingList item){
-        Gson gson = new Gson();
         String json = gson.toJson(item);
         editor.putString(key, json);
         editor.commit();
         UpdateActivity();
+    }
+
+    public void AddHealthEntry(){
+        SharedPreferences sp = getSharedPreferences("Health Entries", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+
+        String json = sp.getString("entries", null);
+        Type type = new TypeToken<List<ShoppingList>>() {}.getType();
+        List<ShoppingList> list = gson.fromJson(json, type);
+
+        if(list==null){
+            list = new ArrayList<>();
+        }
+
+        list.add(getShoppingList());
+
+        System.out.println(list.size());
+
+        json = gson.toJson(list);
+        editor.putString("entries", json);
+        editor.commit();
     }
 }

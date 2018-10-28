@@ -36,6 +36,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,9 @@ import java.util.Map;
 public class HealthActivity extends AppCompatActivity {
 
     private BarChart barChart;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+    private Gson gson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,30 +65,25 @@ public class HealthActivity extends AppCompatActivity {
         toolBarTitle.setTypeface(customFont);
 
         barChart = (BarChart) findViewById(R.id.chart);
+        sharedPreferences = getSharedPreferences("Health Entries", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        gson = new Gson();
 
-        final List<Data> data = new ArrayList<>();
-        data.add(new Data(0f, -200f));
-        data.add(new Data(1f, 22f));
-        data.add(new Data(2f, 124f));
-        data.add(new Data(3f, -60f));
-        data.add(new Data(4f, 35f));
-
-        setData(data);
+        setData(getData());
 
         barChart.setDragEnabled(true);
         barChart.setPinchZoom(true);
         barChart.setDoubleTapToZoomEnabled(true);
         barChart.setHorizontalScrollBarEnabled(true);
         barChart.setDescription(null);
-        barChart.setDrawGridBackground(true);
         barChart.setFitBars(true); // make the x-axis fit exactly all bars
-        barChart.setVisibleXRangeMinimum(5); // change to list.size() -> amount of bars
+        //barChart.setVisibleXRangeMinimum(getData().size()); // amount of bars visible
 
         YAxis left = barChart.getAxisLeft();
-        left.setDrawLabels(false); // no axis labels
-        left.setDrawAxisLine(false); // no axis line
         left.setDrawGridLines(false); // no grid lines
         left.setDrawZeroLine(true); // draw a zero line
+        left.setAxisMaximum((barChart.getYMax()+50));
+        left.setAxisMinimum((barChart.getYMin()-50));
 
         barChart.getAxisRight().setEnabled(false); // no right axis
 
@@ -94,20 +93,27 @@ public class HealthActivity extends AppCompatActivity {
         xAxis.setDrawAxisLine(true);
         xAxis.setDrawGridLines(false);
         xAxis.setLabelRotationAngle(-45);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
 
         Legend legend = barChart.getLegend();
         legend.setEnabled(false);
     }
 
+    @Override
+    protected void onResume(){
+        super.onResume();
+        barChart.invalidate();
+    }
+
     private class Data{
         public float xVal;
         public float yVal;
-        //public String xAxisVal;
+        public String xAxisVal;
 
-        public Data(float xVal, float yVal){
+        public Data(float xVal, float yVal, String xAxisVal){
             this.xVal = xVal;
             this.yVal = yVal;
-            //this.xAxisVal = xAxisVal;
+            this.xAxisVal = xAxisVal;
         }
     }
 
@@ -116,12 +122,6 @@ public class HealthActivity extends AppCompatActivity {
         List<Integer> colors = new ArrayList<>();
         final List<String> xVal = new ArrayList<>();
 
-        xVal.add("10-01-18");
-        xVal.add("15-01-18");
-        xVal.add("17-01-18");
-        xVal.add("01-02-18");
-        xVal.add("09-02-18");
-
         int green = Color.rgb(110,190,102);
         int red = Color.rgb(211, 87, 44);
 
@@ -129,6 +129,7 @@ public class HealthActivity extends AppCompatActivity {
             Data d = dataList.get(i);
             BarEntry entry = new BarEntry(d.xVal, d.yVal);
             values.add(entry);
+            xVal.add(d.xAxisVal);
 
             if(d.yVal>0){
                 colors.add(red);
@@ -144,9 +145,7 @@ public class HealthActivity extends AppCompatActivity {
 
         BarData data = new BarData(set);
         data.setValueTextSize(10f);
-
         data.setValueFormatter(new ValueFormatter());
-        //data.setBarWidth(0.8f);
 
         XAxis xAxis = barChart.getXAxis();
         xAxis.setValueFormatter(new IAxisValueFormatter() {
@@ -172,22 +171,19 @@ public class HealthActivity extends AppCompatActivity {
         }
     }
 
-    public void AddEntry(ShoppingList newEntry){
-        SharedPreferences sharedPreferences = getSharedPreferences("Health Entries", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+    public List<Data> getData(){
+        List<Data> data = new ArrayList<>();
 
-        Gson gson = new Gson();
         String json = sharedPreferences.getString("entries", null);
-        Type type = new TypeToken<ArrayList<ShoppingList>>() {}.getType();
-        ArrayList<BarEntry> healthEntries = gson.fromJson(json, type);
+        Type type = new TypeToken<List<ShoppingList>>() {}.getType();
+        List<ShoppingList> list = gson.fromJson(json, type);
 
-        String xVal = newEntry.getTimestamp();
-        float yVal = (float) (newEntry.getRecSugar()-newEntry.getTotalSugar());
+        for(int i =0; i < list.size(); i++){
+            double xVal = list.get(i).getTotalSugar()-list.get(i).getRecSugar();
+            System.out.println(xVal);
+            data.add(new Data((float) i, (float) xVal, list.get(i).getTimestamp()));
+        }
 
-        //healthEntries.add(new BarEntry(xVal, yVal);
-
-        json = gson.toJson(healthEntries);
-        editor.putString("entries", json);
-        editor.commit();
+        return data;
     }
 }
