@@ -122,7 +122,7 @@ public class ShoppingListActivity extends AppCompatActivity {
 
             if(remove){
                 Log.d("bool", "made it here2");
-                removeFromShoppingList(food);
+                RemoveFromShoppingList(food);
                 UpdateActivity();
             }else {
                 //To be replaced with AddToList method on Connor's commit

@@ -79,8 +79,8 @@ public class CompareActivity extends AppCompatActivity {
         TextView comp1Measure = (TextView) findViewById(R.id.product1Measure);
         TextView comp2Measure = (TextView) findViewById(R.id.product2Measure);
 
-        comp1Measure.setText(sharedPref.getString("abbreviation", "grams"));
-        comp2Measure.setText(sharedPref.getString("abbreviation", "grams"));
+        comp1Measure.setText(sharedPref.getString("abbreviation", "g"));
+        comp2Measure.setText(sharedPref.getString("abbreviation", "g"));
 
         compare1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,7 +164,7 @@ public class CompareActivity extends AppCompatActivity {
         final Food food2 = food;
         name.setText(food.name);
         SharedPreferences sharedPref = CompareActivity.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
-        sugar.setText(Integer.toString((int)(food.sugarServing / sharedPref.getFloat("floatMeasure", 1.0f) + 0.5d)));
+        sugar.setText(Integer.toString((int)(food.sugar100 / sharedPref.getFloat("floatMeasure", 1.0f) + 0.5d)));
 
         String category = food.category;
         List<Food> healthy = db.foodDao().searchHealthyAlt(category, food.sugar100);
@@ -203,7 +203,7 @@ public class CompareActivity extends AppCompatActivity {
         final Food food1 = food;
         name.setText(food.name);
         SharedPreferences sharedPref = CompareActivity.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
-        sugar.setText(Integer.toString((int)(food.sugarServing / sharedPref.getFloat("floatMeasure", 1.0f) + 0.5d)));
+        sugar.setText(Integer.toString((int)(food.sugar100 / sharedPref.getFloat("floatMeasure", 1.0f) + 0.5d)));
 
         String category = food.category;
         List<Food> healthy = db.foodDao().searchHealthyAlt(category, food.sugar100);
