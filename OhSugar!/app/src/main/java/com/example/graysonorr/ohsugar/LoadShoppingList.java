@@ -91,7 +91,7 @@ public class LoadShoppingList extends AppCompatActivity {
             final ShoppingList currentItem = getItem(position);
 
             name.setText(currentItem.getName());
-            sugar.setText("Sugar total: " + currentItem.getTotalSugar());
+            sugar.setText("Sugar total: " + currentItem.getTotalSugar(LoadShoppingList.this));
 
             name.setOnClickListener(new View.OnClickListener() {
                 @Override

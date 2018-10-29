@@ -5,6 +5,8 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
 /**
@@ -26,4 +28,13 @@ public class Food {
     public String category;
     public boolean onShopList;
 
+    public double getSugarServing(Context context){
+        return this.sugarServing/getPrefs(context).getFloat("floatMeasure", Context.MODE_PRIVATE);
+    }
+
+    private static SharedPreferences getPrefs(Context context) {
+        return context.getSharedPreferences("conversions", Context.MODE_PRIVATE);
+    }
 }
+
+

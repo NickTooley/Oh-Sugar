@@ -44,8 +44,8 @@ public class ShoppingListActivity extends AppCompatActivity {
 
     private AppDatabase db;
     private ArrayList<Food> shoppingList;
-    SharedPreferences conversions;
     SharedPreferences sharedPreferences;
+    SharedPreferences conversions;
     SharedPreferences.Editor editor;
     Gson gson;
 
@@ -78,7 +78,7 @@ public class ShoppingListActivity extends AppCompatActivity {
 
         db = AppDatabase.getInMemoryDatabase(getApplicationContext());
 
-        conversions = getSharedPreferences("conversions", Context.MODE_PRIVATE);
+        conversions = getSharedPreferences("conversions", MODE_PRIVATE);
         sharedPreferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
         editor = sharedPreferences.edit();
         gson = new Gson();
@@ -159,7 +159,7 @@ public class ShoppingListActivity extends AppCompatActivity {
             final Food currentItem = getItem(position);
 
             name.setText(currentItem.name);
-            sugarV.setText(String.format("%.2f", currentItem.sugarServing/conversions.getFloat("floatMeasure", 1)));
+            sugarV.setText(String.format("%.2f", currentItem.getSugarServing(ShoppingListActivity.this)));
             sugarM.setText(conversions.getString("abbreviation", null));
 
             name.setOnClickListener(new View.OnClickListener() {
@@ -209,7 +209,7 @@ public class ShoppingListActivity extends AppCompatActivity {
     private void AddToList(Food item) {
         ShoppingList shoppingList = getShoppingList();
         shoppingList.AddToList(item);
-        shoppingList.setTotalSugar(shoppingList.getTotalSugar()+item.sugarServing);
+        shoppingList.setTotalSugar(this, shoppingList.getTotalSugar(this)+item.sugarServing);
         CommitToList("current list", shoppingList);
     }
 
@@ -224,7 +224,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         }
 
         shoppingList.setList(list);
-        shoppingList.setTotalSugar(shoppingList.getTotalSugar()-item.sugarServing);
+        shoppingList.setTotalSugar(this,shoppingList.getTotalSugar(this)-item.sugarServing);
         CommitToList("current list", shoppingList);
     }
 
@@ -239,14 +239,13 @@ public class ShoppingListActivity extends AppCompatActivity {
         lv.setAdapter(adapter1);
 
         TextView title = (TextView) findViewById(R.id.TitleTxtVw);
-        title.setText(list.getName());
+        title.setText("List name: " + list.getName());
 
         TextView goal = (TextView) findViewById(R.id.GoalTxtVw);
-        goal.setText("Sugar Goal: " + Double.toString(list.getRecSugar()));
+        goal.setText(String.format("Sugar goal: %.2f ", list.getRecSugar(this)) + list.getConversionString(this));
 
-        double totalSugar = list.getTotalSugar()/conversions.getFloat("floatMeasure", 1);
         TextView units = (TextView) findViewById(R.id.unitsTxtVw);
-        units.setText(String.format("%.2f ", totalSugar) + conversions.getString("stringMeasure", null));
+        units.setText(String.format("%.2f ", list.getTotalSugar(this)) + list.getConversionString(this));
     }
 
     public void ShowSaveDialog(){
@@ -280,8 +279,10 @@ public class ShoppingListActivity extends AppCompatActivity {
 
         final EditText name = (EditText) dialogView.findViewById(R.id.edit1);
         name.setText(list.getName());
+        final EditText goalLabel = (EditText) dialogView.findViewById(R.id.goalLabel);
+        goalLabel.setText("Sugar goal ("+list.getConversionString(this)+")");
         final EditText goal = (EditText) dialogView.findViewById(R.id.edit2);
-        goal.setText(Double.toString(list.getRecSugar()));
+        goal.setText(Double.toString(list.getRecSugar(this)));
 
         dialogBuilder.setTitle("Update current list");
 
@@ -310,7 +311,7 @@ public class ShoppingListActivity extends AppCompatActivity {
     public void UpdateShoppingList(String name, Double goal){
         ShoppingList shoppingList = getShoppingList();
         shoppingList.setName(name);
-        shoppingList.setRecSugar(goal);
+        shoppingList.setRecSugar(this, goal);
         CommitToList("current list", shoppingList);
     }
 
