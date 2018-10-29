@@ -1,6 +1,8 @@
 package com.example.graysonorr.ohsugar;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +41,10 @@ public class MoreInfoActivity extends AppCompatActivity {
         TextView toolBarTitle = findViewById(R.id.toolbar_title);
         Typeface customFont = Typeface.createFromAsset(getAssets(), getString(R.string.font));
         toolBarTitle.setTypeface(customFont);
+
+        SharedPreferences sharedPref = this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
+        String conversionsStr = sharedPref.getString("abbreviation", "g");
+        double conversionDbl = sharedPref.getFloat("floatMeasure", 1.0f);
 
         boolean inList = false;
 
@@ -98,9 +104,18 @@ public class MoreInfoActivity extends AppCompatActivity {
 
         TextView foodProduct = (TextView) findViewById(R.id.FoodProductTxtVw);
         TextView sugarLevel = (TextView) findViewById(R.id.MsrmntTxtVw);
+        TextView abbreviation = (TextView) findViewById(R.id.UnitTxtVw);
+
 
         foodProduct.setText(food.name);
-        sugarLevel.setText(Double.toString(food.sugarServing));
+        if(food.sugar100 >= 0) {
+            double sugar = food.sugar100 * conversionDbl;
+            sugarLevel.setText(Double.toString(sugar));
+            abbreviation.setText(conversionsStr);
+        }else{
+            sugarLevel.setText("No sugar data");
+            abbreviation.setText("");
+        }
 
         TextView backBtn = (TextView) findViewById(R.id.backTxtVw);
         backBtn.setOnClickListener(new View.OnClickListener() {

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
@@ -424,6 +425,67 @@ public class SearchReturn extends AppCompatActivity {
                 //returnValues();
             }
 
+        }
+
+    }
+
+    class FoodAdapterWClickListen extends ArrayAdapter<Food> {
+
+        Context mContext;
+
+        public FoodAdapterWClickListen(Context context, List<Food> foods){
+            super(context, 0 , foods);
+            this.mContext = context;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            final Food food = getItem(position);
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.food_item, parent, false);
+            }
+
+            final View convertViewFnl = convertView;
+
+            Log.d("foods", Double.toString(food.sugarServing));
+            Log.d("foods", food.name);
+
+            TextView foodName = (TextView) convertViewFnl.findViewById(R.id.foodName);
+            TextView foodSugar = (TextView) convertViewFnl.findViewById(R.id.sugarValue);
+            TextView foodSugarMeasurement = (TextView) convertViewFnl.findViewById(R.id.sugarMeasurement);
+
+            SharedPreferences sharedPref = SearchReturn.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
+            String conversionsStr = sharedPref.getString("abbreviation", "g");
+            double conversionDbl = sharedPref.getFloat("floatMeasure", 1.0f);
+
+            foodName.setText(food.name);
+            if(food.sugar100 >= 0 ) {
+                Double sugar = food.sugar100 * conversionDbl;
+                foodSugar.setText(Double.toString(sugar));
+                foodSugarMeasurement.setText(conversionsStr + " of sugar");
+            }else{
+                foodSugar.setText("No Sugar Data Available");
+                foodSugarMeasurement.setText("");
+            }
+
+            Button btn = (Button) convertViewFnl.findViewById(R.id.AddBtn);
+
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.putExtra("Name", food.name);
+                    intent.putExtra("Sugar", food.sugarServing);
+                    intent.putExtra("Barcode", food.barcode);
+                    intent.putExtra("ID", food.foodID);
+                    ((Activity)mContext).setResult(RESULT_OK, intent);
+                    ((Activity)mContext).finish();
+                }
+            });
+
+
+            return convertView;
         }
 
     }

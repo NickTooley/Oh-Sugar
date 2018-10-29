@@ -50,8 +50,13 @@ public class FoodAdapterWClickListen extends ArrayAdapter<Food> {
         //SharedPreferences sharedPref = FoodAdapter.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
 
         foodName.setText(food.name);
-        foodSugar.setText(Double.toString(food.sugarServing));
-        foodSugarMeasurement.setText("g of sugar");
+        if(food.sugar100 >= 0 ) {
+            foodSugar.setText(Double.toString(food.sugarServing));
+            foodSugarMeasurement.setText("g of sugar");
+        }else{
+            foodSugar.setText("No Sugar Data Available");
+            foodSugarMeasurement.setText("");
+        }
 
         Button btn = (Button) convertViewFnl.findViewById(R.id.AddBtn);
 
