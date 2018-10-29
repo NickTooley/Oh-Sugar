@@ -62,8 +62,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="9" />
 
-            <!--<TextView
-                android:id="@+id/createBtn"
+            <TextView
+                android:id="@+id/deleteBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -71,10 +71,10 @@
                 android:paddingBottom="12dp"
                 android:paddingHorizontal="60dp"
                 android:paddingTop="10dp"
-                android:text="create new"
+                android:text="Delete all"
                 android:textAlignment="center"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                android:textSize="22sp" />-->
+                android:textColor="#ff0000"
+                android:textSize="22sp" />
 
         </LinearLayout>
 

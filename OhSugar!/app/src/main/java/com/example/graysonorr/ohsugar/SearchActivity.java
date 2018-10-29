@@ -27,6 +27,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.graysonorr.ohsugar.db.AppDatabase;
 import com.example.graysonorr.ohsugar.db.Food;
@@ -140,6 +141,19 @@ public class SearchActivity extends AppCompatActivity {
         ListView lv = (ListView) findViewById(R.id.searchResults);
         lv.setAdapter(adapter1);
 
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Food food = (Food)parent.getItemAtPosition(position);
+                int foodID = food.foodID;
+
+                Intent intent = new Intent(getApplicationContext(), MoreInfoActivity.class);
+                intent.putExtra("ID", foodID);
+                startActivity(intent);
+
+            }
+        });
+
         HashMap<String, String> searchStrings = new HashMap<String, String>();
 
         for(int i=0; i < searchResult.size(); i++){
@@ -217,7 +231,15 @@ public class SearchActivity extends AppCompatActivity {
         Food foods = db.foodDao().findByBarcode(barcode);
 
         if(foods != null){
-            populateListView(foods);
+//            populateListView(foods);
+            int foodID = foods.foodID;
+
+            Intent intent = new Intent(getApplicationContext(), MoreInfoActivity.class);
+            intent.putExtra("ID", foodID);
+            startActivity(intent);
+
+        }else{
+            Toast.makeText(this, "No items found with that barcode", Toast.LENGTH_LONG).show();
         }
 
     }
@@ -285,12 +307,20 @@ public class SearchActivity extends AppCompatActivity {
             final Food currentItem = getItem(position);
 
             resultTxtVw.setText(currentItem.name);
-            sugarV.setText(String.format("%.2f", currentItem.sugarServing/conversions.getFloat("floatMeasure", 1)));
-            sugarM.setText(conversions.getString("abbreviation", null));
+            if(currentItem.sugar100 >= 0) {
+                sugarV.setText(String.format("%.2f", currentItem.sugar100 / conversions.getFloat("floatMeasure", 1)));
+                sugarM.setText(conversions.getString("abbreviation", null));
+            }else{
+                sugarV.setText("No sugar data");
+                sugarM.setText("");
+            }
             addBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    int foodID = currentItem.foodID;
+
                     Intent intent = new Intent(SearchActivity.this, ShoppingListActivity.class);
+                    intent.putExtra("ID", foodID);
                     startActivity(intent);
                 }
             });
@@ -339,11 +369,11 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void addToShoppingList(Food item){
-        SharedPreferences sharedPreferences = getSharedPreferences("Shopping List", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         Gson gson = new Gson();
-        String json = sharedPreferences.getString("shopping list", null);
+        String json = sharedPreferences.getString("current list", null);
         Type type = new TypeToken<ArrayList<Food>>() {}.getType();
 
         ArrayList<Food> shoppinglist = gson.fromJson(json, type);
@@ -356,7 +386,7 @@ public class SearchActivity extends AppCompatActivity {
 
         gson = new Gson();
         json = gson.toJson(shoppinglist);
-        editor.putString("shopping list", json);
+        editor.putString("current list", json);
         editor.commit();
     }
 

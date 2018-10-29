@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import com.example.graysonorr.ohsugar.db.Food;
 
 import org.w3c.dom.Text;
 
+import java.util.List;
 import java.util.Locale;
 
 public class CompareActivity extends AppCompatActivity {
@@ -45,6 +47,11 @@ public class CompareActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compare);
 
+        int mScreenWidth = getWindowManager().getDefaultDisplay().getWidth();
+        int mScreenHeight = getWindowManager().getDefaultDisplay().getHeight();
+        View view = getLayoutInflater().inflate(R.layout.activity_compare, null);
+        setContentView(view, new ViewGroup.LayoutParams(mScreenWidth, mScreenHeight));
+
         TextView toolBarTitle = findViewById(R.id.toolbar_title);
         Typeface customFont = Typeface.createFromAsset(getAssets(), getString(R.string.font));
         toolBarTitle.setTypeface(customFont);
@@ -65,13 +72,15 @@ public class CompareActivity extends AppCompatActivity {
         product1Sugar = (TextView) findViewById(R.id.product1Sugar);
         product2Sugar = (TextView) findViewById(R.id.product2Sugar);
 
+
+
         db = AppDatabase.getInMemoryDatabase(getApplicationContext());
 
         TextView comp1Measure = (TextView) findViewById(R.id.product1Measure);
         TextView comp2Measure = (TextView) findViewById(R.id.product2Measure);
 
-        comp1Measure.setText(sharedPref.getString("abbreviation", "grams"));
-        comp2Measure.setText(sharedPref.getString("abbreviation", "grams"));
+        comp1Measure.setText(sharedPref.getString("abbreviation", "g"));
+        comp2Measure.setText(sharedPref.getString("abbreviation", "g"));
 
         compare1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +91,25 @@ public class CompareActivity extends AppCompatActivity {
         });
 
         compare2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CompareActivity.this, SearchReturn.class);
+                startActivityForResult(intent, 2);
+            }
+        });
+
+        TextView newItem1 = (TextView) findViewById(R.id.selectNew1);
+        TextView newItem2 = (TextView) findViewById(R.id.selectNew2);
+
+        newItem1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CompareActivity.this, SearchReturn.class);
+                startActivityForResult(intent, 1);
+            }
+        });
+
+        newItem2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CompareActivity.this, SearchReturn.class);
@@ -102,18 +130,19 @@ public class CompareActivity extends AppCompatActivity {
                 name = data.getStringExtra("Name");
                 sugar = data.getDoubleExtra("Sugar", 1.0);
                 if (name != null) {
+                    Food food1 = db.foodDao().searchByName(name).get(0);
                     compare1.setText(name);
-                    showOutput(name, sugar, product1Title, product1Sugar);
+                    //showOutput(name, sugar, product1Title, product1Sugar);
+                    showOutput1(food1, product1Title, product1Sugar);
                 }
-
             }
-
             if (requestCode == 2) {
                 name = data.getStringExtra("Name");
                 sugar = data.getDoubleExtra("Sugar", 1.0);
                 if (name != null) {
                     compare2.setText(name);
-                    showOutput(name, sugar, product2Title, product2Sugar);
+                    Food food2 = db.foodDao().searchByName(name).get(0);
+                    showOutput2(food2, product2Title, product2Sugar);
                 }
             }
         }
@@ -125,15 +154,87 @@ public class CompareActivity extends AppCompatActivity {
         //Food food = db.foodDao().findByID(1);
 
         if(food != null){
-            showOutput(food, name, sugar);
+            //showOutput(food, name, sugar);
         }
 
     }
 
-    private void showOutput(Food food, TextView name, TextView sugar){
+    private void showOutput1(Food food, TextView name, TextView sugar){
+
+        final Food food2 = food;
         name.setText(food.name);
         SharedPreferences sharedPref = CompareActivity.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
-        sugar.setText(Integer.toString((int)(food.sugarServing / sharedPref.getFloat("floatMeasure", 1.0f) + 0.5d)));
+        sugar.setText(Integer.toString((int)(food.sugar100 / sharedPref.getFloat("floatMeasure", 1.0f) + 0.5d)));
+
+        String category = food.category;
+        List<Food> healthy = db.foodDao().searchHealthyAlt(category, food.sugar100);
+        if(healthy.size() > 0){
+            final Food healthyFood = healthy.get(0);
+            TextView healthyAlt1Tv = (TextView) findViewById(R.id.healthyAlt1);
+            healthyAlt1Tv.setText(healthyFood.name);
+            healthyAlt1Tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int foodID = healthyFood.foodID;
+
+                    Intent intent = new Intent(getApplicationContext(), MoreInfoActivity.class);
+                    intent.putExtra("ID", foodID);
+                    startActivity(intent);
+                }
+            });
+        }
+
+        TextView addToList = (TextView) findViewById(R.id.addBtn1);
+        addToList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int foodID = food2.foodID;
+
+                Intent intent = new Intent(getApplicationContext(), ShoppingListActivity.class);
+                intent.putExtra("ID", foodID);
+                startActivity(intent);
+            }
+        });
+
+    }
+
+    private void showOutput2(Food food, TextView name, TextView sugar){
+
+        final Food food1 = food;
+        name.setText(food.name);
+        SharedPreferences sharedPref = CompareActivity.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
+        sugar.setText(Integer.toString((int)(food.sugar100 / sharedPref.getFloat("floatMeasure", 1.0f) + 0.5d)));
+
+        String category = food.category;
+        List<Food> healthy = db.foodDao().searchHealthyAlt(category, food.sugar100);
+        if(healthy.size() > 0){
+            final Food healthyFood = healthy.get(0);
+            TextView healthyAlt1Tv = (TextView) findViewById(R.id.healthyAlt2);
+            healthyAlt1Tv.setText(healthyFood.name);
+            healthyAlt1Tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int foodID = healthyFood.foodID;
+
+                    Intent intent = new Intent(getApplicationContext(), MoreInfoActivity.class);
+                    intent.putExtra("ID", foodID);
+                    startActivity(intent);
+                }
+            });
+        }
+
+        TextView addToList = (TextView) findViewById(R.id.addBtn2);
+        addToList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int foodID = food1.foodID;
+
+                Intent intent = new Intent(getApplicationContext(), ShoppingListActivity.class);
+                intent.putExtra("ID", foodID);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void showOutput(String name, Double sugar, TextView nameTv, TextView sugarTv){

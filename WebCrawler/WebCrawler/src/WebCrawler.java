@@ -7,6 +7,7 @@ import org.jsoup.select.Elements;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -18,7 +19,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonReader;
 
+import org.json.simple.*;
+import org.json.simple.parser.JSONParser;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -36,6 +42,8 @@ import org.apache.http.util.EntityUtils;
 
 public class WebCrawler {
 	
+	static ArrayList<String> nameArr;
+	
 	
 	public static void main(String[] args) {	
 		
@@ -46,22 +54,48 @@ public class WebCrawler {
 		int NUMPRODPERPAGE = 24;
 		
 		ArrayList<String> categoryArr = new ArrayList<String>();
-
+		nameArr = new ArrayList<String>();
 		
-		categoryArr.add("/shop/browse/meat");
-		categoryArr.add("/shop/browse/seafood");
-		categoryArr.add("/shop/browse/baby-care/baby-food-from-4-mths");
-		categoryArr.add("/shop/browse/baby-care/baby-food-from-6-mths");
-		categoryArr.add("/shop/browse/baby-care/baby-food-from-9-mths");
-		categoryArr.add("/shop/browse/baby-care/baby-food-one-year-");
-		categoryArr.add("/shop/browse/baby-care/baby-food-packet-meals");
-		categoryArr.add("/shop/browse/baby-care/baby-formula");
-		categoryArr.add("/shop/browse/baby-care/other-baby-foods");
-		categoryArr.add("/shop/browse/biscuits-crackers");
-		categoryArr.add("/shop/browse/breakfast-foods");
-		categoryArr.add("/shop/browse/canned-prepared-foods");
-		categoryArr.add("/shop/browse/chocolate-sweets-snacks");
-		categoryArr.add("/shop/browse/christmas");
+        JSONParser parser = new JSONParser();
+
+        try {
+        	FileReader fr = new FileReader("retrieveJson.json");
+        	Object obj = parser.parse(fr);
+        	fr.close();
+        	
+        	JSONArray arr = (JSONArray) obj;
+        	
+        	System.out.println(arr.get(0).toString());
+        	
+        	for (int i = 0; i < arr.size(); i++) {
+        		JSONObject jsonObj = (JSONObject) arr.get(i);
+        		if(jsonObj.containsKey("sugar")) {
+	        		if (Double.parseDouble((String)jsonObj.get("sugar")) == 0.0) {
+	        			nameArr.add((String) jsonObj.get("name"));
+	        			System.out.println((String) jsonObj.get("name"));
+	        		}
+        		}
+        	}
+        	
+        }catch(Exception e) {
+        	System.out.println("couldnt suss the json");
+        }
+        
+		
+		//categoryArr.add("/shop/browse/meat");
+//		categoryArr.add("/shop/browse/seafood");
+//		categoryArr.add("/shop/browse/baby-care/baby-food-from-4-mths");
+//		categoryArr.add("/shop/browse/baby-care/baby-food-from-6-mths");
+//		categoryArr.add("/shop/browse/baby-care/baby-food-from-9-mths");
+//		categoryArr.add("/shop/browse/baby-care/baby-food-one-year-");
+//		categoryArr.add("/shop/browse/baby-care/baby-food-packet-meals");
+//		categoryArr.add("/shop/browse/baby-care/baby-formula");
+//		categoryArr.add("/shop/browse/baby-care/other-baby-foods");
+//		categoryArr.add("/shop/browse/biscuits-crackers");
+//		categoryArr.add("/shop/browse/breakfast-foods");
+//		categoryArr.add("/shop/browse/canned-prepared-foods");
+//		categoryArr.add("/shop/browse/chocolate-sweets-snacks");
+//		categoryArr.add("/shop/browse/christmas");
 		categoryArr.add("/shop/browse/drinks-hot-cold");
 		categoryArr.add("/shop/browse/frozen-foods");
 		categoryArr.add("/shop/browse/liquor-beer-cider");
@@ -79,7 +113,9 @@ public class WebCrawler {
         	
         	int numOfPages = 0;
         	Document doc1 = Jsoup.connect(basePage + subPage).get();
-        	int numOfProd = Integer.parseInt(doc1.select(".paging-description.hidden-tablet.hidden").html().substring(0,3));
+        	int spaceIndex = doc1.select(".paging-description.hidden-tablet.hidden").html().indexOf(" ");
+        	int numOfProd = Integer.parseInt(doc1.select(".paging-description.hidden-tablet.hidden").html().substring(0,spaceIndex));
+        	System.out.println(doc1.select(".paging-description.hidden-tablet.hidden").html());
         	if(numOfProd % NUMPRODPERPAGE == 0) {
         		numOfPages = numOfProd / NUMPRODPERPAGE;
         	}else {
@@ -88,11 +124,12 @@ public class WebCrawler {
         	System.out.println(numOfPages);
         	
         	
-        	HashMap<String, String> arr = getAllProducts(doc1);
+        	//HashMap<String, String> arr = getAllProducts(doc1);
+        	HashMap<String, String> arr = getNoSugarProducts(doc1);
         	
         	for (int j = 2; j < numOfPages; j++) {
         		Document doc2 = Jsoup.connect(basePage + subPage + "?page=" + j).get();
-        		arr.putAll(getAllProducts(doc2));
+        		arr.putAll(getNoSugarProducts(doc2));
         		System.out.println("New page completed");
         		Thread.sleep(1500);
         		
@@ -108,9 +145,14 @@ public class WebCrawler {
         	
         	
         	for (int j = 0; j < arr.size(); j++) {
+        		try {
         		Document doc3 = Jsoup.connect(basePage + URLs.get(j)).get();
         		insertFoodData(getFoodData(doc3, titles.get(j)));
         		Thread.sleep(20000);
+        		
+        		}catch(Exception e) {
+        			System.out.println("Failed: " + titles.get(j));
+        		}
         		
         		}          
         	}
@@ -143,6 +185,30 @@ public class WebCrawler {
 		return arr;
 	}
 	
+	
+	public static HashMap<String, String> getNoSugarProducts(Document doc) {
+		
+		HashMap<String,String> arr = new HashMap<String,String>();
+		
+		Elements URLs = doc.select(".gridProductStamp-imageLink");
+		List<String> searchResults = doc.select(".gridProductStamp-name").eachText();
+		
+		for (int i = 0; i < searchResults.size(); i++) {
+            String productName = searchResults.get(i);
+//            System.out.println("Hello");
+//            System.out.println(nameArr.get(0));
+//            if (productName.equals("H2go Water Lime 750ml")){
+            if(nameArr.contains(productName)) {
+		        String productURL = URLs.get(i).attr("href");
+		        arr.put(productName, productURL);
+            }
+        }
+		
+		return arr;
+	}
+	
+	
+	
 	public static ArrayList<String> getFoodData(Document doc, String title) {
 		ArrayList<String> arr = new ArrayList<String>();
 		arr.add(title);
@@ -159,15 +225,15 @@ public class WebCrawler {
 
          int incrementCount = 0;
          for (Element headings : headers) {
-             if(headings.html().equals("Per 100g") || headings.html().equals("Per 100ml")){
+             if(headings.html().substring(0, 8).equals("Per 100g") || headings.html().substring(0, 9).equals("Per 100ml")){
                  break;
              }else{
                  incrementCount++;
              }
          }
          
-         Double sugarContent = 0.0;
-         Double sugarperhundred = 0.0;
+         Double sugarContent = -1.0;
+         Double sugarperhundred = -1.0;
 
          for(Element nutritionals: nutritional){
              if(nutritionals.html().equals("Sugars")){
