@@ -223,7 +223,7 @@ public class ShoppingListActivity extends AppCompatActivity {
             final Food currentItem = getItem(position);
 
             name.setText(currentItem.name);
-            sugarV.setText(String.format("%.2f", currentItem.getSugarServing(ShoppingListActivity.this)));
+            sugarV.setText(String.format("%.2f", currentItem.getSugar100(ShoppingListActivity.this)));
             sugarM.setText(conversions.getString("abbreviation", null));
 
 //            name.setOnClickListener(new View.OnClickListener() {
@@ -273,7 +273,7 @@ public class ShoppingListActivity extends AppCompatActivity {
     private void AddToList(Food item) {
         ShoppingList shoppingList = getShoppingList();
         shoppingList.AddToList(item);
-        shoppingList.setTotalSugar(this, shoppingList.getTotalSugar(this)+item.sugarServing);
+        shoppingList.setTotalSugar(this, shoppingList.getTotalSugar(this) + item.getSugar100(this));
         CommitToList("current list", shoppingList);
     }
 

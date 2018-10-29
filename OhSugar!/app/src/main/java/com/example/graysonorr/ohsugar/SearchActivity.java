@@ -157,7 +157,7 @@ public class SearchActivity extends AppCompatActivity {
         HashMap<String, String> searchStrings = new HashMap<String, String>();
 
         for(int i=0; i < searchResult.size(); i++){
-            searchStrings.put(searchResult.get(i).name, Double.toString(searchResult.get(i).sugarServing));
+            searchStrings.put(searchResult.get(i).name, Double.toString(searchResult.get(i).getSugar100(this)));
         }
 
         Log.d("get count", Integer.toString(adapter1.getCount()));
@@ -307,7 +307,7 @@ public class SearchActivity extends AppCompatActivity {
             final Food currentItem = getItem(position);
 
             resultTxtVw.setText(currentItem.name);
-            sugarV.setText(String.format("%.2f", currentItem.sugarServing/conversions.getFloat("floatMeasure", 1)));
+            sugarV.setText(String.format("%.2f", currentItem.getSugar100(SearchActivity.this)));
             sugarM.setText(conversions.getString("abbreviation", null));
             addBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
