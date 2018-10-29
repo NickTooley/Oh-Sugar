@@ -190,10 +190,14 @@ public class HealthActivity extends AppCompatActivity {
         Type type = new TypeToken<List<ShoppingList>>() {}.getType();
         List<ShoppingList> list = gson.fromJson(json, type);
 
-        if(list.get(0)!=null){
-            for(int i =0; i < list.size(); i++){
-                double xVal = (list.get(i).getTotalSugar(this)-list.get(i).getRecSugar(this));
-                data.add(new Data((float) i, (float) xVal, list.get(i).getTimestamp()));
+        if(list!=null){
+            if(list.get(0)!=null){
+                for(int i =0; i < list.size(); i++){
+                    double totalSugar = list.get(i).getTotalSugar(this);
+                    double recSugar = list.get(i).getRecSugar(this);
+                    double xVal = totalSugar-recSugar;
+                    data.add(new Data((float) i, (float) xVal, list.get(i).getTimestamp()));
+                }
             }
         }
 
