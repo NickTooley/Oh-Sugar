@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -101,9 +102,53 @@ public class ShoppingListActivity extends AppCompatActivity {
                 addItem.setPadding(0,25,0,0);
             }
         }
-    if (getShoppingList() != null){
-        UpdateActivity();
+        if (getShoppingList() != null){
+            UpdateActivity();
+        }
+
+
+        Food food;
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            int value = extras.getInt("ID");
+            boolean remove = extras.getBoolean("remove", false);
+            food = db.foodDao().findByID(value);
+
+            if(remove){
+                Log.d("bool", "made it here2");
+                removeFromShoppingList(food);
+                UpdateActivity();
+            }else {
+                //To be replaced with AddToList method on Connor's commit
+                SharedPreferences sharedPreferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                Gson gson = new Gson();
+                String json = sharedPreferences.getString("current list", null);
+                Type type = new TypeToken<ShoppingList>() {
+                }.getType();
+
+                ShoppingList list = gson.fromJson(json, type);
+
+                list.AddToList(food);
+
+                gson = new Gson();
+                json = gson.toJson(list);
+                editor.putString("current list", json);
+                editor.commit();
+
+                UpdateActivity();
+            }
+        }
+
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        if(getShoppingList() != null) {
+            UpdateActivity();
+        }
 
     }
 
@@ -117,6 +162,8 @@ public class ShoppingListActivity extends AppCompatActivity {
             if (requestCode == 1) {
                 name = data.getStringExtra("Name");
                 sugar = data.getDoubleExtra("Sugar", 1.0);
+                String barcode = data.getStringExtra("Barcode");
+                int id = data.getIntExtra("ID", 0);
 
                 if (name != null) {
                     SharedPreferences sharedPreferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
@@ -129,7 +176,8 @@ public class ShoppingListActivity extends AppCompatActivity {
 
                     ShoppingList list = gson.fromJson(json, type);
 
-                    Food item = new Food();
+                    //Food item = new Food();
+                    Food item = db.foodDao().findByID(id);
 
                     item.name = name;
                     item.sugarServing = sugar;
@@ -146,6 +194,8 @@ public class ShoppingListActivity extends AppCompatActivity {
 
 
             }
+        }else if(resultCode == 404){
+            Toast.makeText(this, "Can not find an item with that barcode", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -169,14 +219,14 @@ public class ShoppingListActivity extends AppCompatActivity {
             sugarV.setText(String.format("%.2f", currentItem.sugarServing/conversions.getFloat("floatMeasure", 1)));
             sugarM.setText(conversions.getString("abbreviation", null));
 
-            name.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(ShoppingListActivity.this, MoreInfoActivity.class);
-                    intent.putExtra("ID", currentItem.foodID);
-                    startActivity(intent);
-                }
-            });
+//            name.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Intent intent = new Intent(ShoppingListActivity.this, MoreInfoActivity.class);
+//                    intent.putExtra("ID", currentItem.foodID);
+//                    startActivity(intent);
+//                }
+//            });
 
             remove.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -222,28 +272,35 @@ public class ShoppingListActivity extends AppCompatActivity {
     }
 
     public void removeFromShoppingList(Food item){
-        SharedPreferences sharedPreferences = getSharedPreferences("Shopping List", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("Saved Lists", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         Gson gson = new Gson();
-        String json = sharedPreferences.getString("shopping list", null);
-        Type type = new TypeToken<ArrayList<Food>>() {}.getType();
+        String json = sharedPreferences.getString("current list", null);
+        Type type = new TypeToken<ShoppingList>() {}.getType();
 
-        ArrayList<Food> shoppinglist = gson.fromJson(json, type);
+        ShoppingList list = gson.fromJson(json, type);
 
-        if(shoppinglist == null){
-            shoppinglist = new ArrayList<>();
-        }
+//        if(shoppinglist == null){
+//            shoppinglist = new ArrayList<>();
+//        }
 
-        for(int i=0; i < shoppinglist.size(); i++){
-            if (shoppinglist.get(i).foodID == item.foodID){
-                shoppinglist.remove(i);
-            }
-        }
+//        for(int i=0; i < shoppinglist.size(); i++){
+//            if (shoppinglist.get(i).foodID == item.foodID){
+//                shoppinglist.remove(i);
+//            }
+//        }
+
+        Log.d("List Before", list.getList().get(0).name);
+        list.RemoveFromList(item);
+//        Log.d("List After", list.getList().get(0).name);
+
 
         gson = new Gson();
-        json = gson.toJson(shoppinglist);
-        editor.putString("shopping list", json);
+        json = gson.toJson(list);
+        Log.d("JSONIn", json);
+        Log.d("Item", item.name);
+        editor.putString("current list", json);
         editor.commit();
     }
 
@@ -251,9 +308,25 @@ public class ShoppingListActivity extends AppCompatActivity {
         ShoppingList list = getShoppingList();
 
         ShoppingListArrayAdapter adapter1 = new ShoppingListArrayAdapter
-                (ShoppingListActivity.this, R.layout.food_item, list.getList());
+                (ShoppingListActivity.this, R.layout.list_item, list.getList());
         ListView lv = (ListView) findViewById(R.id.ListView);
         lv.setAdapter(adapter1);
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Food food = (Food)parent.getItemAtPosition(position);
+                int foodID = food.foodID;
+                Log.d("foodID passing", Integer.toString(foodID));
+                Log.d("foodID passing", food.name);
+
+                Intent intent = new Intent(getApplicationContext(), MoreInfoActivity.class);
+                intent.putExtra("ID", foodID);
+                intent.putExtra("inList", true);
+                startActivity(intent);
+
+            }
+        });
 
         TextView title = (TextView) findViewById(R.id.TitleTxtVw);
         title.setText(list.getName());
@@ -335,7 +408,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         final Button create = (Button) dialogView.findViewById(R.id.createBtn);
         final Button load = (Button) dialogView.findViewById(R.id.loadBtn);
 
-        dialogBuilder.setTitle("Menu");
+        //dialogBuilder.setTitle("Menu");
 
         updateGoal.setOnClickListener(new View.OnClickListener() {
             @Override

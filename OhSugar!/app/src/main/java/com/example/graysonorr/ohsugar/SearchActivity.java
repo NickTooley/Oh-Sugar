@@ -27,6 +27,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.graysonorr.ohsugar.db.AppDatabase;
 import com.example.graysonorr.ohsugar.db.Food;
@@ -140,6 +141,19 @@ public class SearchActivity extends AppCompatActivity {
         ListView lv = (ListView) findViewById(R.id.searchResults);
         lv.setAdapter(adapter1);
 
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Food food = (Food)parent.getItemAtPosition(position);
+                int foodID = food.foodID;
+
+                Intent intent = new Intent(getApplicationContext(), MoreInfoActivity.class);
+                intent.putExtra("ID", foodID);
+                startActivity(intent);
+
+            }
+        });
+
         HashMap<String, String> searchStrings = new HashMap<String, String>();
 
         for(int i=0; i < searchResult.size(); i++){
@@ -217,7 +231,15 @@ public class SearchActivity extends AppCompatActivity {
         Food foods = db.foodDao().findByBarcode(barcode);
 
         if(foods != null){
-            populateListView(foods);
+//            populateListView(foods);
+            int foodID = foods.foodID;
+
+            Intent intent = new Intent(getApplicationContext(), MoreInfoActivity.class);
+            intent.putExtra("ID", foodID);
+            startActivity(intent);
+
+        }else{
+            Toast.makeText(this, "No items found with that barcode", Toast.LENGTH_LONG).show();
         }
 
     }
@@ -290,7 +312,10 @@ public class SearchActivity extends AppCompatActivity {
             addBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    int foodID = currentItem.foodID;
+
                     Intent intent = new Intent(SearchActivity.this, ShoppingListActivity.class);
+                    intent.putExtra("ID", foodID);
                     startActivity(intent);
                 }
             });

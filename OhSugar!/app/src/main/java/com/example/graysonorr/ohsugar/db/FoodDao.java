@@ -38,4 +38,7 @@ public interface FoodDao {
 
     @Query("SELECT * FROM Food WHERE name LIKE :name")
     List<Food> searchByName(String name);
+
+    @Query("SELECT * FROM Food WHERE category = :category AND sugar100 < :sugar")
+    List<Food> searchHealthyAlt(String category, Double sugar);
 }

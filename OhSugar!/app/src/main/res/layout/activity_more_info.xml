@@ -54,9 +54,9 @@
 
             <TextView
                 android:id="@+id/FoodProductTxtVw"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="-5dp"
                 android:background="@drawable/long_btn"
                 android:clickable="true"
                 android:paddingBottom="10dp"
@@ -64,9 +64,17 @@
                 android:paddingRight="50dp"
                 android:paddingTop="10dp"
                 android:text="Food Product"
+                android:textAlignment="center"
                 android:textColor="@color/colorAccent"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:scaleType="fitStart"
+                app:srcCompat="@drawable/mask_gradient" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -87,7 +95,7 @@
                     android:id="@+id/MsrmntTxtVw"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2"
+                    android:text="0"
                     android:textColor="@color/colorDeepPink"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -175,6 +183,22 @@
                 android:paddingRight="50dp"
                 android:paddingTop="10dp"
                 android:text="Add to shopping list"
+                android:textColor="@android:color/background_dark"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/backTxtVw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/long_btn"
+                android:clickable="true"
+                android:paddingBottom="10dp"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:paddingTop="10dp"
+                android:text="Back"
                 android:textColor="@android:color/background_dark"
                 android:textSize="14sp"
                 android:textStyle="bold" />

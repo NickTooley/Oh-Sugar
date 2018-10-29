@@ -16,6 +16,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.graysonorr.ohsugar.db.AppDatabase;
 import com.example.graysonorr.ohsugar.db.Food;
@@ -95,9 +96,24 @@ public class BarcodeRetrieval extends AppCompatActivity {
             if (requestCode == 1) {
                 currentQRCode = data.getStringExtra("nada");
                 if (currentQRCode != null) {
-                    barcodeText.setText(currentQRCode);
-                    fetchData(currentQRCode);
+//                    barcodeText.setText(currentQRCode);
+//                    fetchData(currentQRCode);
+                    Food food = db.foodDao().findByBarcode(currentQRCode);
+                    if(food != null) {
+                        int foodID = food.foodID;
+
+                        Intent intent = new Intent(getApplicationContext(), MoreInfoActivity.class);
+                        intent.putExtra("ID", foodID);
+                        startActivity(intent);
+                        finish();
+                    }else{
+                        Toast.makeText(this, "No items found with that barcode", Toast.LENGTH_LONG).show();
+
+                        finish();
+                    }
                 }
+
+
 
             }
         }else{
