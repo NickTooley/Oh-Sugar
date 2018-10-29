@@ -29,17 +29,8 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/PrevBtn"
-        android:layout_width="90dp"
-        android:layout_height="40dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="3dp"
-        android:layout_weight="1"
-        android:background="@drawable/add_to_list_btn"/>
-
-    <Button
         android:id="@+id/DelBtn"
-        android:layout_width="90dp"
+        android:layout_width="65dp"
         android:layout_height="40dp"
         android:layout_marginTop="3dp"
         android:layout_weight="1"

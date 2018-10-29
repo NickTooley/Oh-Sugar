@@ -5,10 +5,28 @@
     android:padding="10dp"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/nameLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Name:" />
+
     <EditText
         android:id="@+id/edit1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text" />
+
+    <TextView
+        android:id="@+id/goalLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sugar Goal:" />
+
+    <EditText
+        android:id="@+id/edit2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number" />
 
 </LinearLayout>

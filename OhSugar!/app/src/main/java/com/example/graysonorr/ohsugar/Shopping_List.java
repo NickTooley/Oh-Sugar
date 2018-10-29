@@ -75,8 +75,8 @@ public class Shopping_List extends AppCompatActivity {
         if(list != null){
             //name.setText(list.getName());
             time.setText(list.getTimestamp());
-            totSug.setText(Double.toString(list.getTotalSugar()));
-            recSug.setText((Double.toString(list.getRecSugar())));
+            totSug.setText(Double.toString(list.getTotalSugar(this)));
+            recSug.setText((Double.toString(list.getRecSugar(this))));
             //difference.setText((Double.toString(list.getRecSugar()-list.getTotalSugar())));
 
             ShoppingListArrayAdapter adapter1 = new ShoppingListArrayAdapter

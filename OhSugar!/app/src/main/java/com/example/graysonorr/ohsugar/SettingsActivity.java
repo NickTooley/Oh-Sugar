@@ -57,16 +57,6 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        TextView loadShopList = (TextView) findViewById(R.id.button2);
-
-        loadShopList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LoadShoppingList.class);
-                startActivity(intent);
-            }
-        });
-
         TextView familyBtn = (TextView) findViewById(R.id.button3);
 
         familyBtn.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +81,7 @@ public class SettingsActivity extends AppCompatActivity {
                 new float[]{0, 1}, Shader.TileMode.CLAMP);
         conversionsBtn.getPaint().setShader(textShader2);
 
-        TextView shoppingListBtn = (TextView) findViewById(R.id.button2);
+        TextView shoppingListBtn = (TextView) findViewById(R.id.button);
 
         shoppingListBtn.measure(0,0);
 
