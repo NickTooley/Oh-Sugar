@@ -144,6 +144,19 @@ public class SearchReturn extends AppCompatActivity {
         ListView lv = (ListView) findViewById(R.id.searchResults);
         lv.setAdapter(adapter1);
 
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Food food = (Food)parent.getItemAtPosition(position);
+                int foodID = food.foodID;
+
+                Intent intent = new Intent(getApplicationContext(), MoreInfoActivity.class);
+                intent.putExtra("ID", foodID);
+                startActivity(intent);
+
+            }
+        });
+
         HashMap<String, String> searchStrings = new HashMap<String, String>();
 
         for(int i=0; i < searchResult.size(); i++){
@@ -231,8 +244,10 @@ public class SearchReturn extends AppCompatActivity {
             finish();
             //populateListView(foods);
         }else{
-            BarcodeAsyncScraper scraper = new BarcodeAsyncScraper(this, barcode);
-            scraper.execute();
+            setResult(404);
+            finish();
+//            BarcodeAsyncScraper scraper = new BarcodeAsyncScraper(this, barcode);
+//            scraper.execute();
         }
 
     }

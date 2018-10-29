@@ -31,6 +31,11 @@ public class ShoppingList {
     public void AddToList(Food item){
         list.add(item);
     }
+    public void RemoveFromList(Food item) {for(int i = 0; i < list.size(); i++){
+        if (list.get(i).foodID == item.foodID) {
+            list.remove(i);
+        }
+    }}
 
     public String getName() {return name;}
     public void setName(String name){ this.name = name; }
