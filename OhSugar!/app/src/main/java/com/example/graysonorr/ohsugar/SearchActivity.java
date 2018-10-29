@@ -307,8 +307,13 @@ public class SearchActivity extends AppCompatActivity {
             final Food currentItem = getItem(position);
 
             resultTxtVw.setText(currentItem.name);
-            sugarV.setText(String.format("%.2f", currentItem.getSugar100(SearchActivity.this)));
-            sugarM.setText(conversions.getString("abbreviation", null));
+            if(currentItem.sugar100 >= 0) {
+                sugarV.setText(String.format("%.2f", currentItem.sugar100 / conversions.getFloat("floatMeasure", 1)));
+                sugarM.setText(conversions.getString("abbreviation", null));
+            }else{
+                sugarV.setText("No sugar data");
+                sugarM.setText("");
+            }
             addBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
