@@ -28,8 +28,8 @@ public class Food {
     public String category;
     public boolean onShopList;
 
-    public double getSugarServing(Context context){
-        return this.sugarServing/getPrefs(context).getFloat("floatMeasure", Context.MODE_PRIVATE);
+    public double getSugar100(Context context){
+        return this.sugar100/getPrefs(context).getFloat("floatMeasure", Context.MODE_PRIVATE);
     }
 
     private static SharedPreferences getPrefs(Context context) {

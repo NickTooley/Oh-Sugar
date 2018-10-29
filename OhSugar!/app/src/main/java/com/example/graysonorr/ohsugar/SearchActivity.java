@@ -157,7 +157,7 @@ public class SearchActivity extends AppCompatActivity {
         HashMap<String, String> searchStrings = new HashMap<String, String>();
 
         for(int i=0; i < searchResult.size(); i++){
-            searchStrings.put(searchResult.get(i).name, Double.toString(searchResult.get(i).sugarServing));
+            searchStrings.put(searchResult.get(i).name, Double.toString(searchResult.get(i).getSugar100(this)));
         }
 
         Log.d("get count", Integer.toString(adapter1.getCount()));
