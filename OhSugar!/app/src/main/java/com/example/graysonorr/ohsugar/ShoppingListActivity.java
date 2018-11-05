@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -225,6 +226,15 @@ public class ShoppingListActivity extends AppCompatActivity {
             name.setText(currentItem.name);
             sugarV.setText(String.format("%.2f", currentItem.getSugar100(ShoppingListActivity.this)));
             sugarM.setText(conversions.getString("abbreviation", null));
+
+            Log.d("currrent", Double.toString(currentItem.getSugar100(ShoppingListActivity.this)));
+            Log.d("overall", Double.toString(getShoppingList().getRecSugar(ShoppingListActivity.this)));
+
+            if(currentItem.getSugar100(ShoppingListActivity.this) > getShoppingList().getRecSugar(ShoppingListActivity.this)){
+                Log.d("Does this change bg?", "Lets see");
+                LinearLayout bgLayout = (LinearLayout) customView.findViewById(R.id.foodBackground);
+                bgLayout.setBackgroundResource(R.drawable.sugarover);
+            }
 
 //            name.setOnClickListener(new View.OnClickListener() {
 //                @Override
