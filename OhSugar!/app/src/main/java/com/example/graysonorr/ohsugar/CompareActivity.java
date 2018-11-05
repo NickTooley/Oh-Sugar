@@ -165,7 +165,7 @@ public class CompareActivity extends AppCompatActivity {
         final Food food2 = food;
         name.setText(food.name);
         SharedPreferences sharedPref = CompareActivity.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
-        sugar.setText(Integer.toString((int)(food.sugar100 / sharedPref.getFloat("floatMeasure", 1.0f) + 0.5d)));
+        sugar.setText(Integer.toString((int)(food.sugar100 / sharedPref.getFloat("floatMeasure", 1.0f) + 0.5d)) + " " + sharedPref.getString("abbreviation", "g") + " per 100g");
 
         String category = food.category;
         List<Food> healthy = db.foodDao().searchHealthyAlt(category, food.sugar100);
@@ -204,7 +204,7 @@ public class CompareActivity extends AppCompatActivity {
         final Food food1 = food;
         name.setText(food.name);
         SharedPreferences sharedPref = CompareActivity.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
-        sugar.setText(Integer.toString((int)(food.sugar100 / sharedPref.getFloat("floatMeasure", 1.0f) + 0.5d)));
+        sugar.setText(Integer.toString((int)(food.sugar100 / sharedPref.getFloat("floatMeasure", 1.0f) + 0.5d))+ " " + sharedPref.getString("abbreviation", "g") + " per 100g");
 
         String category = food.category;
         List<Food> healthy = db.foodDao().searchHealthyAlt(category, food.sugar100);
