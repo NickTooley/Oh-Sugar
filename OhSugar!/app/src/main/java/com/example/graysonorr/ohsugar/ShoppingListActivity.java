@@ -490,7 +490,15 @@ public class ShoppingListActivity extends AppCompatActivity {
                     builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Create(name.getText().toString(), sugarGoal.getText().toString());
+                            if(name.getText().length() != 0 && sugarGoal.getText().length() != 0) {
+                                Create(name.getText().toString(), sugarGoal.getText().toString());
+                            }else if (name.getText().length() == 0 && sugarGoal.getText().length() > 0){
+                                Create("Default list", sugarGoal.getText().toString());
+                            }else if(name.getText().length() > 0 && sugarGoal.getText().length() == 0){
+                                Create(name.getText().toString(), "100");
+                            }else{
+                                Create("Default list", "100");
+                            }
                             UpdateActivity();
                         }
                     });
