@@ -335,7 +335,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         goal.setText(String.format("Sugar goal: %.2f ", list.getRecSugar(this)) + list.getConversionString(this));
 
         TextView units = (TextView) findViewById(R.id.unitsTxtVw);
-        units.setText(String.format("%.2f ", list.getTotalSugar(this)) + list.getConversionString(this));
+        units.setText(String.format("%.2f ", list.getTotalSugar(this) / list.getList().size()) + list.getConversionString(this));
     }
 
     public void ShowSaveDialog(){

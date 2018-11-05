@@ -125,7 +125,7 @@
                         android:id="@+id/sugarTotal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Total Sugar:"
+                        android:text="Average Sugar:"
                         android:textSize="18sp" />
 
                     <TextView
