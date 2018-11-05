@@ -462,11 +462,20 @@ public class ShoppingListActivity extends AppCompatActivity {
 
         dialogBuilder.setTitle("Create New");
 
+
         dialogBuilder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(final DialogInterface dialogInterface, int i) {
                 if (getShoppingList() == null) {
-                    Create(name.getText().toString(), sugarGoal.getText().toString());
+                    if(name.getText().length() != 0 && sugarGoal.getText().length() != 0) {
+                        Create(name.getText().toString(), sugarGoal.getText().toString());
+                    }else if (name.getText().length() == 0 && sugarGoal.getText().length() > 0){
+                        Create("Default list", sugarGoal.getText().toString());
+                    }else if(name.getText().length() > 0 && sugarGoal.getText().length() == 0){
+                        Create(name.getText().toString(), "100");
+                    }else{
+                        Create("Default list", "100");
+                    }
                     UpdateActivity();
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(ShoppingListActivity.this);
