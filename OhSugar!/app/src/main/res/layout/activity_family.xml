@@ -54,27 +54,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textView11"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Gender:" />
-
-                <Spinner
-                    android:id="@+id/genderSpinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_weight="1">
 
                 <TextView
                     android:id="@+id/textView13"
@@ -93,7 +74,7 @@
                 android:id="@+id/addBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="150dp"
                 android:layout_weight="1"
                 android:background="@drawable/long_btn"
                 android:paddingBottom="8dp"
@@ -135,20 +116,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingLeft="30dp">
+            android:gravity="center">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="4dp"
-                    android:text="Recommended sugar total:"
+                    android:text="Recommended sugar total (Per Week):"
                     android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                    android:textSize="18sp" />
+                    android:textSize="17sp" />
 
                 <TextView
                     android:id="@+id/totalRecSugar"
@@ -157,18 +139,25 @@
                     android:paddingRight="4dp"
                     android:text="00"
                     android:textColor="@color/colorAccent"
-                    android:textSize="30sp"
+                    android:textSize="25sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/units"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="g"
                     android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                    android:textSize="18sp" />
+                    android:textSize="17sp" />
             </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/colorDeepPink"
+                android:layout_marginTop="25dp"
+                android:text="*Based on recommendations from www.healthnavigator.org.nz"/>
         </LinearLayout>
 
     </LinearLayout>
