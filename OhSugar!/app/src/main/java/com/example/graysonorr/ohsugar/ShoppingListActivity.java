@@ -163,7 +163,8 @@ public class ShoppingListActivity extends AppCompatActivity {
         }
 
         if (getShoppingList() == null){
-            ShowCreateDialog();
+            Create("My first shopping list", "0.00");
+            ShowUpdateDialog();
         }else{
             UpdateActivity();
         }
@@ -359,7 +360,7 @@ public class ShoppingListActivity extends AppCompatActivity {
 
         final EditText name = (EditText) dialogView.findViewById(R.id.edit1);
         name.setText(list.getName());
-        final EditText goalLabel = (EditText) dialogView.findViewById(R.id.goalLabel);
+        final TextView goalLabel = (TextView) dialogView.findViewById(R.id.goalLabel);
         goalLabel.setText("Sugar goal ("+list.getConversionString(this)+")");
         final EditText goal = (EditText) dialogView.findViewById(R.id.edit2);
         goal.setText(Double.toString(list.getRecSugar(this)));
@@ -499,16 +500,6 @@ public class ShoppingListActivity extends AppCompatActivity {
         });
 
         final AlertDialog alert = dialogBuilder.create();
-        alert.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                if(getShoppingList() == null){
-                    alert.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(false);
-                    alert.setCancelable(false);
-                }
-            }
-        });
-
         alert.show();
     }
 
