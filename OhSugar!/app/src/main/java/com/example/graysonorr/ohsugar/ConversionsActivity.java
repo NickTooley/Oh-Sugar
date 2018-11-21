@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ConversionsActivity extends AppCompatActivity {
 
@@ -90,6 +91,7 @@ public class ConversionsActivity extends AppCompatActivity {
                 }
                 editor.putString("stringMeasure", selected);
                 editor.apply();
+                Toast.makeText(getBaseContext(), "Measurement successfully changed", Toast.LENGTH_LONG).show();
                 Log.d("sharedPrefs", sharedPref.getString("stringMeasure", "Cannot find"));
             }
         });

@@ -78,7 +78,8 @@
                 android:id="@+id/GoalTxtVw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="TextView"
+                android:layout_marginBottom="10dp"/>
 
             <LinearLayout
                 android:id="@+id/ListLayout"
@@ -124,7 +125,7 @@
                         android:id="@+id/sugarTotal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Total Sugar:"
+                        android:text="Average Sugar:"
                         android:textSize="18sp" />
 
                     <TextView
