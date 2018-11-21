@@ -10,32 +10,26 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/genderTxtVw"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Gender: Male"
-            android:textSize="20sp" />
-
-        <TextView
             android:id="@+id/ageTxtVw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Age: 11+"
-            android:textSize="14sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/recSugTxtVw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Recommeded sugar: 30g" />
+            android:text="Recommeded sugar: 30g"
+            android:textSize="15sp"/>
 
     </LinearLayout>
 
     <Button
         android:id="@+id/removeBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="55dp"
         android:layout_height="wrap_content"
-        android:text="Rmv"
+        android:background="@drawable/x_btn"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"/>
 

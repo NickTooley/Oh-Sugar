@@ -9,13 +9,11 @@ import java.util.UUID;
 public class Person {
 
     UUID personID;
-    String gender;
     String age;
     int recSugar;
 
-    public Person(String gender, String age){
+    public Person(String age){
         personID = UUID.randomUUID();
-        this.gender = gender;
         this.age = age;
 
         switch(age){
