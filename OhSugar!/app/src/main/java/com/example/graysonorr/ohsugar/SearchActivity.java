@@ -126,10 +126,6 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
-
-
-
-
     private void Search(){
 
         lv.setAdapter(null);

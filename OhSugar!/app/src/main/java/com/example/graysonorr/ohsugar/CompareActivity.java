@@ -45,11 +45,12 @@ public class CompareActivity extends AppCompatActivity {
         }
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_compare);
+//        setContentView(R.layout.activity_compare);
+        setContentView(R.layout.activity_compare_v2);
 
         int mScreenWidth = getWindowManager().getDefaultDisplay().getWidth();
         int mScreenHeight = getWindowManager().getDefaultDisplay().getHeight();
-        View view = getLayoutInflater().inflate(R.layout.activity_compare, null);
+        View view = getLayoutInflater().inflate(R.layout.activity_compare_v2, null);
         setContentView(view, new ViewGroup.LayoutParams(mScreenWidth, mScreenHeight));
 
         TextView toolBarTitle = findViewById(R.id.toolbar_title);
@@ -65,8 +66,8 @@ public class CompareActivity extends AppCompatActivity {
 
         SharedPreferences sharedPref = CompareActivity.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
 
-        compare1 = (TextView) findViewById(R.id.compare1);
-        compare2 = (TextView) findViewById(R.id.compare2);
+//        compare1 = (TextView) findViewById(R.id.compare1);
+//        compare2 = (TextView) findViewById(R.id.compare2);
         product1Title = (TextView) findViewById(R.id.product1Title);
         product2Title = (TextView) findViewById(R.id.product2Title);
         product1Sugar = (TextView) findViewById(R.id.product1Sugar);
@@ -79,24 +80,24 @@ public class CompareActivity extends AppCompatActivity {
         TextView comp1Measure = (TextView) findViewById(R.id.product1Measure);
         TextView comp2Measure = (TextView) findViewById(R.id.product2Measure);
 
-        comp1Measure.setText(sharedPref.getString("abbreviation", "g"));
-        comp2Measure.setText(sharedPref.getString("abbreviation", "g"));
+//        comp1Measure.setText(sharedPref.getString("abbreviation", "g"));
+//        comp2Measure.setText(sharedPref.getString("abbreviation", "g"));
 
-        compare1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CompareActivity.this, SearchReturn.class);
-                startActivityForResult(intent, 1);
-            }
-        });
-
-        compare2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CompareActivity.this, SearchReturn.class);
-                startActivityForResult(intent, 2);
-            }
-        });
+//        compare1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(CompareActivity.this, SearchReturn.class);
+//                startActivityForResult(intent, 1);
+//            }
+//        });
+//
+//        compare2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(CompareActivity.this, SearchReturn.class);
+//                startActivityForResult(intent, 2);
+//            }
+//        });
 
         TextView newItem1 = (TextView) findViewById(R.id.selectNew1);
         TextView newItem2 = (TextView) findViewById(R.id.selectNew2);
@@ -131,7 +132,7 @@ public class CompareActivity extends AppCompatActivity {
                 sugar = data.getDoubleExtra("Sugar", 1.0);
                 if (name != null) {
                     Food food1 = db.foodDao().searchByName(name).get(0);
-                    compare1.setText(name);
+//                    compare1.setText(name);
                     //showOutput(name, sugar, product1Title, product1Sugar);
                     showOutput1(food1, product1Title, product1Sugar);
                 }
@@ -140,7 +141,7 @@ public class CompareActivity extends AppCompatActivity {
                 name = data.getStringExtra("Name");
                 sugar = data.getDoubleExtra("Sugar", 1.0);
                 if (name != null) {
-                    compare2.setText(name);
+//                    compare2.setText(name);
                     Food food2 = db.foodDao().searchByName(name).get(0);
                     showOutput2(food2, product2Title, product2Sugar);
                 }
@@ -164,7 +165,7 @@ public class CompareActivity extends AppCompatActivity {
         final Food food2 = food;
         name.setText(food.name);
         SharedPreferences sharedPref = CompareActivity.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
-        sugar.setText(Integer.toString((int)(food.sugar100 / sharedPref.getFloat("floatMeasure", 1.0f) + 0.5d)));
+        sugar.setText(Integer.toString((int)(food.sugar100 / sharedPref.getFloat("floatMeasure", 1.0f) + 0.5d)) + " " + sharedPref.getString("abbreviation", "g") + " per 100g");
 
         String category = food.category;
         List<Food> healthy = db.foodDao().searchHealthyAlt(category, food.sugar100);
@@ -203,7 +204,7 @@ public class CompareActivity extends AppCompatActivity {
         final Food food1 = food;
         name.setText(food.name);
         SharedPreferences sharedPref = CompareActivity.this.getSharedPreferences("conversions", Context.MODE_PRIVATE);
-        sugar.setText(Integer.toString((int)(food.sugar100 / sharedPref.getFloat("floatMeasure", 1.0f) + 0.5d)));
+        sugar.setText(Integer.toString((int)(food.sugar100 / sharedPref.getFloat("floatMeasure", 1.0f) + 0.5d))+ " " + sharedPref.getString("abbreviation", "g") + " per 100g");
 
         String category = food.category;
         List<Food> healthy = db.foodDao().searchHealthyAlt(category, food.sugar100);

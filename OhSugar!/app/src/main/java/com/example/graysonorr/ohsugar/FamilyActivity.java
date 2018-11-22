@@ -50,23 +50,17 @@ public class FamilyActivity extends AppCompatActivity {
         Typeface customFont = Typeface.createFromAsset(getAssets(), getString(R.string.font));
         toolBarTitle.setTypeface(customFont);
 
-        final Spinner gSpinner = (Spinner) findViewById(R.id.genderSpinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.genderArray, R.layout.spinner_item);
-        adapter.setDropDownViewResource(R.layout.spinner_item);
-        gSpinner.setAdapter(adapter);
-
         final Spinner aSpinner = (Spinner) findViewById(R.id.ageSpinner);
-        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this,
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.ageArray, R.layout.spinner_item);
         adapter.setDropDownViewResource(R.layout.spinner_item);
-        aSpinner.setAdapter(adapter2);
+        aSpinner.setAdapter(adapter);
 
         TextView add = (TextView) findViewById(R.id.addBtn);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddMember(gSpinner.getSelectedItem().toString(), aSpinner.getSelectedItem().toString());
+                AddMember(aSpinner.getSelectedItem().toString());
                 UpdateActivity();
             }
         });
@@ -74,7 +68,7 @@ public class FamilyActivity extends AppCompatActivity {
         UpdateActivity();
     }
 
-    public void AddMember(String gender, String age){
+    public void AddMember(String age){
         SharedPreferences sharedPreferences = getSharedPreferences("Family", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -88,7 +82,7 @@ public class FamilyActivity extends AppCompatActivity {
             family = new ArrayList<>();
         }
 
-        family.add(new Person(gender, age));
+        family.add(new Person(age));
 
         gson = new Gson();
         json = gson.toJson(family);
@@ -122,7 +116,6 @@ public class FamilyActivity extends AppCompatActivity {
             LayoutInflater inflater = LayoutInflater.from(FamilyActivity.this);
             View customView = inflater.inflate(R.layout.family_member, container, false);
 
-            TextView gender = (TextView) customView.findViewById(R.id.genderTxtVw);
             TextView age = (TextView) customView.findViewById(R.id.ageTxtVw);
             TextView recSugar = (TextView) customView.findViewById(R.id.recSugTxtVw);
             Button remove = (Button)customView.findViewById(R.id.removeBtn);
@@ -154,7 +147,6 @@ public class FamilyActivity extends AppCompatActivity {
             });
 
             SharedPreferences conversions = getSharedPreferences("conversions", MODE_PRIVATE);
-            gender.setText("Gender: " + currentItem.gender);
             age.setText("Age: " + currentItem.age);
             recSugar.setText("Recommended sugar: "
                                 + currentItem.recSugar/conversions.getFloat("floatMeasure",0)

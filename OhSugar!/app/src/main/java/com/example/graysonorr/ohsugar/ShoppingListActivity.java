@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -163,7 +164,8 @@ public class ShoppingListActivity extends AppCompatActivity {
         }
 
         if (getShoppingList() == null){
-            ShowCreateDialog();
+            Create("My first shopping list", "0.00");
+            ShowUpdateDialog();
         }else{
             UpdateActivity();
         }
@@ -225,6 +227,15 @@ public class ShoppingListActivity extends AppCompatActivity {
             name.setText(currentItem.name);
             sugarV.setText(String.format("%.2f", currentItem.getSugar100(ShoppingListActivity.this)));
             sugarM.setText(conversions.getString("abbreviation", null));
+
+            Log.d("currrent", Double.toString(currentItem.getSugar100(ShoppingListActivity.this)));
+            Log.d("overall", Double.toString(getShoppingList().getRecSugar(ShoppingListActivity.this)));
+
+            if(currentItem.getSugar100(ShoppingListActivity.this) > getShoppingList().getRecSugar(ShoppingListActivity.this)){
+                Log.d("Does this change bg?", "Lets see");
+                LinearLayout bgLayout = (LinearLayout) customView.findViewById(R.id.foodBackground);
+                bgLayout.setBackgroundResource(R.drawable.sugarover);
+            }
 
 //            name.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -325,7 +336,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         goal.setText(String.format("Sugar goal: %.2f ", list.getRecSugar(this)) + list.getConversionString(this));
 
         TextView units = (TextView) findViewById(R.id.unitsTxtVw);
-        units.setText(String.format("%.2f ", list.getTotalSugar(this)) + list.getConversionString(this));
+        units.setText(String.format("%.2f ", list.getTotalSugar(this) / list.getList().size()) + list.getConversionString(this));
     }
 
     public void ShowSaveDialog(){
@@ -359,7 +370,7 @@ public class ShoppingListActivity extends AppCompatActivity {
 
         final EditText name = (EditText) dialogView.findViewById(R.id.edit1);
         name.setText(list.getName());
-        final EditText goalLabel = (EditText) dialogView.findViewById(R.id.goalLabel);
+        final TextView goalLabel = (TextView) dialogView.findViewById(R.id.goalLabel);
         goalLabel.setText("Sugar goal ("+list.getConversionString(this)+")");
         final EditText goal = (EditText) dialogView.findViewById(R.id.edit2);
         goal.setText(Double.toString(list.getRecSugar(this)));
@@ -462,11 +473,20 @@ public class ShoppingListActivity extends AppCompatActivity {
 
         dialogBuilder.setTitle("Create New");
 
+
         dialogBuilder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(final DialogInterface dialogInterface, int i) {
                 if (getShoppingList() == null) {
-                    Create(name.getText().toString(), sugarGoal.getText().toString());
+                    if(name.getText().length() != 0 && sugarGoal.getText().length() != 0) {
+                        Create(name.getText().toString(), sugarGoal.getText().toString());
+                    }else if (name.getText().length() == 0 && sugarGoal.getText().length() > 0){
+                        Create("Default list", sugarGoal.getText().toString());
+                    }else if(name.getText().length() > 0 && sugarGoal.getText().length() == 0){
+                        Create(name.getText().toString(), "100");
+                    }else{
+                        Create("Default list", "100");
+                    }
                     UpdateActivity();
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(ShoppingListActivity.this);
@@ -481,7 +501,15 @@ public class ShoppingListActivity extends AppCompatActivity {
                     builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Create(name.getText().toString(), sugarGoal.getText().toString());
+                            if(name.getText().length() != 0 && sugarGoal.getText().length() != 0) {
+                                Create(name.getText().toString(), sugarGoal.getText().toString());
+                            }else if (name.getText().length() == 0 && sugarGoal.getText().length() > 0){
+                                Create("Default list", sugarGoal.getText().toString());
+                            }else if(name.getText().length() > 0 && sugarGoal.getText().length() == 0){
+                                Create(name.getText().toString(), "100");
+                            }else{
+                                Create("Default list", "100");
+                            }
                             UpdateActivity();
                         }
                     });
@@ -499,16 +527,6 @@ public class ShoppingListActivity extends AppCompatActivity {
         });
 
         final AlertDialog alert = dialogBuilder.create();
-        alert.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                if(getShoppingList() == null){
-                    alert.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(false);
-                    alert.setCancelable(false);
-                }
-            }
-        });
-
         alert.show();
     }
 
